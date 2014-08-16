@@ -15,7 +15,6 @@ SNF::calculate_naive(MatrixXi & m)
     std::cout << "Sorting diagonal...\n";
     qsort_diagonal(m);
     std::cout << "Ensuring divisibility...\n";
-    // std::cout << m << std::endl;
     ensure_divisibility(m);
     std::cout << "Complete!\n";
 
@@ -41,7 +40,7 @@ SNF::diagonalize(MatrixXi & m)
     .00...
  */
 void
-SNF::make_gcd(MatrixXi & m)
+SNF::make_gcd(Block<MatrixXi> m)
 {   
     for (unsigned int i = 1; i < m.cols(); ++i) {
         // Check Euclidean algorithm invariant |a| >= |b|

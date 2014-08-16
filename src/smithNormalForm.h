@@ -11,7 +11,7 @@ public:
 private:
     void diagonalize(MatrixXi & m);
     void ensure_divisibility(MatrixXi & m);
-    void make_gcd(MatrixXi & m);
+    void make_gcd(Block<MatrixXi> m);
     void qsort_diagonal(MatrixXi & m);
 };
 
