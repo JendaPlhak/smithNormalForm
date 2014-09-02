@@ -23,16 +23,16 @@ int main(int argc, char const *argv[])
 
     SNF snf;
 
-    std::cout << matrix << std::endl;
+    // std::cout << matrix << std::endl;
     std::chrono::high_resolution_clock::time_point start, end;
     start = std::chrono::high_resolution_clock::now();
 
-    snf.calculate_probabilistic(matrix);
+    snf.calculate_naive(matrix);
 
     end = std::chrono::high_resolution_clock::now();
     mu_t duration(std::chrono::duration_cast <mu_t>(end - start));
 
-    // std::cout << matrix << std::endl;
+    std::cout << matrix(matrix.n_cols - 1, matrix.n_rows - 1) << std::endl;
     printf("\nCalculation took %f s\n", duration.count() / 1000000.);
 
     return 0;

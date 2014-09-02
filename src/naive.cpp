@@ -8,9 +8,8 @@
 void
 diagonalize(arma::imat & m)
 {
-    for (int i = m.n_rows; 0 < i; --i) {
-        std::cout << i << std::endl;
-        make_gcd(m.submat(i, i, m.n_rows, m.n_cols));
+    for (unsigned int i = 0; i < m.n_rows; ++i) {
+        make_gcd(m.submat(i, i, m.n_rows - 1, m.n_cols - 1));
     }
 }
 
@@ -44,7 +43,6 @@ make_gcd(arma::subview<arma::sword> m)
     for (unsigned int j = 1; j < m.n_cols; ++j) {
         m(0, j) = 0;
     }
-    // cout << m << endl << endl;
 }
 
 /*
@@ -58,8 +56,8 @@ ensure_divisibility(arma::imat & m)
     arma::imat diag = m.diag();
     for (unsigned int i = 0; i < m.n_rows - 1; ++i) {
         unsigned int gcd = boost::math::gcd(diag[i], diag[i + 1]);
-        diag[i + 1]      = boost::math::lcm(diag[i], diag[i + 1]);
-        diag[i]          = gcd;
+        m(i + 1, i + 1)  = boost::math::lcm(diag[i], diag[i + 1]);
+        m(i, i)          = gcd;
     }
 }
 
