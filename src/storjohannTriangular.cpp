@@ -8,6 +8,7 @@
 #include "storjohannTriangular.h"
 
 void triangularReduction(arma::subview<arma::sword> A);
+void eliminateTrailingCol(arma::subview<arma::sword> T);
 
 class IncorrectForm : public std::exception {
     std::string error_message;
@@ -47,7 +48,6 @@ diagonalMultiple(const arma::diagview<int> & diag)
 void
 checkCorrectForm(const arma::imat & A)
 {
-    std::cout << gcdCombination(3, 5, 18) << std::endl;
     checkUpperDiagonal(A);
     // check if matrix is regular
     int det = diagonalMultiple(A.diag());
@@ -112,5 +112,94 @@ triangularReduction(arma::subview<arma::sword> T)
             sub_row -= div_result.quot * T.row(j).subvec(j+1, T.n_cols - 1);
             sub_row.transform(PositiveModulo(d));
         }
+    }
+}
+
+void ensureDivisibility(arma::subview<arma::sword> T);
+
+void
+submatrixToSNF(arma::subview<arma::sword> T)
+{
+    std::cout << T << std::endl;
+    ensureDivisibility(T);
+    std::cout << T << std::endl;
+    eliminateTrailingCol(T);
+
+}
+
+//! Implements Lemma 7 - ensures that
+//! gcd(a_i, t_i) = gcd(a_i, t_i, t_i+1, ..., t_k) for 0 <= i <= k-1
+void
+ensureDivisibility(arma::subview<arma::sword> T)
+{
+    int k = T.n_rows;
+    arma::subview_col<int> t = T.col(k - 1);
+
+    for (int i = k - 2; i >= 0; --i) {
+        int a = T.diag()[i];
+        int c = gcdCombination(t[i], t[i + 1], a);
+
+        arma::subview_row<int> sub_row = T.row(i).subvec(k - 1, T.n_cols - 1);
+        sub_row += c * T.row(i+1).subvec(k - 1, T.n_cols - 1);
+        sub_row.transform(PositiveModulo(a));
+    }
+
+    // check invariant
+    int gcd_t = t[k - 1];
+    for (int i = k - 2; i >= 0; --i) {
+        using boost::math::gcd;
+        gcd_t = gcd(gcd_t, t[i]);
+        if (gcd(t[i], T.diag()[i]) != gcd(gcd_t, T.diag()[i])) {
+            throw "Invariant of Lemma 7 doesn't hold!";
+        }
+     }
+}
+
+void processRow(arma::subview<arma::sword> T);
+//! implements Lemma 9
+void
+eliminateTrailingCol(arma::subview<arma::sword> T)
+{
+    for (uint i = 0; i < T.n_rows - 1; i++) {
+        processRow(T.submat(i, i, T.n_rows - 1, T.n_cols - 1));
+    }
+
+}
+
+//! process first row of given view and convert it to form required by Lemma 9
+void
+processRow(arma::subview<arma::sword> T)
+{
+    uint k = T.n_rows;
+    arma::subview_col<int> t_col = T.col(k - 1);
+    arma::diagview<int> diag     = T.diag();
+    int s = 0, t = 0, s1 = 0;
+    extendedGCD(s, t, s1, diag[0], t_col[0]);
+
+    std::cout << T << std::endl;
+    diag[0]  = s1;
+    t_col[0] = 0;
+
+    for (uint i = 1; i < k; ++i) {
+        std::cout << t_col[i] << std::endl;
+        int q = (t * t_col[i] / s1) % t_col[i];
+
+        if (k <= T.n_cols - 1) {
+            arma::subview_row<int> sub_row = T.row(i).subvec(k, T.n_cols - 1);
+            sub_row -= q * T.row(i).subvec(k, T.n_cols - 1);
+            sub_row.transform(PositiveModulo(t_col[i]));
+        }
+        t_col[i] = t_col[i] * diag[i] / s1;
+    }
+    if (k <= T.n_cols - 1) {
+        T.row(0).subvec(k, T.n_cols - 1).transform(PositiveModulo(s1));
+    }
+}
+
+void
+hermiteTriangToSNF(arma::imat & A)
+{
+    for (uint i = 0; i < A.n_rows; ++i) {
+        submatrixToSNF(A.submat(0, 0, i, i));
     }
 }

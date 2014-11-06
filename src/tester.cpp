@@ -33,6 +33,9 @@ int main(int argc, char const *argv[])
     print_wolfram_matrix(matrix, size);
 
     makeHermiteNormalForm(matrix);
+    std::cout << matrix << std::endl;
+    hermiteTriangToSNF(matrix);
+    std::cout << matrix << std::endl;
 
     SNF snf;
 

@@ -2,6 +2,7 @@
 #define SNF_STORJOHANN_TRIANGULAR_H
 
 void makeHermiteNormalForm(arma::imat & A);
+void hermiteTriangToSNF(arma::imat & A);
 
 
 #endif // SNF_STORJOHANN_TRIANGULAR_H

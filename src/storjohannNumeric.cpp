@@ -42,7 +42,7 @@ gcdCombination(int a, int b, int N)
         } else if (1 != gcd(g, y)) {
             throw ("gcd(g, y) == 1 doesn't hold!");
         }
-        printf("Factorization N = %d * %d\n", x, y);
+        // printf("Factorization N = %d * %d\n", x, y);
         // apply Chinese remaindering algorithm to obtain c that satisfies
         // (c = 1) mod x, (c = 0) mod y
         c = CRT(x, y);
@@ -87,4 +87,64 @@ CRT(const int x, const int y)
         }
     }
     return c;
+}
+
+// Given a and b, calculate s, t, and gcd(a, b) such that
+// s * a + t * b = gcd(a, b)
+// Also, if a = +/- gcd, then choose t = 0.
+void extendedGCD(int & s_out, int & t_out, int & gcd_out,
+                    const int a, const int b)
+{
+    static int one ( 1 );
+    static int zero ( 0 );
+    static int neg_one ( -1 );
+    // Relies upon Euclidean Division being available, and also comparison.
+    // The user doesn't need to sort the input.
+    bool reversed = false;
+    if ( a < b ) reversed = true;
+
+    int x, y;
+    if ( reversed ) {
+        x = a;
+        y = b;
+    } else {
+        x = b;
+        y = a;
+    }
+
+   // For extended euclidean algorithm
+    int s0 = one; int s1 = zero;
+    int t0 = zero; int t1 = one;
+    while ( x != zero ) {
+        int q = std::div(y, x).quot;
+        int r = y - x * q;
+        int s = s0 - q * s1;
+        int t = t0 - q * t1;
+
+        s0 = s1; s1 = s;
+        t0 = t1; t1 = t;
+        y = x;
+        x = r;
+    }
+    // Set output
+    // The Bezout coefficients s and t are the second to last ones
+    // to be calculated (the last ones give 0 = s*a + t*b)
+    if ( not reversed ) {
+        s_out = s0;
+        t_out = t0;
+    } else {
+        t_out = s0;
+        s_out = t0;
+    }
+    gcd_out = y;
+    // TODO: generalize this to all unit multiples, somehow, for general Rs
+    // TODO: should this really be here? perhaps the caller should worry about this
+    if ( gcd_out == a ) {
+        s_out = one;
+        t_out = zero;
+    }
+    if ( gcd_out == -a ) {
+        s_out = neg_one;
+        t_out = zero;
+    }
 }
