@@ -8,7 +8,7 @@
 
 void
 SNF::calculate_naive(arma::imat & m)
-{   
+{
     std::cout << "Performing diagonalization...\n";
     diagonalize(m);
     std::cout << "Sorting diagonal...\n";
@@ -20,7 +20,7 @@ SNF::calculate_naive(arma::imat & m)
 
 void
 SNF::calculate_probabilistic(arma::imat & m)
-{   
+{
     int val = valence(m);
     std::cout << val;
 }
