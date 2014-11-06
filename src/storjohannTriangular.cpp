@@ -2,7 +2,9 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
+#include <boost/math/common_factor.hpp>
 
+#include "storjohannNumeric.h"
 #include "storjohannTriangular.h"
 
 void triangularReduction(arma::subview<arma::sword> A);
@@ -16,10 +18,10 @@ public:
     IncorrectForm(const std::string & message) : error_message(message) {}
 };
 
+//! check if A is upper diagonal. If not, IncorrectForm exception is thrown
 void
 checkUpperDiagonal(const arma::imat & A)
 {
-    // check if A is upper diagonal
     for (uint i = 0; i < A.n_rows; ++i) {
         for (uint j = 0; j < i; ++j) {
             if (A(i, j) != 0) {
@@ -29,7 +31,9 @@ checkUpperDiagonal(const arma::imat & A)
     }
 }
 
-int diagonalMultiple(const arma::diagview<int> & diag)
+//! calculates multiple product of elements on diagonal
+int
+diagonalMultiple(const arma::diagview<int> & diag)
 {
     int det = 1;
     for (uint i = 0; i < diag.n_rows; ++i) {
@@ -38,9 +42,12 @@ int diagonalMultiple(const arma::diagview<int> & diag)
     return det;
 }
 
+//! checks whether matrix A is in correct form to perform conversion to Hermite
+//! normal form.
 void
 checkCorrectForm(const arma::imat & A)
 {
+    std::cout << gcdCombination(3, 5, 18) << std::endl;
     checkUpperDiagonal(A);
     // check if matrix is regular
     int det = diagonalMultiple(A.diag());
@@ -75,6 +82,7 @@ makeHermiteNormalForm(arma::imat & A)
     checkCorrectForm(A);
 }
 
+//! Functor calculating positive modulo for given number e.
 class PositiveModulo {
     int m_d;
 public:
@@ -82,6 +90,8 @@ public:
     int operator()(const int e) { return (e % m_d + m_d) % m_d; }
 };
 
+//! perform triangular reduction of input matrix T. For details please refer to
+//! chapter 2, Lemma 2.
 void
 triangularReduction(arma::subview<arma::sword> T)
 {
