@@ -29,13 +29,17 @@ int main(int argc, char const *argv[])
     // std::vector<int> matrix_array = {2,     0,     0,
     //                                  0,     6,     1,
     //                                  0,     0,     12};
-    std::vector<int> matrix_array = {2,     1,
-                                     0,     6,};
+    // std::vector<int> matrix_array = {2,     1, 7,
+    //                                  0,     6, 12};
+    std::vector<int> matrix_array = {3,113344, 95472,  42884, 12302,
+                                     0,     2,  1576,  98594, 11872,
+                                     0,     0,     2,  99206, 94692,
+                                     0,     0,     0,   9456,  7080};
 
     uint size = std::sqrt(matrix_array.size());
-    arma::imat matrix(matrix_array.data(), size, size);
+    arma::imat matrix(matrix_array.data(), size + 1, size);
     matrix = matrix.t();
-
+    std::cout << matrix << std::endl;
     print_wolfram_matrix(matrix, size);
 
     SNF snf;
@@ -43,14 +47,14 @@ int main(int argc, char const *argv[])
     std::chrono::high_resolution_clock::time_point start, end;
     start = std::chrono::high_resolution_clock::now();
 
-    arma::imat naive_result      = snf.calculate_naive(matrix);
+    // arma::imat naive_result      = snf.calculate_naive(matrix);
     arma::imat storjohann_result = snf.calculate_storjohann(matrix);
 
     end = std::chrono::high_resolution_clock::now();
     mu_t duration(std::chrono::duration_cast <mu_t>(end - start));
 
-    std::cout << "Naive method result:" << std::endl;
-    std::cout << naive_result << std::endl;
+    // std::cout << "Naive method result:" << std::endl;
+    // std::cout << naive_result << std::endl;
     std::cout << "Storjohann method: " << std::endl;
     std::cout << storjohann_result << std::endl;
     printf("\nCalculation took %f s\n", duration.count() / 1000000.);

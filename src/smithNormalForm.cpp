@@ -23,8 +23,15 @@ SNF::calculate_naive(arma::imat m)
 arma::imat
 SNF::calculate_storjohann(arma::imat matrix)
 {
+    std::cout << "Making Hermite normal form...\n";
     makeHermiteNormalForm(matrix);
+    std::cout << "Result: \n" << matrix << std::endl;
+    std::cout << "Converting Hermite matrix to SNF...\n";
     hermiteTriangToSNF(matrix);
+    std::cout << "Result: \n" << matrix << std::endl;
+    std::cout << "Eliminating extra columns...\n";
+    eliminateExtraColumns(matrix);
+    std::cout << "Result: \n" << matrix << std::endl;
     return matrix;
 }
 

@@ -13,6 +13,7 @@ void eliminateTrailingCol(arma::subview<arma::sword> T);
 void ensureDivisibility(arma::subview<arma::sword> T);
 void submatrixToSNF(arma::subview<arma::sword> T);
 void processRow(arma::subview<arma::sword> T);
+void eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T);
 
 class IncorrectForm : public std::exception {
     std::string error_message;
@@ -28,7 +29,7 @@ void
 checkSNF(const arma::subview<arma::sword> T)
 {
     for (uint i = 0; i < T.n_rows; ++i) {
-        for (uint j = 0; j < T.n_cols; ++j) {
+        for (uint j = 0; j < T.n_rows; ++j) {
             if (i == j) {
                 if (i >= 1 && T(i, i) % T(i-1, i-1) != 0) {
                     throw IncorrectForm("Diagonal entries don't form dividing "
@@ -48,6 +49,12 @@ void
 checkConditionsTheorem6(const arma::subview<arma::sword> T)
 {
     uint k = T.n_rows;
+    arma::mat T_mat = arma::conv_to<arma::mat>::from(
+                        T.submat(0, 0, T.n_rows - 1, T.n_rows - 1));
+
+    if (k != arma::rank(T_mat)) {
+        throw IncorrectForm("First k columns of matrix T don't have rank k!");
+    }
     // first k-1 columns of T must be in Smith normal form
     try { checkSNF(T.submat(0, 0, k - 2, k - 2)); }
     catch (IncorrectForm & e) {
@@ -73,7 +80,16 @@ checkConditionsTheorem6(const arma::subview<arma::sword> T)
             }
         }
     }
-
+    // off-diagonal entries in row k-1 must be bounded in magnitude by D, a
+    // positive multiple of the determinant of the principal kth submatrix of T
+    int determinant = std::abs(arma::det(T_mat));
+    for (uint col = k; col < T.n_cols; ++col) {
+        if (determinant < T(k - 1, col)) {
+            throw IncorrectForm("off-diagonal entries in row k-1 must be"
+                "bounded in magnitude by D, a positive multiple of the "
+                "determinant of the principal kth submatrix of T");
+        }
+    }
 }
 
 //! check if A is upper diagonal. If not, IncorrectForm exception is thrown
@@ -149,7 +165,7 @@ triangularReduction(arma::subview<arma::sword> T)
     T.row(0).subvec(1, T.n_cols - 1).transform(PositiveModulo(d));
 
     // Reduce off-diagonal entries in row 0
-    for (uint j = 1; j < T.n_cols; ++j) {
+    for (uint j = 1; j < T.n_rows; ++j) {
         std::div_t div_result = std::div(T(0, j), T(j, j));
         T(0, j) = div_result.rem;
 
@@ -165,7 +181,7 @@ void
 hermiteTriangToSNF(arma::imat & A)
 {
     for (uint i = 1; i < A.n_rows; ++i) {
-        submatrixToSNF(A.submat(0, 0, i, i));
+        submatrixToSNF(A.submat(0, 0, i, A.n_cols - 1));
     }
 }
 
@@ -215,14 +231,14 @@ ensureDivisibility(arma::subview<arma::sword> T)
 void
 eliminateTrailingCol(arma::subview<arma::sword> T)
 {
-    std::cout << "Eliminating trailing column\n";
+    // std::cout << "Eliminating trailing column\n";
     for (uint i = 0; i < T.n_rows - 1; ++i) {
-        std::cout << "Processing row " << i << std::endl;
-        std::cout << T.submat(i, i, T.n_rows - 1, T.n_cols - 1) << std::endl;
+        // std::cout << "Processing row " << i << std::endl;
+        // std::cout << T.submat(i, i, T.n_rows - 1, T.n_cols - 1) << std::endl;
         processRow(T.submat(i, i, T.n_rows - 1, T.n_cols - 1));
     }
-    std::cout << "Resulting sub-matrix is: \n";
-    std::cout << T << std::endl;
+    // std::cout << "Resulting sub-matrix is: \n";
+    // std::cout << T << std::endl;
 }
 
 //! process first row of given view and convert it to form required by Lemma 9
@@ -271,5 +287,41 @@ processRow(arma::subview<arma::sword> T)
     // T(0, k-1) has to be zero - thats what this function is supposed to do.
     if (0 != T(0, k-1)) {
         throw IncorrectForm("T(0, k-1) != 0!");
+    }
+}
+
+//! Implements Theorem 10 - eliminate columns k,.., m
+void
+eliminateExtraColumns(arma::imat & T)
+{
+    uint k = T.n_rows;
+    uint m = T.n_cols;
+    for (uint i = 0; i < k; ++i) {
+        eliminateExtraColumnsInFirstRow(T.submat(i, i, k - 1, m - 1));
+    }
+}
+
+//! Process first row and eliminate all extra entries on indexes k,.., m
+void
+eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T)
+{
+    uint k = T.n_rows;
+    uint m = T.n_cols;
+    for (uint j = k; j < m; ++j) {
+        int s = 0; int t = 0; int s1 = 0;
+        extendedGCD(s, t, s1, T(0, 0), T(0, j));
+
+        // initialize
+        int a   = (-1) * T(0, j) / s1;
+        int b   = T(0, 0) / s1;
+        T(0, 0) = s1;
+        T(0, j) = 0;
+
+        // TODO implement using column-wise operations!
+        for (uint i = 1; i < k; ++i) {
+            int C   = (s * T(i, 0) + t * T(i, j)) % T.diag()[i];
+            T(i, j) = (a * T(i, 0) + b * T(i, j)) % T.diag()[i];
+            T(i, 0) = C;
+        }
     }
 }
