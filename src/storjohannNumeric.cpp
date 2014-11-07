@@ -1,7 +1,9 @@
+#include <armadillo>
 #include <cmath>
 #include <exception>
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 #include <boost/math/common_factor.hpp>
 
 #include "storjohannNumeric.h"
@@ -14,7 +16,7 @@ gcdCombination(int a, int b, int N)
     using boost::math::gcd;
     // input arguments check
     if (N <= 0) {
-        throw ("Argument N has to be positive!");
+        throw std::logic_error("Argument N has to be positive!");
     }
     // if d != 1, we divide a, b, N by d which reduces the problem to Theorem 5
     int d = gcd(a, gcd(b, N));
@@ -38,9 +40,9 @@ gcdCombination(int a, int b, int N)
         x = x * gcd_x_y;
         // check invariant
         if (1 != gcd(x, y)) {
-            throw ("gcd(x, y) == 1 doesn't hold!");
+            throw std::logic_error("gcd(x, y) == 1 doesn't hold!");
         } else if (1 != gcd(g, y)) {
-            throw ("gcd(g, y) == 1 doesn't hold!");
+            throw std::logic_error("gcd(g, y) == 1 doesn't hold!");
         }
         // printf("Factorization N = %d * %d\n", x, y);
         // apply Chinese remaindering algorithm to obtain c that satisfies
@@ -50,7 +52,7 @@ gcdCombination(int a, int b, int N)
 
     // check invariant
     if (1 != gcd(a + c * b, N)) {
-        throw "gcd(a + c * b, N) == 1 doesn't hold!";
+        throw std::logic_error("gcd(a + c * b, N) == 1 doesn't hold!");
     }
     return c;
 }
@@ -147,4 +149,15 @@ void extendedGCD(int & s_out, int & t_out, int & gcd_out,
         s_out = neg_one;
         t_out = zero;
     }
+}
+
+//! calculates multiple product of elements on diagonal
+int
+diagonalMultiple(const arma::diagview<int> & diag)
+{
+    int det = 1;
+    for (uint i = 0; i < diag.n_rows; ++i) {
+        det *= diag[i];
+    }
+    return det;
 }

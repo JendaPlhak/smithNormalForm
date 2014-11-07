@@ -6,7 +6,8 @@
 
 class SNF {
 public:
-    void calculate_naive(arma::imat & m);
+    arma::imat calculate_naive(arma::imat m);
+    arma::imat calculate_storjohann(arma::imat m);
     void calculate_probabilistic(arma::imat & m);
 };
 

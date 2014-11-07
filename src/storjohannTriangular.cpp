@@ -2,6 +2,7 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <boost/math/common_factor.hpp>
 
 #include "storjohannNumeric.h"
@@ -9,6 +10,9 @@
 
 void triangularReduction(arma::subview<arma::sword> A);
 void eliminateTrailingCol(arma::subview<arma::sword> T);
+void ensureDivisibility(arma::subview<arma::sword> T);
+void submatrixToSNF(arma::subview<arma::sword> T);
+void processRow(arma::subview<arma::sword> T);
 
 class IncorrectForm : public std::exception {
     std::string error_message;
@@ -17,7 +21,60 @@ class IncorrectForm : public std::exception {
     }
 public:
     IncorrectForm(const std::string & message) : error_message(message) {}
+    std::string str() const { return error_message; }
 };
+
+void
+checkSNF(const arma::subview<arma::sword> T)
+{
+    for (uint i = 0; i < T.n_rows; ++i) {
+        for (uint j = 0; j < T.n_cols; ++j) {
+            if (i == j) {
+                if (i >= 1 && T(i, i) % T(i-1, i-1) != 0) {
+                    throw IncorrectForm("Diagonal entries don't form dividing "
+                                        "sequence!");
+                }
+            } else {
+                if (0 != T(i, j)) {
+                    throw IncorrectForm("Matrix has non-zero off diagonal "
+                                        "entries!");
+                }
+            }
+        }
+    }
+}
+
+void
+checkConditionsTheorem6(const arma::subview<arma::sword> T)
+{
+    uint k = T.n_rows;
+    // first k-1 columns of T must be in Smith normal form
+    try { checkSNF(T.submat(0, 0, k - 2, k - 2)); }
+    catch (IncorrectForm & e) {
+        std::stringstream s;
+        s << "Theorem 6 requires principal (k-1)th matrix to be in SNF but "
+          << e.str();
+        throw IncorrectForm(s.str());
+    }
+    // off-diagonal entries in rows 0, 1,..., k-2 are reduced modulo the
+    // diagonal entry in the same row.
+    for (uint row = 0; row < k - 2; ++row) {
+        for (uint col = row + 1; col < T.n_cols; ++col) {
+            std::stringstream s;
+            s << "Theorem 6 requires off-diagonal entries in rows 0,.., k-2 "
+              << "to be reduced modulo the diagonal entry in the same row but ";
+            if (T(row, col) < 0) {
+                s << "T(" << row <<", " <<col<< ") = " << T(row, col) << " < 0";
+                throw IncorrectForm(s.str());
+            } else if (T(row, row) <= T(row, col)) {
+                s << "T(" << row <<", " << col << ") = " << T(row, col)
+                  << " >= " << T(row, col);
+                throw IncorrectForm(s.str());
+            }
+        }
+    }
+
+}
 
 //! check if A is upper diagonal. If not, IncorrectForm exception is thrown
 void
@@ -32,21 +89,10 @@ checkUpperDiagonal(const arma::imat & A)
     }
 }
 
-//! calculates multiple product of elements on diagonal
-int
-diagonalMultiple(const arma::diagview<int> & diag)
-{
-    int det = 1;
-    for (uint i = 0; i < diag.n_rows; ++i) {
-        det *= diag[i];
-    }
-    return det;
-}
-
 //! checks whether matrix A is in correct form to perform conversion to Hermite
 //! normal form.
 void
-checkCorrectForm(const arma::imat & A)
+checkCorrectFormHermiteTransform(const arma::imat & A)
 {
     checkUpperDiagonal(A);
     // check if matrix is regular
@@ -79,7 +125,7 @@ makeHermiteNormalForm(arma::imat & A)
     for (int k = A.n_rows - 2; k >= 0; --k) {
         triangularReduction(A.submat(k, k, A.n_rows - 1, A.n_cols - 1));
     }
-    checkCorrectForm(A);
+    checkCorrectFormHermiteTransform(A);
 }
 
 //! Functor calculating positive modulo for given number e.
@@ -115,16 +161,26 @@ triangularReduction(arma::subview<arma::sword> T)
     }
 }
 
-void ensureDivisibility(arma::subview<arma::sword> T);
+void
+hermiteTriangToSNF(arma::imat & A)
+{
+    for (uint i = 1; i < A.n_rows; ++i) {
+        submatrixToSNF(A.submat(0, 0, i, i));
+    }
+}
 
 void
 submatrixToSNF(arma::subview<arma::sword> T)
 {
-    std::cout << T << std::endl;
     ensureDivisibility(T);
-    std::cout << T << std::endl;
     eliminateTrailingCol(T);
 
+    // check invariant
+    try { checkSNF(T); }
+    catch (IncorrectForm & e) {
+        std::cerr << T << std::endl;
+        throw IncorrectForm("Function: submatrixToSNF, Error: " + e.str());
+    }
 }
 
 //! Implements Lemma 7 - ensures that
@@ -150,20 +206,23 @@ ensureDivisibility(arma::subview<arma::sword> T)
         using boost::math::gcd;
         gcd_t = gcd(gcd_t, t[i]);
         if (gcd(t[i], T.diag()[i]) != gcd(gcd_t, T.diag()[i])) {
-            throw "Invariant of Lemma 7 doesn't hold!";
+            throw std::logic_error("Invariant of Lemma 7 doesn't hold!");
         }
      }
 }
 
-void processRow(arma::subview<arma::sword> T);
 //! implements Lemma 9
 void
 eliminateTrailingCol(arma::subview<arma::sword> T)
 {
-    for (uint i = 0; i < T.n_rows - 1; i++) {
+    std::cout << "Eliminating trailing column\n";
+    for (uint i = 0; i < T.n_rows - 1; ++i) {
+        std::cout << "Processing row " << i << std::endl;
+        std::cout << T.submat(i, i, T.n_rows - 1, T.n_cols - 1) << std::endl;
         processRow(T.submat(i, i, T.n_rows - 1, T.n_cols - 1));
     }
-
+    std::cout << "Resulting sub-matrix is: \n";
+    std::cout << T << std::endl;
 }
 
 //! process first row of given view and convert it to form required by Lemma 9
@@ -176,30 +235,41 @@ processRow(arma::subview<arma::sword> T)
     int s = 0, t = 0, s1 = 0;
     extendedGCD(s, t, s1, diag[0], t_col[0]);
 
-    std::cout << T << std::endl;
-    diag[0]  = s1;
     t_col[0] = 0;
-
     for (uint i = 1; i < k; ++i) {
-        std::cout << t_col[i] << std::endl;
-        int q = (t * t_col[i] / s1) % t_col[i];
-
+        int q = (t * t_col[i] / s1) % diag[i];
+        // std::cout << "    q = " << q << std::endl;
         if (k <= T.n_cols - 1) {
             arma::subview_row<int> sub_row = T.row(i).subvec(k, T.n_cols - 1);
             sub_row -= q * T.row(i).subvec(k, T.n_cols - 1);
-            sub_row.transform(PositiveModulo(t_col[i]));
+            sub_row.transform(PositiveModulo(diag[i]));
         }
-        t_col[i] = t_col[i] * diag[i] / s1;
+        // std::cout << "    t[i] = " << t_col[i] << ", diag[i] = " << diag[i]
+        //           << ", s1 = " << s1 << std::endl;
+        t_col[i] = t_col[i] * diag[0] / s1;
     }
+    diag[0]  = s1;
+
     if (k <= T.n_cols - 1) {
         T.row(0).subvec(k, T.n_cols - 1).transform(PositiveModulo(s1));
     }
-}
+    // check invariant of Lemma 9
+    // Resulting matrix has to satisfy all 4 conditions of Theorem 6
+    checkConditionsTheorem6(T);
 
-void
-hermiteTriangToSNF(arma::imat & A)
-{
-    for (uint i = 0; i < A.n_rows; ++i) {
-        submatrixToSNF(A.submat(0, 0, i, i));
+    // T(0,0) has to divide all entries in the principal kth submatrix of T
+    for (uint row = 0; row < k; ++row) {
+        for (uint col = 0; col < k; ++col) {
+            if (T(row, col) % T(0, 0) != 0) {
+                std::stringstream e;
+                e << "T(" << row << "," << col << ") = " << T(row, col)
+                  << " is not divisible by T(0,0) = " << T(0, 0) << "!";
+                throw IncorrectForm(e.str());
+            }
+        }
+    }
+    // T(0, k-1) has to be zero - thats what this function is supposed to do.
+    if (0 != T(0, k-1)) {
+        throw IncorrectForm("T(0, k-1) != 0!");
     }
 }
