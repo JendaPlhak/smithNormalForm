@@ -178,7 +178,7 @@ triangularReduction(arma::subview<arma::sword> T)
 }
 
 void
-hermiteTriangToSNF(arma::imat & A)
+hermiteTriangToSNF(arma::subview<arma::sword> A)
 {
     for (uint i = 1; i < A.n_rows; ++i) {
         submatrixToSNF(A.submat(0, 0, i, A.n_cols - 1));
@@ -296,8 +296,15 @@ eliminateExtraColumns(arma::imat & T)
 {
     uint k = T.n_rows;
     uint m = T.n_cols;
+    bool identity = true;
     for (uint i = 0; i < k; ++i) {
-        eliminateExtraColumnsInFirstRow(T.submat(i, i, k - 1, m - 1));
+        // For first identity block of matrix T no need for elimination.
+        if (identity && 1 == T.diag()[i]) {
+            continue;
+        } else {
+            identity = false;
+            eliminateExtraColumnsInFirstRow(T.submat(i, i, k - 1, m - 1));
+        }
     }
 }
 
@@ -322,6 +329,20 @@ eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T)
             int C   = (s * T(i, 0) + t * T(i, j)) % T.diag()[i];
             T(i, j) = (a * T(i, 0) + b * T(i, j)) % T.diag()[i];
             T(i, 0) = C;
+        }
+    }
+}
+
+void
+reduceResultingSquareToSNF(arma::imat & T)
+{
+    for (uint i = 0; i < T.n_rows; ++i) {
+        if (1 != T.diag()[i]) {
+            // transpose the nontrivial matrix
+            T.submat(i, i, T.n_rows - 1, T.n_rows - 1) =
+                T.submat(i, i, T.n_rows - 1, T.n_rows - 1).t();
+            hermiteTriangToSNF(T.submat(i, i, T.n_rows - 1, T.n_rows - 1));
+            break;
         }
     }
 }

@@ -27,10 +27,13 @@ SNF::calculate_storjohann(arma::imat matrix)
     makeHermiteNormalForm(matrix);
     std::cout << "Result: \n" << matrix << std::endl;
     std::cout << "Converting Hermite matrix to SNF...\n";
-    hermiteTriangToSNF(matrix);
+    hermiteTriangToSNF(matrix.submat(0, 0, matrix.n_rows-1, matrix.n_cols-1));
     std::cout << "Result: \n" << matrix << std::endl;
     std::cout << "Eliminating extra columns...\n";
     eliminateExtraColumns(matrix);
+    std::cout << "Result: \n" << matrix << std::endl;
+    std::cout << "Reducing final non-trivial square matrix to SNF...\n";
+    reduceResultingSquareToSNF(matrix);
     std::cout << "Result: \n" << matrix << std::endl;
     return matrix;
 }

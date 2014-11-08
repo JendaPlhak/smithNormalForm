@@ -31,16 +31,16 @@ int main(int argc, char const *argv[])
     //                                  0,     0,     12};
     // std::vector<int> matrix_array = {2,     1, 7,
     //                                  0,     6, 12};
-    std::vector<int> matrix_array = {3,113344, 95472,  42884, 12302,
-                                     0,     2,  1576,  98594, 11872,
-                                     0,     0,     2,  99206, 94692,
-                                     0,     0,     0,   9456,  7080};
+    std::vector<int> matrix_array = {36,113344, 95472,  42884, 12373,12503,12303,
+                                     0,     41,  1576,  98594, 1172,1172,11872,
+                                     0,     0,     13,  99206, 952,94662,94192,
+                                     0,     0,     0,   94,  770, 7780, 7030};
 
     uint size = std::sqrt(matrix_array.size());
-    arma::imat matrix(matrix_array.data(), size + 1, size);
+    arma::imat matrix(matrix_array.data(), 7, 4);
     matrix = matrix.t();
     std::cout << matrix << std::endl;
-    print_wolfram_matrix(matrix, size);
+    // print_wolfram_matrix(matrix, size);
 
     SNF snf;
 
