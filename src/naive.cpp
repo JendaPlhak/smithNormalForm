@@ -6,10 +6,27 @@
 #include <boost/math/common_factor.hpp>
 
 void
-diagonalize(arma::imat & m)
+naive::rowReduce(arma::imat & m)
 {
     for (unsigned int i = 0; i < m.n_rows; ++i) {
-        make_gcd(m.submat(i, i, m.n_rows - 1, m.n_cols - 1));
+        naive::make_gcd(m.submat(i, i, m.n_rows - 1, m.n_cols - 1));
+        if (m.diag()[i] < 0) {
+            m.row(i) *= (-1);
+        }
+    }
+}
+
+void
+naive::diagonalize(arma::imat & m)
+{
+    for (unsigned int i = 0; i < m.n_rows; ++i) {
+        naive::make_gcd(m.submat(i, i, m.n_rows - 1, m.n_cols - 1));
+        // Since -1 is invertible element in Z we can take absolute value of
+        // diagonal element.
+        m(0, 0) = std::abs(m(0, 0));
+        for (unsigned int j = 1; j < m.n_cols; ++j) {
+            m(0, j) = 0;
+        }
     }
 }
 
@@ -24,9 +41,9 @@ diagonalize(arma::imat & m)
     .00...
  */
 void
-make_gcd(arma::subview<arma::sword> m)
+naive::make_gcd(arma::subview<arma::sword> m)
 {
-    for (unsigned int i = 1; i < m.n_cols; ++i) {
+    for (unsigned int i = 1; i < m.n_rows; ++i) {
         // Check Euclidean algorithm invariant |a| >= |b|
         while (std::abs(m(0, 0)) < std::abs(m(i, 0)) ) {
             m.swap_rows(0, i);
@@ -36,12 +53,6 @@ make_gcd(arma::subview<arma::sword> m)
             m.row(0) -= (m(0,0) / m(i,0)) * m.row(i);
             m.swap_rows(0, i);
         }
-    }
-    // Since -1 is invertible element in Z we can take absolute value of
-    // diagonal element.
-    m(0, 0) = std::abs(m(0, 0));
-    for (unsigned int j = 1; j < m.n_cols; ++j) {
-        m(0, j) = 0;
     }
 }
 
@@ -79,7 +90,7 @@ eliminate_zero_elements(arma::imat & m)
             ascending order. Zero entries are placed at very end of diagonal.
  */
 void
-ensure_divisibility(arma::imat & m)
+naive::ensure_divisibility(arma::imat & m)
 {
     uint zero_n  = eliminate_zero_elements(m);
 
@@ -98,7 +109,7 @@ ensure_divisibility(arma::imat & m)
 }
 
 void
-qsort_diagonal(arma::imat & m)
+naive::qsort_diagonal(arma::imat & m)
 {
     #define  MAX_LEVELS  1000
     int piv;

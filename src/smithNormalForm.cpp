@@ -11,11 +11,11 @@ arma::imat
 SNF::calculate_naive(arma::imat m)
 {
     std::cout << "Performing diagonalization...\n";
-    diagonalize(m);
+    naive::diagonalize(m);
     std::cout << "Sorting diagonal...\n";
     m.diag() = arma::sort(m.diag());
     std::cout << "Ensuring divisibility...\n";
-    ensure_divisibility(m);
+    naive::ensure_divisibility(m);
     std::cout << "Complete!\n";
     return m;
 }
@@ -23,6 +23,10 @@ SNF::calculate_naive(arma::imat m)
 arma::imat
 SNF::calculate_storjohann(arma::imat matrix)
 {
+    std::cout << "Input matrix: \n" << matrix << std::endl;
+    std::cout << "Performing naive row reduction...";
+    naive::rowReduce(matrix);
+    std::cout << "Result: \n" << matrix << std::endl;
     std::cout << "Making Hermite normal form...\n";
     makeHermiteNormalForm(matrix);
     std::cout << "Result: \n" << matrix << std::endl;

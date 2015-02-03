@@ -1,5 +1,7 @@
 #include "smithNormalForm.h"
 #include "storjohannTriangular.h"
+#include "storjohannNumeric.h"
+#include "triangularization.h"
 
 #include <iostream>
 #include <armadillo>
@@ -13,10 +15,12 @@ void print_wolfram_matrix(arma::imat matrix, uint size);
 
 int main(int argc, char const *argv[])
 {
-    // unsigned int size = atoi(argv[1]);
+    uint size = atoi(argv[1]);
 
     srand(time(NULL));
-    // arma::imat matrix = arma::randi<arma::imat>(size, size);
+    while (true) {
+    arma::imat matrix = arma::randi<arma::imat>(size, size);
+
 
     // for (int & c : matrix) {
     //     c = c % 10;
@@ -26,21 +30,38 @@ int main(int argc, char const *argv[])
     //                                  0,     1, 66359, 153094,
     //                                  0,     0,     9,  43651,
     //                                  0,     0,     0,     77};
-    // std::vector<int> matrix_array = {2,     0,     0,
-    //                                  0,     6,     1,
-    //                                  0,     0,     12};
+    // std::vector<int> matrix_array = {2,     -6,     0,
+    //                                  0,    2,     -6,
+    //                                  -6,   0,     2};
     // std::vector<int> matrix_array = {2,     1, 7,
     //                                  0,     6, 12};
-    std::vector<int> matrix_array = {36,113344, 95472,  42884, 12373,12503,12303,
-                                     0,     41,  1576,  98594, 1172,1172,11872,
-                                     0,     0,     13,  99206, 952,94662,94192,
-                                     0,     0,     0,   94,  770, 7780, 7030};
+    // std::vector<int> matrix_array = {36,113344, 95472,  42884, 12373,12503,12303,
+    //                                  0,     41,  1576,  98594, 1172,1172,11872,
+    //                                  0,     0,     13,  99206, 952,94662,94192,
+    //                                  0,     0,     0,   94,  770, 7780, 7030};
 
-    uint size = std::sqrt(matrix_array.size());
-    arma::imat matrix(matrix_array.data(), 7, 4);
-    matrix = matrix.t();
+
+
+    // uint size = std::sqrt(matrix_array.size());
+    // arma::imat matrix(matrix_array.data(), size, size);
+    // matrix = matrix.t();
+    matrix.transform(PositiveModulo(5));
+    float det = std::abs(arma::det(arma::conv_to<arma::mat>::from(matrix)));
+    if (0.01f > det) {
+        continue;
+    }
+
+    printf("Determinant: %f\n", det);
     std::cout << matrix << std::endl;
     // print_wolfram_matrix(matrix, size);
+    triangularize(matrix);
+    float new_det = std::abs(arma::det(arma::conv_to<arma::mat>::from(matrix)));
+    if (0.01f < std::abs(det - new_det) ) {
+        printf("Determinants differ!!! New det: %f\n", new_det);
+        break;
+    }
+
+    std::cout << matrix << std::endl;
 
     SNF snf;
 
@@ -59,6 +80,7 @@ int main(int argc, char const *argv[])
     std::cout << storjohann_result << std::endl;
     printf("\nCalculation took %f s\n", duration.count() / 1000000.);
 
+}
     return 0;
 }
 

@@ -35,9 +35,11 @@ gcdCombination(int a, int b, int N)
         int y = N / g;      // ensuring that gcd(g, y) = 1
 
         // ensure that gcd(x, y) = 1
-        int gcd_x_y = gcd(x, y);
-        y = y / gcd_x_y;
-        x = x * gcd_x_y;
+        while (1 != gcd(x, y)) {
+            int gcd_x_y = gcd(x, y);
+            y = y / gcd_x_y;
+            x = x * gcd_x_y;
+        }
         // check invariant
         if (1 != gcd(x, y)) {
             throw std::logic_error("gcd(x, y) == 1 doesn't hold!");
@@ -95,7 +97,7 @@ CRT(const int x, const int y)
 // s * a + t * b = gcd(a, b)
 // Also, if a = +/- gcd, then choose t = 0.
 void extendedGCD(int & s_out, int & t_out, int & gcd_out,
-                    const int a, const int b)
+                    const int a, const int b, bool first_nonzero)
 {
     static int one ( 1 );
     static int zero ( 0 );
@@ -149,6 +151,17 @@ void extendedGCD(int & s_out, int & t_out, int & gcd_out,
         s_out = neg_one;
         t_out = zero;
     }
+    if ( first_nonzero ) {
+        if (s_out == 0) {
+            if (t_out > 0) {
+                s_out += b / gcd_out;
+                t_out -= a / gcd_out;
+            } else {
+                s_out -= b / gcd_out;
+                t_out += a / gcd_out;
+            }
+        }
+    }
 }
 
 //! calculates multiple product of elements on diagonal
@@ -160,4 +173,16 @@ diagonalMultiple(const arma::diagview<int> & diag)
         det *= diag[i];
     }
     return det;
+}
+
+
+int
+floored_factor(const int x, const int y)
+{
+    auto r = std::div(x, y);
+    if (x >= 0 || r.rem == 0) {
+        return r.quot;
+    } else {
+        return r.quot - 1;
+    }
 }
