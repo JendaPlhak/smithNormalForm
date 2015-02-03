@@ -45,7 +45,7 @@ int main(int argc, char const *argv[])
     // uint size = std::sqrt(matrix_array.size());
     // arma::imat matrix(matrix_array.data(), size, size);
     // matrix = matrix.t();
-    matrix.transform(PositiveModulo(5));
+    matrix.transform(PositiveModulo(2));
     float det = std::abs(arma::det(arma::conv_to<arma::mat>::from(matrix)));
     if (0.01f > det) {
         continue;

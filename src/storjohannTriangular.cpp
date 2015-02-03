@@ -171,11 +171,7 @@ hermiteTriangToSNF(arma::subview<arma::sword> A)
 void
 submatrixToSNF(arma::subview<arma::sword> T)
 {
-    printf("Before divisibility:\n");
-    std::cout << T << std::endl;
     ensureDivisibility(T);
-    printf("After divisibility:\n");
-    std::cout << T << std::endl;
     eliminateTrailingCol(T);
 
     // check invariant
@@ -218,14 +214,14 @@ ensureDivisibility(arma::subview<arma::sword> T)
 void
 eliminateTrailingCol(arma::subview<arma::sword> T)
 {
-    std::cout << "Eliminating trailing column\n";
+    // std::cout << "Eliminating trailing column\n";
     for (uint i = 0; i < T.n_rows - 1; ++i) {
-        std::cout << "Processing row " << i << std::endl;
-        std::cout << T.submat(i, i, T.n_rows - 1, T.n_cols - 1) << std::endl;
+        // std::cout << "Processing row " << i << std::endl;
+        // std::cout << T.submat(i, i, T.n_rows - 1, T.n_cols - 1) << std::endl;
         processRow(T.submat(i, i, T.n_rows - 1, T.n_cols - 1));
     }
-    std::cout << "Resulting sub-matrix is: \n";
-    std::cout << T << std::endl;
+    // std::cout << "Resulting sub-matrix is: \n";
+    // std::cout << T << std::endl;
 }
 
 //! process first row of given view and convert it to form required by Lemma 9
@@ -233,8 +229,6 @@ void
 processRow(arma::subview<arma::sword> T)
 {
     const uint k = T.n_rows;
-    printf("k = %d, Processing:\n", k);
-    std::cout << T << std::endl;
     arma::subview_col<int> t_col = T.col(k - 1);
     arma::diagview<int>    diag  = T.diag();
     int s = 0, t = 0, s1 = 0;
@@ -248,7 +242,6 @@ processRow(arma::subview<arma::sword> T)
         // std::cout << T << std::endl;
         if (k < T.n_cols) {
             arma::subview_row<int> sub_row = T.row(i).subvec(k, T.n_cols - 1);
-            std::cout << T.row(i).subvec(k, T.n_cols - 1) << std::endl;
             sub_row -= q * T.row(0).subvec(k, T.n_cols - 1);
         }
         // std::cout << "    t[i] = " << t_col[i] << ", diag[i] = " << diag[i]
@@ -256,27 +249,27 @@ processRow(arma::subview<arma::sword> T)
         // printf("After mod:\n");
         // std::cout << T << std::endl;
         t_col[i] = t_col[i] * diag[0] / s1;
-        printf("new  %d\n", t_col[i]);
         if (k <= T.n_cols) {
-            arma::subview_row<int> sub_row = T.row(i).subvec(std::max(k - 1, i + 1),
-                                                                T.n_cols - 1);
-            sub_row.transform(PositiveModulo(diag[i]));
+            if (k - 1 == i) {
+                if (k < T.n_cols) {
+                    arma::subview_row<int> sub_row = T.row(i).subvec(k, T.n_cols - 1);
+                    sub_row.transform(PositiveModulo(diag[i]));
+                }
+            } else {
+                arma::subview_row<int> sub_row = T.row(i).subvec(k - 1, T.n_cols - 1);
+                sub_row.transform(PositiveModulo(diag[i]));
+            }
+
         }
     }
     diag[0] = s1;
 
     if (k <= T.n_cols) {
-        std::cout << "Transforming: \n";
-        std::cout << T << std::endl;
-        std::cout << T.row(0).subvec(k - 1, T.n_cols - 1) << std::endl;
         T.row(0).subvec(k - 1, T.n_cols - 1).transform(PositiveModulo(s1));
     }
-    std::cout << "Transformed: \n";
-    std::cout << T << std::endl;
     // check invariant of Lemma 9
     // Resulting matrix has to satisfy all 4 conditions of Theorem 6
     checkConditionsTheorem6(T);
-    std::cout << "fofoofofof\n";
 
     // T(0,0) has to divide all entries in the principal kth submatrix of T
     for (uint row = 0; row < k; ++row) {
