@@ -1,4 +1,6 @@
 #include "naive.h"
+
+#define ARMA_64BIT_WORD
 #include <cmath>
 #include <algorithm>
 #include <iostream>

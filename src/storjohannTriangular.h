@@ -1,6 +1,7 @@
 #ifndef SNF_STORJOHANN_TRIANGULAR_H
 #define SNF_STORJOHANN_TRIANGULAR_H
 
+#define ARMA_64BIT_WORD
 #include <armadillo>
 
 class IncorrectForm : public std::exception {

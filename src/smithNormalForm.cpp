@@ -2,6 +2,8 @@
 #include "naive.h"
 #include "probabilistic.h"
 #include "storjohannTriangular.h"
+
+#define ARMA_64BIT_WORD
 #include <iostream>
 #include <armadillo>
 #include <algorithm>

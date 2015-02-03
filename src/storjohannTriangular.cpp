@@ -1,3 +1,4 @@
+#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <cmath>
 #include <exception>
@@ -73,7 +74,7 @@ checkConditionsTheorem6(const arma::subview<arma::sword> T)
     }
     // off-diagonal entries in row k-1 must be bounded in magnitude by D, a
     // positive multiple of the determinant of the principal kth submatrix of T
-    int determinant = std::abs(arma::det(T_mat));
+    int_t determinant = std::abs(arma::det(T_mat));
     for (uint col = k; col < T.n_cols; ++col) {
         if (determinant < T(k - 1, col)) {
             throw IncorrectForm("off-diagonal entries in row k-1 must be"
@@ -141,7 +142,7 @@ void
 triangularReduction(arma::subview<arma::sword> T)
 {
     // initialization
-    int d = diagonalMultiple(T.submat(1, 1, T.n_rows - 1, T.n_cols - 1).diag());
+    int_t d = diagonalMultiple(T.submat(1, 1, T.n_rows - 1, T.n_cols - 1).diag());
     if (T(0, 0) < 0) {
         T.row(0) = (-1) * T.row(0);
     }
@@ -149,11 +150,11 @@ triangularReduction(arma::subview<arma::sword> T)
 
     // Reduce off-diagonal entries in row 0
     for (uint j = 1; j < T.n_rows; ++j) {
-        std::div_t div_result = std::div(T(0, j), T(j, j));
+        auto div_result = std::div(T(0, j), T(j, j));
         T(0, j) = div_result.rem;
 
         if (j + 1 < T.n_cols) {
-            arma::subview_row<int> sub_row = T.row(0).subvec(j+1, T.n_cols - 1);
+            auto sub_row = T.row(0).subvec(j+1, T.n_cols - 1);
             sub_row -= div_result.quot * T.row(j).subvec(j+1, T.n_cols - 1);
             sub_row.transform(PositiveModulo(d));
         }
@@ -187,20 +188,20 @@ submatrixToSNF(arma::subview<arma::sword> T)
 void
 ensureDivisibility(arma::subview<arma::sword> T)
 {
-    int k = T.n_rows;
-    arma::subview_col<int> t = T.col(k - 1);
+    int_t k  = T.n_rows;
+    auto t = T.col(k - 1);
 
     for (int i = k - 2; i >= 0; --i) {
-        int a = T.diag()[i];
-        int c = gcdCombination(t[i], t[i + 1], a);
+        int_t a = T.diag()[i];
+        int_t c = gcdCombination(t[i], t[i + 1], a);
 
-        arma::subview_row<int> sub_row = T.row(i).subvec(k - 1, T.n_cols - 1);
+        auto sub_row = T.row(i).subvec(k - 1, T.n_cols - 1);
         sub_row += c * T.row(i+1).subvec(k - 1, T.n_cols - 1);
         sub_row.transform(PositiveModulo(a));
     }
 
     // check invariant
-    int gcd_t = t[k - 1];
+    int_t gcd_t = t[k - 1];
     for (int i = k - 2; i >= 0; --i) {
         using boost::math::gcd;
         gcd_t = gcd(gcd_t, t[i]);
@@ -229,19 +230,19 @@ void
 processRow(arma::subview<arma::sword> T)
 {
     const uint k = T.n_rows;
-    arma::subview_col<int> t_col = T.col(k - 1);
-    arma::diagview<int>    diag  = T.diag();
-    int s = 0, t = 0, s1 = 0;
+    arma::subview_col<int_t> t_col = T.col(k - 1);
+    arma::diagview<int_t>    diag  = T.diag();
+    int_t s = 0, t = 0, s1 = 0;
     extendedGCD(s, t, s1, diag[0], t_col[0]);
 
     t_col[0] = 0;
     for (uint i = 1; i < k; ++i) {
-        int q = (t * t_col[i] / s1) % diag[i];
+        int_t q = (t * t_col[i] / s1) % diag[i];
         // std::cout << "    q = " << q << std::endl;
         // printf("Before mod:\n");
         // std::cout << T << std::endl;
         if (k < T.n_cols) {
-            arma::subview_row<int> sub_row = T.row(i).subvec(k, T.n_cols - 1);
+            arma::subview_row<int_t> sub_row = T.row(i).subvec(k, T.n_cols - 1);
             sub_row -= q * T.row(0).subvec(k, T.n_cols - 1);
         }
         // std::cout << "    t[i] = " << t_col[i] << ", diag[i] = " << diag[i]
@@ -252,11 +253,11 @@ processRow(arma::subview<arma::sword> T)
         if (k <= T.n_cols) {
             if (k - 1 == i) {
                 if (k < T.n_cols) {
-                    arma::subview_row<int> sub_row = T.row(i).subvec(k, T.n_cols - 1);
+                    auto sub_row = T.row(i).subvec(k, T.n_cols - 1);
                     sub_row.transform(PositiveModulo(diag[i]));
                 }
             } else {
-                arma::subview_row<int> sub_row = T.row(i).subvec(k - 1, T.n_cols - 1);
+                auto sub_row = T.row(i).subvec(k - 1, T.n_cols - 1);
                 sub_row.transform(PositiveModulo(diag[i]));
             }
 
@@ -313,18 +314,18 @@ eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T)
     uint k = T.n_rows;
     uint m = T.n_cols;
     for (uint j = k; j < m; ++j) {
-        int s = 0; int t = 0; int s1 = 0;
+        int_t s = 0; int_t t = 0; int_t s1 = 0;
         extendedGCD(s, t, s1, T(0, 0), T(0, j));
 
         // initialize
-        int a   = (-1) * T(0, j) / s1;
-        int b   = T(0, 0) / s1;
+        int_t a   = (-1) * T(0, j) / s1;
+        int_t b   = T(0, 0) / s1;
         T(0, 0) = s1;
         T(0, j) = 0;
 
         // TODO implement using column-wise operations!
         for (uint i = 1; i < k; ++i) {
-            int C   = (s * T(i, 0) + t * T(i, j)) % T.diag()[i];
+            int_t C = (s * T(i, 0) + t * T(i, j)) % T.diag()[i];
             T(i, j) = (a * T(i, 0) + b * T(i, j)) % T.diag()[i];
             T(i, 0) = C;
         }

@@ -1,6 +1,7 @@
 #ifndef SNF_SMITH_NORMAL_FORM_H
 #define SNF_SMITH_NORMAL_FORM_H
 
+#define ARMA_64BIT_WORD
 #include <armadillo>
 
 

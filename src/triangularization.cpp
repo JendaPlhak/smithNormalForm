@@ -1,6 +1,7 @@
 #include <boost/math/common_factor.hpp>
 #include <vector>
 
+#define ARMA_64BIT_WORD
 #include "triangularization.h"
 #include "storjohannTriangular.h"
 #include "storjohannNumeric.h"
@@ -25,10 +26,10 @@ imat_det(Matrix_Type A)
 uint
 get_next_rank(arma::subview<arma::sword> A)
 {
-    const int N = A(0,0);
+    const int_t N = A(0,0);
     uint j = 1;
     for (; j < A.n_cols; ++j) {
-        const int N_ = A(0,j);
+        const int_t N_ = A(0,j);
         for (uint i = 1; i < A.n_rows; ++i) {
             if (N * A(i, j) - N_ * A(i, 0) != 0) {
                 goto PROFILE_FOUND;
@@ -76,7 +77,7 @@ triangularize(arma::imat & A)
     }
     A = A_tmp.submat(1, 1, n_rows - 2, n_cols - 2);
 
-    if (0.001f < std::abs(det_orig - imat_det(A))) {
+    if (0.1f < std::abs(det_orig - std::abs(imat_det(A)))) {
         fprintf(stderr, "det_orig = %f, new_det = %f\n", det_orig, imat_det(A));
         throw IncorrectForm("Determinant mustn't change during triangularization!");
     }
@@ -111,9 +112,9 @@ conditioningRoutineOutputCheck(Matrix_Type B)
         std::cout << B << std::endl;
         throw IncorrectForm("Principal matrix must have rank 2!");
     }
-    int x = gcd(B(1,0), B(0,0));
+    int_t x = gcd(B(1,0), B(0,0));
     for (uint i = 2; i < B.n_rows; i++) {
-        int y = gcd(x, B(i,0));
+        int_t y = gcd(x, B(i,0));
         if (y != x) {
             throw IncorrectForm("gcd(a_k,N) != gcd(a_k,N, b_1,..., b_k)");
         }
@@ -152,21 +153,21 @@ conditioningRoutine(arma::subview<arma::sword> B, const uint col2)
         return;
     }
 
-    const int & N  = B(0,0);
-    const int & N_ = B(0,col2);
-    int & a  = B(1,0);
-    int & a_ = B(1,col2);
+    const int_t & N  = B(0,0);
+    const int_t & N_ = B(0,col2);
+    int_t & a  = B(1,0);
+    int_t & a_ = B(1,col2);
     for (uint i = 2; i < B.n_rows; i++) {
         using boost::math::gcd;
 
-        int g = gcd(a, B(i,0));
+        int_t g = gcd(a, B(i,0));
         if (g == 0) { // a and B(i,0) must be 0, therefore no action needed.
             continue;
         }
-        int a_tmp = (a / g)      % N;
-        int b_tmp = (B(i,0) / g) % N;
+        int_t a_tmp = (a / g)      % N;
+        int_t b_tmp = (B(i,0) / g) % N;
 
-        int t = gcdCombination(a_tmp, b_tmp, N);
+        int_t t = gcdCombination(a_tmp, b_tmp, N);
         if (0 == N * (a_ + t * B(i,col2)) - N_ * (a + t * B(i,0))) {
             t = -gcdCombination(a_tmp, -b_tmp, N);
         }
@@ -181,8 +182,8 @@ columnReductionOutputCheck(arma::subview<arma::sword> B,
                             const int k,
                             const int col2)
 {
-    const int t1 = B(B.n_rows - k - 2, 0);
-    const int t2 = B(B.n_rows - k - 1, col2);
+    const int_t t1 = B(B.n_rows - k - 2, 0);
+    const int_t t2 = B(B.n_rows - k - 1, col2);
     if (t1 <= 0 || t2 <= 0) {
         std::cout << B << std::endl;
         std::cerr << "t1 = " << t1 << ", "
@@ -219,10 +220,10 @@ columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
     // std::cout << A_tmp << std::endl;
 
     uint offset = B.n_rows - k - 2;
-    int m1, m2, t1;
+    int_t m1, m2, t1;
 
-    const int N = B(offset, 0);
-    const int a = B(offset + 1, 0);
+    const int_t N = B(offset, 0);
+    const int_t a = B(offset + 1, 0);
 
     extendedGCD(m1, m2, t1, N, a, true); // gcd(N, a_k)
 
@@ -241,7 +242,7 @@ columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
     // std::cout << "Before elimination:\n";
     // std::cout << B << std::endl;
 
-    const int t2 = B(offset + 1, col2);
+    const int_t t2 = B(offset + 1, col2);
     // Reduce first and second column
     for (uint i = 0; i < B.n_rows; i++) {
         if (i == offset + 1) {

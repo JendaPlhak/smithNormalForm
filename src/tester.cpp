@@ -3,6 +3,7 @@
 #include "storjohannNumeric.h"
 #include "triangularization.h"
 
+#define ARMA_64BIT_WORD
 #include <iostream>
 #include <armadillo>
 #include <chrono>
@@ -18,6 +19,7 @@ int main(int argc, char const *argv[])
     uint size = atoi(argv[1]);
 
     srand(time(NULL));
+    // for (int i = 0; i < 1; ++i) {
     while (true) {
     arma::imat matrix = arma::randi<arma::imat>(size, size);
 
@@ -45,11 +47,11 @@ int main(int argc, char const *argv[])
     // uint size = std::sqrt(matrix_array.size());
     // arma::imat matrix(matrix_array.data(), size, size);
     // matrix = matrix.t();
-    matrix.transform(PositiveModulo(2));
+    matrix.transform(PositiveModulo(3));
     float det = std::abs(arma::det(arma::conv_to<arma::mat>::from(matrix)));
-    if (0.01f > det) {
-        continue;
-    }
+    // if (0.01f > det) {
+    //     continue;
+    // }
 
     printf("Determinant: %f\n", det);
     std::cout << matrix << std::endl;

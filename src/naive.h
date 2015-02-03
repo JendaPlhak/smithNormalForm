@@ -1,6 +1,7 @@
 #ifndef SNF_NAIVE_H
 #define SNF_NAIVE_H
 
+#define ARMA_64BIT_WORD
 #include <armadillo>
 
 namespace naive

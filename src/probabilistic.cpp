@@ -1,19 +1,21 @@
 #include "probabilistic.h"
+
+#define ARMA_64BIT_WORD
 #include <vector>
 #include <cmath>
 #include <iostream>
 #include <armadillo>
 
 /*
-    This code is altogether based on paper [1] "On Efficient Sparse Integer 
+    This code is altogether based on paper [1] "On Efficient Sparse Integer
     Matrix Smith Normal Form Computations"
  */
 
 double ovalsCassiniBound(arma::imat & A);
 
-int 
-valence(arma::imat & A) 
-{   
+int
+valence(arma::imat & A)
+{
     arma::imat B;
     if (A.n_rows < A.n_cols) {
         B = A * A.t();
@@ -37,7 +39,7 @@ ovalsCassiniBound(arma::imat & A)
     for (unsigned int i = 0; i < A.n_rows; ++i) {
         centers(i) = arma::dot(A.row(i), A.row(i));
     }
-    
+
     A = arma::abs(A);
 
     arma::ivec ones = arma::ivec(A.n_rows, arma::fill::ones);
