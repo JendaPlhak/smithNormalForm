@@ -67,6 +67,14 @@ info: $(BINS)
 pinfo:
 	make -j$(N_JOBS) info
 
+# add performance flag to flags, then compile
+perf: CFLAGS += -DSMITH_PERFORMANCE
+perf: $(BINS)
+
+# parallel make perf
+pperf:
+	make -j$(N_JOBS) perf
+
 # include compiler-generated dependencies, so obj files get recompiled when
 # their header changes
 -include $(DEPENDS)

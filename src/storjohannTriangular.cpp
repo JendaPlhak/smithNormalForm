@@ -139,7 +139,7 @@ makeHermiteNormalForm(arma::imat & A)
     for (int k = A.n_rows - 2; k >= 0; --k) {
         triangularReduction(A.submat(k, k, A.n_rows - 1, A.n_cols - 1));
     }
-    checkCorrectFormHermiteTransform(A);
+    P_ checkCorrectFormHermiteTransform(A);
 }
 
 //! perform triangular reduction of input matrix T. For details please refer to
@@ -284,7 +284,7 @@ processRow(arma::subview<arma::sword> T)
     }
     // check invariant of Lemma 9
     // Resulting matrix has to satisfy all 4 conditions of Theorem 6
-    checkConditionsTheorem6(T);
+    P_ checkConditionsTheorem6(T);
 
     // T(0,0) has to divide all entries in the principal kth submatrix of T
     for (uint row = 0; row < k; ++row) {
@@ -360,7 +360,7 @@ reduceResultingSquareToSNF(arma::imat & T)
     hermiteTriangToSNF_Internal(T.submat(0, 0, T.n_rows - 1, T.n_rows - 1));
 
     D_ std::cout << T << std::endl;
-    checkSNF(T.submat(0, 0, T.n_rows - 1, T.n_cols - 1));
+    P_ checkSNF(T.submat(0, 0, T.n_rows - 1, T.n_cols - 1));
 }
 
 uint

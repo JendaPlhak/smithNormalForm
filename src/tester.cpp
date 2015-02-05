@@ -2,6 +2,7 @@
 #include "storjohannTriangular.h"
 #include "storjohannNumeric.h"
 #include "triangularization.h"
+#include "util.h"
 
 #define ARMA_64BIT_WORD
 #include <iostream>
@@ -80,10 +81,10 @@ int main(int argc, char const *argv[])
 
     // std::cout << "Naive method result:" << std::endl;
     // std::cout << naive_result << std::endl;
-    // std::cout << "Storjohann method: " << std::endl;
-    // std::cout << storjohann_result << std::endl;
-    // printf("\nCalculation took %f s\n", duration.count() / 1000000.);
-    // std::cout << "###################################################################\n";
+    P_ std::cout << "Storjohann method: " << std::endl;
+    P_ std::cout << storjohann_result << std::endl;
+    P_ printf("\nCalculation took %f s\n", duration.count() / 1000000.);
+    P_ std::cout << "###################################################################\n";
 
 }
     return 0;

@@ -128,7 +128,7 @@ triangularize(arma::imat & A)
 
     D_ std::cout << "Resulting matrix: " << std::endl;
     D_ std::cout << A << std::endl;
-    hermiteTriangularFormCheck(A);
+    P_ hermiteTriangularFormCheck(A);
 
     if (0.1f < std::abs(det_orig - std::abs(mat_det(A)))) {
         fprintf(stderr, "det_orig = %f, new_det = %f\n", det_orig, mat_det(A));
@@ -162,7 +162,7 @@ conditioningRoutine(arma::subview<arma::sword> B, const uint col2)
     }
     D_ std::cout << "Result:\n";
     D_ std::cout << B << std::endl;
-    conditioningRoutineInputCheck(arma::imat(arma::join_rows(B.col(0), B.col(col2))));
+    P_ conditioningRoutineInputCheck(arma::imat(arma::join_rows(B.col(0), B.col(col2))));
 
     if (B.n_rows == 2) { // There is no work to be done
         return;
@@ -189,8 +189,8 @@ conditioningRoutine(arma::subview<arma::sword> B, const uint col2)
         B.row(1) += t * B.row(i);
     }
 
-    conditioningRoutineOutputCheck(
-        arma::imat(arma::join_rows(B.col(0), B.col(col2))));
+    P_ conditioningRoutineOutputCheck(
+            arma::imat(arma::join_rows(B.col(0), B.col(col2))));
 }
 
 void
@@ -207,8 +207,8 @@ columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
     D_ printf("After conditioningRoutine: \n");
     D_ std::cout << arma::join_rows(B.col(0), B.col(col2)) << std::endl;
 
-    columnReductionInputCheck(
-        arma::imat(arma::join_rows(B.col(0), B.col(col2))), k);
+    P_ columnReductionInputCheck(
+            arma::imat(arma::join_rows(B.col(0), B.col(col2))), k);
 
     uint offset = B.n_rows - k - 2;
     int_t m1, m2, t1;
@@ -251,8 +251,8 @@ columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
     }
     D_ std::cout << "After elimination:\n";
     D_ std::cout << B << std::endl;
-    columnReductionOutputCheck(
-        arma::imat(arma::join_rows(B.col(0), B.col(col2))), k);
+    P_ columnReductionOutputCheck(
+            arma::imat(arma::join_rows(B.col(0), B.col(col2))), k);
 }
 /**
  * Reduce columns between matrix profiles modulo profile entries

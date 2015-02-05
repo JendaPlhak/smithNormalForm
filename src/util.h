@@ -11,3 +11,9 @@
 #else
  #define D_ if (0)
 #endif
+
+#ifdef SMITH_PERFORMANCE
+ #define P_ if (0)
+#else
+ #define P_
+#endif
