@@ -20,6 +20,7 @@ int_t CRT(const int_t x, const int_t y);
 
 int_t diagonalMultiple(const arma::diagview<int_t> & diag);
 
+//! implements valid x / y over Z
 int_t floored_factor(const int_t x, const int_t y);
 
 #endif // SNF_STORJOHANN_NUMERIC_H

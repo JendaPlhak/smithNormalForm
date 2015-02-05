@@ -8,13 +8,19 @@
 
 #include "storjohannNumeric.h"
 #include "storjohannTriangular.h"
+#include "util.h"
 
-void triangularReduction(arma::subview<arma::sword> A);
-void eliminateTrailingCol(arma::subview<arma::sword> T);
-void ensureDivisibility(arma::subview<arma::sword> T);
-void submatrixToSNF(arma::subview<arma::sword> T);
-void processRow(arma::subview<arma::sword> T);
-void eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T);
+void triangularReduction(arma::subview<arma::sword>);
+void eliminateTrailingCol(arma::subview<arma::sword>);
+void ensureDivisibility(arma::subview<arma::sword>);
+void submatrixToSNF(arma::subview<arma::sword>);
+void processRow(arma::subview<arma::sword>);
+void eliminateExtraColumnsInFirstRow(arma::subview<arma::sword>);
+
+template <typename MatrixType>
+void
+hermiteTriangToSNF_Internal(MatrixType &&);
+
 
 void
 checkSNF(const arma::subview<arma::sword> T)
@@ -161,8 +167,16 @@ triangularReduction(arma::subview<arma::sword> T)
     }
 }
 
+//! Wrapper so that the templated function can be implemented in .cpp file
 void
-hermiteTriangToSNF(arma::subview<arma::sword> A)
+hermiteTriangToSNF(arma::imat & A)
+{
+    hermiteTriangToSNF_Internal(A);
+}
+
+template <typename MatrixType>
+void
+hermiteTriangToSNF_Internal(MatrixType && A)
 {
     for (uint i = 1; i < A.n_rows; ++i) {
         submatrixToSNF(A.submat(0, 0, i, A.n_cols - 1));
@@ -335,14 +349,30 @@ eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T)
 void
 reduceResultingSquareToSNF(arma::imat & T)
 {
-    for (uint i = 0; i < T.n_rows; ++i) {
-        if (1 != T.diag()[i]) {
-            // transpose the nontrivial matrix
-            T.submat(i, i, T.n_rows - 1, T.n_rows - 1) =
-                T.submat(i, i, T.n_rows - 1, T.n_rows - 1).t();
-            hermiteTriangToSNF(T.submat(i, i, T.n_rows - 1, T.n_rows - 1));
-            break;
+    if (0 == T.n_rows || 0 == T.n_cols) {
+        return;
+    }
+    // transpose the nontrivial matrix
+    T.submat(0, 0, T.n_rows - 1, T.n_rows - 1) =
+                T.submat(0, 0, T.n_rows - 1, T.n_rows - 1).t();
+    hermiteTriangToSNF_Internal(T.submat(0, 0, T.n_rows - 1, T.n_rows - 1));
+
+    D_ std::cout << T << std::endl;
+    checkSNF(T.submat(0, 0, T.n_rows - 1, T.n_cols - 1));
+}
+
+uint
+stripZeroRows(arma::imat & T)
+{
+    uint zero_rows = 0;
+    for (int i = T.n_rows - 1; i >= 0; --i) {
+        if (arma::any(T.row(i))) {
+            T.resize(T.n_rows - zero_rows, T.n_cols);
+            return zero_rows;
+        } else {
+            ++zero_rows;
         }
     }
-    checkSNF(T.submat(0, 0, T.n_rows - 1, T.n_cols - 1));
+    T.resize(0, T.n_cols);
+    return T.n_rows;
 }

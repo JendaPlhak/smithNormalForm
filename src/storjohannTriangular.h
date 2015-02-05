@@ -4,20 +4,26 @@
 #define ARMA_64BIT_WORD
 #include <armadillo>
 
-class IncorrectForm : public std::exception {
-    std::string error_message;
-    virtual const char* what() const throw() {
-        return error_message.c_str();
-    }
+class IncorrectForm : public std::logic_error {
 public:
-    IncorrectForm(const std::string & message) : error_message(message) {}
-    std::string str() const { return error_message; }
+    IncorrectForm(const std::string & message)
+     : std::logic_error(message) { }
+
+    virtual ~IncorrectForm() { }
+    std::string str() const { return what(); }
 };
 
 void makeHermiteNormalForm(arma::imat & A);
-void hermiteTriangToSNF(arma::subview<arma::sword> A);
+void hermiteTriangToSNF(arma::imat & A);
 void eliminateExtraColumns(arma::imat & T);
 void reduceResultingSquareToSNF(arma::imat & T);
+
+/**
+ * Strips all trailing zero columns off the matrix T
+ * @param T input matrix
+ * @return Number of stripped rows
+ */
+uint stripZeroRows(arma::imat & T);
 
 
 #endif // SNF_STORJOHANN_TRIANGULAR_H

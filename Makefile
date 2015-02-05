@@ -51,13 +51,21 @@ pall:
 
 all: $(BINS) $(LIB)
 
-# add debug flag to flags, then compile
-debug: CFLAGS += -DRRRR_INFO
-debug: $(BINS)
+# add debug flag to flags, then compile with info
+debug: CFLAGS += -DSMITH_DEBUG
+debug: info
 
 # parallel make debug
 pdebug:
 	make -j$(N_JOBS) debug
+
+# add info flag to flags, then compile
+info: CFLAGS += -DSMITH_INFO
+info: $(BINS)
+
+# parallel make info
+pinfo:
+	make -j$(N_JOBS) info
 
 # include compiler-generated dependencies, so obj files get recompiled when
 # their header changes
