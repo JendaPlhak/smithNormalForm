@@ -80,10 +80,10 @@ int main(int argc, char const *argv[])
 
     // std::cout << "Naive method result:" << std::endl;
     // std::cout << naive_result << std::endl;
-    std::cout << "Storjohann method: " << std::endl;
-    std::cout << storjohann_result << std::endl;
-    printf("\nCalculation took %f s\n", duration.count() / 1000000.);
-    std::cout << "###################################################################\n";
+    // std::cout << "Storjohann method: " << std::endl;
+    // std::cout << storjohann_result << std::endl;
+    // printf("\nCalculation took %f s\n", duration.count() / 1000000.);
+    // std::cout << "###################################################################\n";
 
 }
     return 0;

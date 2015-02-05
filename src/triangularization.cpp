@@ -179,8 +179,8 @@ conditioningRoutine(arma::subview<arma::sword> B, const uint col2)
         if (g == 0) { // a and B(i,0) must be 0, therefore no action needed.
             continue;
         }
-        int_t a_tmp = (a / g)      % N;
-        int_t b_tmp = (B(i,0) / g) % N;
+        int_t a_tmp = PositiveModulo::mod(a / g, N);
+        int_t b_tmp = PositiveModulo::mod(B(i,0) / g, N);
 
         int_t t = gcdCombination(a_tmp, b_tmp, N);
         if (0 == N * (a_ + t * B(i,col2)) - N_ * (a + t * B(i,0))) {
