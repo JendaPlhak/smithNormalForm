@@ -251,7 +251,7 @@ processRow(arma::subview<arma::sword> T)
 
     t_col[0] = 0;
     for (uint i = 1; i < k; ++i) {
-        int_t q = (t * t_col[i] / s1) % diag[i];
+        int_t q = PositiveModulo::mod(t * t_col[i] / s1, diag[i]);
         // std::cout << "    q = " << q << std::endl;
         // printf("Before mod:\n");
         // std::cout << T << std::endl;
@@ -332,15 +332,16 @@ eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T)
         extendedGCD(s, t, s1, T(0, 0), T(0, j));
 
         // initialize
-        int_t a   = (-1) * T(0, j) / s1;
-        int_t b   = T(0, 0) / s1;
+        int_t a   = -T(0, j) / s1;
+        int_t b   =  T(0, 0) / s1;
         T(0, 0) = s1;
         T(0, j) = 0;
 
         // TODO implement using column-wise operations!
         for (uint i = 1; i < k; ++i) {
-            int_t C = (s * T(i, 0) + t * T(i, j)) % T.diag()[i];
-            T(i, j) = (a * T(i, 0) + b * T(i, j)) % T.diag()[i];
+            PositiveModulo mod(T.diag()[i]);
+            int_t C = mod(s * T(i, 0) + t * T(i, j));
+            T(i, j) = mod(a * T(i, 0) + b * T(i, j));
             T(i, 0) = C;
         }
     }
@@ -355,6 +356,7 @@ reduceResultingSquareToSNF(arma::imat & T)
     // transpose the nontrivial matrix
     T.submat(0, 0, T.n_rows - 1, T.n_rows - 1) =
                 T.submat(0, 0, T.n_rows - 1, T.n_rows - 1).t();
+    makeHermiteNormalForm(T);
     hermiteTriangToSNF_Internal(T.submat(0, 0, T.n_rows - 1, T.n_rows - 1));
 
     D_ std::cout << T << std::endl;

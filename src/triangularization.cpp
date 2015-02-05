@@ -291,7 +291,7 @@ reduceBetweenProfiles(arma::imat & A,
 void
 reshape(arma::imat & A)
 {
-    for (uint i = 0; i < A.n_rows; ++i) {
+    for (uint i = 0; i < std::min(A.n_rows, A.n_cols); ++i) {
         if (0 != A(i, i)) { // Diagonal entry is nonzero so continue.
             continue;
         }
@@ -330,6 +330,7 @@ conditioningRoutineOutputCheck(Matrix_Type B)
     using boost::math::gcd;
 
     if (0 == mat_det(B.submat(0, 0, 1, 1))) {
+        std::cout << B.submat(0, 0, 1, 1) << std::endl;
         std::cout << B << std::endl;
         throw ConditioningRoutineError("Principal matrix must have rank 2!");
     }
@@ -350,6 +351,8 @@ columnReductionInputCheck(Matrix_Type B, const int k)
     if (B(B.n_rows - k - 2, 0) <= 0) {
         throw ColumnReductionError("N = B(B.n_rows - k - 2, 0) has to be positive!");
     } else if (2 != mat_rank(B.submat(B.n_rows - k - 2, 0, B.n_rows - k - 1, 1))) {
+        std::cerr << B << std::endl;
+        std::cerr << B.submat(B.n_rows - k - 2, 0, B.n_rows - k - 1, 1) << std::endl;
         throw ColumnReductionError("trailing (k+2)x2 submatrix must have rank 2!");
     }
 }

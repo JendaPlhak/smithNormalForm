@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
     srand(time(NULL));
     // for (int i = 0; i < 1; ++i) {
     while (true) {
-    arma::imat matrix = arma::randi<arma::imat>(size, size + 3);
+    arma::imat matrix = arma::randi<arma::imat>(size, size + 2);
 
 
     // for (int & c : matrix) {

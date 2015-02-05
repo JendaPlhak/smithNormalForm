@@ -8,7 +8,11 @@ class PositiveModulo {
     int_t m_d;
 public:
     PositiveModulo(int_t d) : m_d(d) {}
-    int_t operator()(const int_t e) { return (e % m_d + m_d) % m_d; }
+    static int_t mod(const int_t e, const int_t d)
+    {
+        return (e % d + d) % d;
+    }
+    int_t operator()(const int_t e) { return mod(e, m_d); }
 };
 
 int_t gcdCombination(int_t a, int_t b, int_t N);
