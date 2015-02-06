@@ -8,65 +8,91 @@
 #include <iostream>
 #include <armadillo>
 #include <chrono>
+#include <exception>
 #include <stdlib.h>
 #include <time.h>
+#include <tclap/CmdLine.h>
 
 typedef std::chrono::duration<int,std::micro> mu_t;
 
 void print_wolfram_matrix(arma::imat matrix, uint size);
+arma::imat loadMatrixFromFile(const std::string file_path);
+void saveMatrixToFile(const std::string file_path, const arma::imat & mat);
+
+
+// Define simple matrix size structure
+struct Size {
+    uint n_rows;
+    uint n_cols;
+
+    Size(const uint rows, const uint cols) : n_rows(rows), n_cols(cols) {}
+    // operator= will be used to assign to the vector
+    Size& operator=(const std::string& str)
+    {
+    std::istringstream iss(str);
+    if (!(iss >> n_rows >> n_cols))
+        throw TCLAP::ArgParseException(str + " doesn't define size!");
+
+    return *this;
+    }
+};
+
+// Create an ArgTraits for the Size type that declares it to be
+// of string like type
+namespace TCLAP {
+template<>
+struct ArgTraits<Size> {
+    typedef StringLike ValueCategory;
+};
+}
 
 int main(int argc, char const *argv[])
 {
-    if (argc < 2) {
-        std::cout << "./tester <matrix_size>\n";
-        return 0;
+    try {
+
+    TCLAP::CmdLine cmd("SNF library tester", ' ', "1.0");
+
+    // Define a value argument and add it to the command line.
+    TCLAP::SwitchArg randArg("r","random",
+                                "Generates random matrix and calculates its SNF",
+                                false);
+    TCLAP::ValueArg<Size> sizeArg("s", "size",
+                                    "Specifies size of random matrix",
+                                    false, Size(5, 5), "rows columns", cmd);
+    TCLAP::ValueArg<std::string> fileArg("f", "file",
+                                            "loads matrix from file",
+                                            false, "", "file_path");
+    TCLAP::ValueArg<std::string> saveArg("", "save",
+                                            "Saves matrix to specified file",
+                                            false, "", "file_path", cmd);
+
+    TCLAP::MultiSwitchArg verboseArg("v", "",
+                                        "Specifies verbosity level. -v will"
+                                        " print only basic info, -vv will produce"
+                                        " step by step partial results",
+                                        cmd, 0);
+
+    // We want either generate random matrix or load matrix from file.
+    cmd.xorAdd(randArg, fileArg);
+    // Parse the argv array.
+    cmd.parse(argc, argv);
+
+    arma::imat matrix;
+
+    if (randArg.isSet()) {
+        Size size = sizeArg.getValue();
+
+        srand(time(NULL));
+        matrix = arma::randi<arma::imat>(size.n_rows, size.n_cols);
+        matrix.transform(PositiveModulo(2));
+    } else if (fileArg.isSet()) {
+        matrix = loadMatrixFromFile(fileArg.getValue());
     }
-    uint size = atoi(argv[1]);
-
-    srand(time(NULL));
-    // for (int i = 0; i < 1; ++i) {
-    while (true) {
-    arma::imat matrix = arma::randi<arma::imat>(size, size);
 
 
-    // for (int & c : matrix) {
-    //     c = c % 10;
-    //     c += 1;
-    // }
-    // std::vector<int> matrix_array = {8, 11286,  4555,  46515,
-    //                                  0,     1, 66359, 153094,
-    //                                  0,     0,     9,  43651,
-    //                                  0,     0,     0,     77};
-    // std::vector<int> matrix_array = {2,     -6,     0,
-    //                                  0,    2,     -6,
-    //                                  -6,   0,     2};
-    // std::vector<int> matrix_array = {2,     1, 7,
-    //                                  0,     6, 12};
-    // std::vector<int> matrix_array = {36,113344, 95472,  42884, 12373,12503,12303,
-    //                                  0,     41,  1576,  98594, 1172,1172,11872,
-    //                                  0,     0,     13,  99206, 952,94662,94192,
-    //                                  0,     0,     0,   94,  770, 7780, 7030};
-
-
-
-    // uint size = std::sqrt(matrix_array.size());
-    // arma::imat matrix(matrix_array.data(), size, size);
-    // matrix = matrix.t();
-    matrix.transform(PositiveModulo(2));
-    // float det = std::abs(arma::det(arma::conv_to<arma::mat>::from(matrix)));
-    // if (0.01f > det) {
-    //     continue;
-    // }
-
-    // printf("Determinant: %f\n", det);
+    std::cout << "Processing matrix:\n";
     std::cout << matrix << std::endl;
-    // print_wolfram_matrix(matrix, size);
     triangularize(matrix);
-    // float new_det = std::abs(arma::det(arma::conv_to<arma::mat>::from(matrix)));
-    // if (0.01f < std::abs(det - new_det) ) {
-    //     printf("Determinants differ!!! New det: %f\n", new_det);
-    //     break;
-    // }
 
     SNF snf;
 
@@ -86,7 +112,15 @@ int main(int argc, char const *argv[])
     P_ printf("\nCalculation took %f s\n", duration.count() / 1000000.);
     P_ std::cout << "###################################################################\n";
 
-}
+    // save file to file
+    if (saveArg.isSet()) {
+        saveMatrixToFile(saveArg.getValue(), matrix);
+    }
+
+    } catch (TCLAP::ArgException &e) {  // catch any exceptions
+        std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
+    }
+
     return 0;
 }
 
@@ -106,4 +140,27 @@ void print_wolfram_matrix(arma::imat matrix, uint size) {
         }
     }
     std::cout << "\n";
+}
+
+arma::imat
+loadMatrixFromFile(const std::string file_path)
+{
+    std::ifstream file(file_path);
+    if (not file.is_open()) {
+        throw std::runtime_error("Failed to open specified file!");
+    }
+
+    arma::imat mat;
+    mat.load(file, arma::raw_ascii);
+    return mat;
+}
+
+void
+saveMatrixToFile(const std::string file_path, const arma::imat & mat)
+{
+    std::ofstream file(file_path);
+    if (not file.is_open()) {
+        throw std::runtime_error("Failed to open specified file!");
+    }
+    mat.save(file, arma::raw_ascii);
 }
