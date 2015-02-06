@@ -1,5 +1,4 @@
 #include "smithNormalForm.h"
-#include "naive.h"
 #include "probabilistic.h"
 #include "storjohannTriangular.h"
 #include "util.h"
@@ -9,27 +8,10 @@
 #include <armadillo>
 #include <algorithm>
 
-
-arma::imat
-SNF::calculate_naive(arma::imat m)
-{
-    std::cout << "Performing diagonalization...\n";
-    naive::diagonalize(m);
-    std::cout << "Sorting diagonal...\n";
-    m.diag() = arma::sort(m.diag());
-    std::cout << "Ensuring divisibility...\n";
-    naive::ensure_divisibility(m);
-    std::cout << "Complete!\n";
-    return m;
-}
-
 arma::imat
 SNF::calculate_storjohann(arma::imat matrix)
 {
     I_ std::cout << "Input matrix: \n" << matrix << std::endl;
-    // std::cout << "Performing naive row reduction...";
-    // naive::rowReduce(matrix);
-    // std::cout << "Result: \n" << matrix << std::endl;
     // std::cout << "Making Hermite normal form...\n";
     // makeHermiteNormalForm(matrix);
     // std::cout << "Result: \n" << matrix << std::endl;
