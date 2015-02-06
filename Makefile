@@ -27,7 +27,7 @@ LTO := -emit-llvm
 BUILD := build
 SRC   := src
 
-LIBS      := -lm -larmadillo -llapack -lblas
+LIBS      := -lm -larmadillo -llapack -lblas -lntl
 SOURCES   := $(sort $(wildcard $(SRC)/*.cpp))
 BYTECODES := $(addprefix $(BUILD)/,$(notdir $(SOURCES:.cpp=.bc)))
 DEPENDS   := $(BYTECODES:.bc=.d)

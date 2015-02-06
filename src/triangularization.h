@@ -1,6 +1,5 @@
 #pragma once
 
-#define ARMA_64BIT_WORD
 #include <armadillo>
 
 #include "storjohannTriangular.h"

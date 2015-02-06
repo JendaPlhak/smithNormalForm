@@ -4,7 +4,7 @@
 #define ARMA_64BIT_WORD
 #include "triangularization.h"
 #include "storjohannTriangular.h"
-#include "storjohannNumeric.h"
+#include "numeric.h"
 #include "util.h"
 
 template <typename Matrix_Type>

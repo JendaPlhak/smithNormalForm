@@ -1,4 +1,3 @@
-#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <cmath>
 #include <exception>
@@ -6,7 +5,7 @@
 #include <stdexcept>
 #include <boost/math/common_factor.hpp>
 
-#include "storjohannNumeric.h"
+#include "numeric.h"
 #include "storjohannTriangular.h"
 #include "util.h"
 

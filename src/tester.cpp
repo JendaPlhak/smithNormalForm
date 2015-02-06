@@ -1,7 +1,5 @@
 #include "smithNormalForm.h"
-#include "storjohannTriangular.h"
-#include "storjohannNumeric.h"
-#include "triangularization.h"
+#include "numeric.h"
 #include "util.h"
 
 #define ARMA_64BIT_WORD
@@ -84,15 +82,10 @@ int main(int argc, char const *argv[])
 
         srand(time(NULL));
         matrix = arma::randi<arma::imat>(size.n_rows, size.n_cols);
-        matrix.transform(PositiveModulo(2));
+        matrix.transform(PositiveModulo(3));
     } else if (fileArg.isSet()) {
         matrix = loadMatrixFromFile(fileArg.getValue());
     }
-
-
-    std::cout << "Processing matrix:\n";
-    std::cout << matrix << std::endl;
-    triangularize(matrix);
 
     SNF snf;
 
@@ -100,7 +93,7 @@ int main(int argc, char const *argv[])
     start = std::chrono::high_resolution_clock::now();
 
     // arma::imat naive_result      = snf.calculate_naive(matrix);
-    arma::imat storjohann_result = snf.calculate_storjohann(matrix);
+    arma::imat storjohann_result = snf.calculate(matrix);
 
     end = std::chrono::high_resolution_clock::now();
     mu_t duration(std::chrono::duration_cast <mu_t>(end - start));

@@ -1,13 +1,23 @@
-#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <cmath>
 #include <exception>
 #include <iostream>
+#include <math.h>
 #include <vector>
 #include <stdexcept>
 #include <boost/math/common_factor.hpp>
 
-#include "storjohannNumeric.h"
+#include "numeric.h"
+
+long
+positive_log(const long x)
+{
+    if (x == 0) {
+        return 1;
+    } else {
+        return 1 + std::floor(std::log2(std::abs(x)));
+    }
+}
 
 //! For given integers a,b,N, N positive and gcd(a,b,N) = d calculates integer c
 //! 0 <= c < N and such that gcd(a + cb, N) = d
@@ -187,4 +197,38 @@ floored_factor(const int_t x, const int_t y)
     } else {
         return r.quot - 1;
     }
+}
+
+void
+matrix_convert(const NTL::mat_ZZ_p & A_from, arma::imat & A_to)
+{
+    A_to = arma::imat(A_from.NumRows(), A_from.NumCols());
+    for (uint i = 0; i < A_from.NumRows(); ++i) {
+        for (uint j = 0; j < A_from.NumCols(); ++j) {
+            A_to(i, j) = ZZ_p_to_int_t(A_from(i + 1, j + 1));
+        }
+    }
+}
+
+void
+matrix_convert(const arma::imat & A_from, NTL::mat_ZZ_p & A_to)
+{
+    A_to.SetDims(A_from.n_rows, A_from.n_cols);
+
+    for (uint i = 0; i < A_from.n_rows; ++i) {
+        for (uint j = 0; j < A_from.n_cols; ++j) {
+            A_to(i + 1, j + 1) = A_from(i, j);
+        }
+    }
+}
+
+int_t
+ZZ_p_to_int_t(const NTL::ZZ_p & big_num) {
+    int_t output;
+
+    std::stringstream big_num_str;
+    big_num_str << big_num;
+    big_num_str >> output;
+
+    return output;
 }
