@@ -355,12 +355,12 @@ public:
     IMat(const arma::imat & matrix, int_t p_)
      : n_rows(matrix.n_rows), n_cols(matrix.n_cols), M(matrix.t()), p(p_)
     {
-        M.transform(Modulo(p));
+        // M.transform(Modulo(p));
     }
     IMat(uint rows, uint cols, int_t p_)
      : n_rows(rows), n_cols(cols), M(n_cols, n_rows), p(p_)
     {
-        M.transform(Modulo(p));
+        // M.transform(Modulo(p));
     }
 
     inline int_t
@@ -388,20 +388,10 @@ public:
         return diagonalMultiple(M.diag());
     }
 
-    inline int_t &
-    operator ()(uint row, uint col) {
-        return M(col, row);
-    }
-
-    inline const int_t &
-    operator ()(uint row, uint col) const {
-        return M(col, row);
-    }
-
-    template <typename T>
+    template <typename OperatorT>
     inline void
-    operator =(const T & rhs) {
-        M = rhs.get_base();
+    transform(const OperatorT & o) {
+        M.transform(o);
     }
 
     inline void
@@ -443,6 +433,22 @@ public:
     inline float
     det() const {
         return arma::det(arma::conv_to<arma::mat>::from(M));
+    }
+
+    inline int_t &
+    operator ()(uint row, uint col) {
+        return M(col, row);
+    }
+
+    inline const int_t &
+    operator ()(uint row, uint col) const {
+        return M(col, row);
+    }
+
+    template <typename T>
+    inline void
+    operator =(const T & rhs) {
+        M = rhs.get_base();
     }
 
 private:

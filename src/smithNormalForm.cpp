@@ -4,19 +4,25 @@
 #include "triangularization.h"
 #include "util.h"
 #include "numeric.h"
-
+#include "matrix.h"
+#include "prime_tester.h"
 
 #include <iostream>
 #include <armadillo>
 #include <algorithm>
 #include <math.h>
-#include "matrix.h"
+#include <mutex>
+#include <thread>
 #include <vector>
+#include <queue>
+#include <memory>
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
+#include <NTL/mat_ZZ.h>
 #include <NTL/mat_ZZ_p.h>
 
-arma::imat
+
+NTL::mat_ZZ
 SNF::calculate(arma::imat matrix)
 {
     // generate primes for moduli system
@@ -28,25 +34,70 @@ SNF::calculate(arma::imat matrix)
         I_ std::cout << rank_profile[i] << " ";
     }
     I_ std::cout << std::endl;
+
+    std::vector<std::pair<NTL::ZZ, arma::imat>> moduli_results;
+    std::queue<NTL::ZZ> primes_queue;
+
     for (const NTL::ZZ & p : primes) {
-        IMat a(arma::imat(matrix), ZZ_to_int_t(p));
-        calculate_storjohann(a, rank_profile, ZZ_to_int_t(p));
+        primes_queue.push(p);
     }
-    return matrix;
+
+    std::shared_ptr<std::mutex> q_mut(new std::mutex);
+    std::shared_ptr<std::mutex> v_mut(new std::mutex);
+
+    std::vector<std::thread> threads;
+    for (uint k = 0; k < 8; ++k) {
+        threads.push_back(std::thread(worker, q_mut, v_mut,
+                                                std::ref(primes_queue),
+                                                matrix,
+                                                std::ref(moduli_results),
+                                                rank_profile));
+    }
+
+    for (std::thread & t : threads) {
+        t.join();
+    }
+
+    NTL::mat_ZZ result = apply_iso(moduli_results, primes);
+    return result;
 }
 
+void
+SNF::worker(const std::shared_ptr<std::mutex> q_mut,
+            const std::shared_ptr<std::mutex> v_mut,
+            std::queue<NTL::ZZ> & primes,
+            const arma::imat matrix,
+            std::vector<std::pair<NTL::ZZ, arma::imat>> & moduli_results,
+            std::vector<uint> rank_profile)
+{
+    while (not primes.empty()) {
+        q_mut->lock();
+        const NTL::ZZ p = primes.front();
+        primes.pop();
+        q_mut->unlock();
+
+        I_ std::cout << "Computing SNF modulo: " << p << std::endl;
+        IMat a(matrix, ZZ_to_int_t(p));
+        calculate_storjohann(a, rank_profile, ZZ_to_int_t(p));
+
+        v_mut->lock();
+        std::pair<NTL::ZZ, arma::imat> r(p, a.get_base().t());
+        moduli_results.push_back(r);
+        v_mut->unlock();
+    }
+}
 
 // before mod implemented  0.020107 for 10x10
 void
 SNF::calculate_storjohann(IMat & matrix,
-                            std::vector<uint> & rank_profile,
+                            const std::vector<uint> & rank_profile,
                             int_t p)
 {
     I_ std::cout << "Input matrix: \n" << matrix << std::endl;
-    std::cout << "Making Hermite triangular normal form...\n";
+    I_ std::cout << "Making Hermite triangular normal form...\n";
     // makeHermiteNormalForm(matrix);
     triangularize(matrix, rank_profile, p);
-    std::cout << "Result: \n" << matrix << std::endl;
+    I_ std::cout << "Result: \n" << matrix << std::endl;
 
     I_ std::cout << "Stripping zero rows...\n";
     uint n_stripped = stripZeroRows(matrix);
@@ -54,16 +105,19 @@ SNF::calculate_storjohann(IMat & matrix,
 
     I_ std::cout << "Converting Hermite matrix to SNF...\n";
     hermiteTriangToSNF(matrix);
+    matrix.transform(Modulo(p));
     I_ std::cout << "Result: \n" << matrix << std::endl;
 
     I_ std::cout << "Eliminating extra columns...\n";
     eliminateExtraColumns(matrix);
+    matrix.transform(Modulo(p));
     I_ std::cout << "Result: \n" << matrix << std::endl;
 
     I_ std::cout << "Reducing final non-trivial square matrix to SNF...\n";
     D_ std::cout << "Input matrix: \n"
                  << matrix << std::endl;
     reduceResultingSquareToSNF(matrix);
+    matrix.transform(Modulo(p));
     I_ std::cout << "Result: \n" << matrix << std::endl;
 
     // give matrix its original size
@@ -109,7 +163,13 @@ SNF::get_primes(const arma::imat & matrix)
     }
 
     I_ std::cout << "Number of primes: "      << primes.size() << std::endl;
-    I_ std::cout << "Max moduli bit length: " << l << std::endl;
+    I_ std::cout << "Max prime bit length: " << l << std::endl;
+    D_ std::cout << "Primes: " << std::endl;
+    for (const NTL::ZZ & p : primes) {
+        D_ std::cout << p << " ";
+    }
+    D_ std::cout << std::endl;
+
     return primes;
 }
 
@@ -201,4 +261,50 @@ SNF::get_rank_profile_mod(NTL::mat_ZZ_p & ntl_matrix, long & rank)
     }
 
     return rank_profile;
+}
+
+NTL::mat_ZZ
+SNF::apply_iso(const std::vector<std::pair<NTL::ZZ, arma::imat>> & moduli_results,
+                const std::vector<NTL::ZZ> & primes)
+{
+    // first we need to calculate coefficients of xgcd problem
+    NTL::ZZ N = NTL::ZZ(NTL::INIT_VAL, 1);
+    for (const NTL::ZZ & p : primes) {
+        N *= p;
+    }
+
+    std::vector<NTL::ZZ> coeffs;
+    for (const std::pair<NTL::ZZ, arma::imat> & pair : moduli_results) {
+        const NTL::ZZ & p = pair.first;
+        NTL::ZZ d, r, s;
+        NTL::ZZ frac = N / p;
+        NTL::XGCD(d, r, s, p, frac);
+        P_ std::cout << "Coefficient: " << s * frac << std::endl;
+        P_ std::cout << d << std::endl;
+        coeffs.push_back(s * frac);
+    }
+    uint n_rows = moduli_results.front().second.n_rows;
+    uint n_cols = moduli_results.front().second.n_cols;
+
+    NTL::mat_ZZ result;
+    result.SetDims(n_rows, n_cols);
+
+    for (uint k = 0; k < coeffs.size(); ++k) {
+        P_ std::cout << moduli_results[k].second << std::endl;
+    }
+
+    for (uint i = 0; i < n_rows; ++i) {
+        for (uint j = 0; j < n_cols; ++j) {
+            if (i == j) {
+                NTL::ZZ sum(NTL::INIT_VAL, 0);
+                for (uint k = 0; k < coeffs.size(); ++k) {
+                    sum += coeffs[k] * moduli_results[k].second(i, j);
+                }
+                result(i + 1, j + 1) = ((sum % N) + N) % N;
+            } else {
+                result(i + 1, j + 1) = NTL::ZZ(NTL::INIT_VAL, 0);
+            }
+        }
+    }
+    return result;
 }

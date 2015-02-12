@@ -77,7 +77,7 @@ PROFILE_FOUND:;
 void
 triangularize(IMat & A, std::vector<uint> rank_profile, int_t p)
 {
-    float det_orig = std::abs(mat_det(A));
+    // float det_orig = std::abs(mat_det(A));
 
     // First reshape the matrix in correspondence with requirements of RowReducedEchelonForm
     uint n_rows = A.n_rows + 2;
@@ -121,10 +121,12 @@ triangularize(IMat & A, std::vector<uint> rank_profile, int_t p)
 
         columnReduction(sub_A, n_rows - row - 2, new_rank_offset);
 
+        A_tmp.transform(Modulo(p));
         if (1 != new_rank_offset) {
             std::vector<uint> v(&rank_profile[0], &rank_profile[row + 1]);
             reduceBetweenProfiles(A_tmp, v,
                                     rank_profile[row + 1]);
+            A_tmp.transform(Modulo(p));
         }
 
         D_ printf("Round %d result: (det = %d)\n", row, (int) mat_det(A_tmp));
@@ -137,10 +139,10 @@ triangularize(IMat & A, std::vector<uint> rank_profile, int_t p)
     D_ std::cout << A << std::endl;
     P_ hermiteTriangularFormCheck(A);
 
-    if (0.1f < std::abs(det_orig - std::abs(mat_det(A)))) {
-        fprintf(stderr, "det_orig = %f, new_det = %f\n", det_orig, mat_det(A));
-        throw HermiteTriangularError("Determinant mustn't change during triangularization!");
-    }
+    // if (0.1f < std::abs(det_orig - std::abs(mat_det(A)))) {
+    //     fprintf(stderr, "det_orig = %f, new_det = %f\n", det_orig, mat_det(A));
+    //     throw HermiteTriangularError("Determinant mustn't change during triangularization!");
+    // }
 }
 
 

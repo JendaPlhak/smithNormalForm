@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <tclap/CmdLine.h>
+#include <NTL/mat_ZZ.h>
 
 typedef std::chrono::duration<int,std::micro> mu_t;
 
@@ -47,7 +48,8 @@ struct ArgTraits<Size> {
 int main(int argc, char const *argv[])
 {
     try {
-    srand(17186);
+    srand(10);
+    // srand(time(NULL));
 
     TCLAP::CmdLine cmd("SNF library tester", ' ', "1.0");
 
@@ -78,7 +80,6 @@ int main(int argc, char const *argv[])
 
     arma::imat matrix;
     int count = 0;
-    srand(1387);
 
     if (randArg.isSet()) {
 CYCLE:;
@@ -88,7 +89,7 @@ CYCLE:;
         Size size = sizeArg.getValue();
 
         matrix = arma::randi<arma::imat>(size.n_rows, size.n_cols);
-        matrix.transform(PositiveModulo(3));
+        matrix.transform(PositiveModulo(10));
     } else if (fileArg.isSet()) {
         matrix = loadMatrixFromFile(fileArg.getValue());
     }
@@ -98,8 +99,10 @@ CYCLE:;
     std::chrono::high_resolution_clock::time_point start, end;
     start = std::chrono::high_resolution_clock::now();
 
+    // float det = arma::det(arma::conv_to<arma::mat>::from(matrix));
+
     // arma::imat naive_result      = snf.calculate_naive(matrix);
-    arma::imat storjohann_result = snf.calculate(matrix);
+    NTL::mat_ZZ storjohann_result = snf.calculate(matrix);
 
     end = std::chrono::high_resolution_clock::now();
     mu_t duration(std::chrono::duration_cast <mu_t>(end - start));
@@ -108,7 +111,8 @@ CYCLE:;
     // std::cout << naive_result << std::endl;
     P_ std::cout << "Storjohann method: " << std::endl;
     P_ std::cout << storjohann_result << std::endl;
-    P_ printf("\nCalculation took %f s\n", duration.count() / 1000000.);
+    // printf("Matrix determinant is: %f\n", det);
+    printf("\nCalculation took %f s\n", duration.count() / 1000000.);
     P_ std::cout << "###################################################################\n";
 
     // save file to file
@@ -116,7 +120,7 @@ CYCLE:;
         saveMatrixToFile(saveArg.getValue(), matrix);
     }
     if (randArg.isSet()) {
-        goto CYCLE;
+        // goto CYCLE;
     }
 
     } catch (TCLAP::ArgException &e) {  // catch any exceptions
