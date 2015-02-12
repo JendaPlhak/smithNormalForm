@@ -17,6 +17,18 @@ public:
     int_t operator()(const int_t e) { return mod(e, m_d); }
 };
 
+//! Functor calculating positive modulo for given number e.
+class Modulo {
+    int_t m_d;
+public:
+    Modulo(int_t d) : m_d(d) {}
+    static int_t mod(const int_t e, const int_t d)
+    {
+        return e % d;
+    }
+    int_t operator()(const int_t e) { return mod(e, m_d); }
+};
+
 //! Calculate log in correspondence with chapter 4.4 in Storjohann
 long positive_log(const long number);
 

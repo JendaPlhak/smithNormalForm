@@ -30,7 +30,7 @@ void columnReduction(SubMat B, const int k, const int col2);
 void reduceBetweenProfiles(IMat & A,
                             const std::vector<uint> & rank_profile,
                             const uint new_prof);
-void reshape(arma::imat & A);
+void reshape(IMat & A);
 
 template <typename Matrix_Type>
 int
@@ -46,9 +46,8 @@ mat_det(Matrix_Type A)
     return A.det();;
 }
 
-template <>
 float
-mat_det<>(IMat & A)
+mat_det(IMat & A)
 {
     if (A.is_square()) {
         return A.det();
@@ -95,7 +94,8 @@ triangularize(IMat & A, std::vector<uint> rank_profile, int_t p)
     std::transform(rank_profile.begin(), rank_profile.end(), rank_profile.begin(),
                     [](uint i) { return ++i; } );
     rank_profile.insert(rank_profile.begin(), 0);
-    rank_profile.push_back(std::min(n_rows, n_cols) - 1);
+    rank_profile.push_back(n_cols - 1);
+
     for (uint i = 0; i < rank_profile.size(); ++i) {
         I_ std::cout << rank_profile[i] << " ";
     }
@@ -227,7 +227,9 @@ columnReduction(SubMat B, const int k, const int col2)
 
     RowVec vec = B.row(offset);
     B.row(offset)     = m1 * B.row(offset) + m2       * B.row(offset + 1);
-    B.row(offset + 1) = (-a / t1) * vec    + (N / t1) * B.row(offset + 1);
+    vec *= (-a / t1);
+    vec += (N / t1) * B.row(offset + 1);
+    B.row(offset + 1) = vec;
 
 
     if (B(offset, 0) < 0) { // ensure t1 to be positive
@@ -296,7 +298,7 @@ reduceBetweenProfiles(IMat & A,
  * @param A matrix to reshape
  */
 void
-reshape(arma::imat & A)
+reshape(IMat & A)
 {
     for (uint i = 0; i < std::min(A.n_rows, A.n_cols); ++i) {
         if (0 != A(i, i)) { // Diagonal entry is nonzero so continue.
@@ -345,6 +347,7 @@ conditioningRoutineOutputCheck(Matrix_Type B)
     for (uint i = 2; i < B.n_rows; i++) {
         int_t y = gcd(x, B(i,0));
         if (y != x) {
+            std::cout << B << std::endl;
             throw ConditioningRoutineError("gcd(a_k,N) != gcd(a_k,N, b_1,..., b_k)");
         }
     }

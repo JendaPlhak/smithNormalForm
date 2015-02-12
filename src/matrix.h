@@ -12,6 +12,7 @@ class MatrixInterface {
 };
 
 class SubRow;
+class RowVec;
 
 
 class SubCol {
@@ -66,6 +67,17 @@ public:
     operator -=(const T & rhs) {
         m_data -= rhs;
     }
+
+    inline int_t &
+    operator [](const uint i) {
+        return m_data[i];
+    }
+
+    inline int_t
+    operator [](const uint i) const {
+        return m_data[i];
+    }
+
 private:
     arma::subview_row<int_t> m_data;
     int_t p;
@@ -97,6 +109,17 @@ public:
         return arma::any(m_data);
     }
 
+    inline SubRow
+    subvec(const uint begin, const uint end) const {
+        return SubRow(m_data.subvec(begin, end), p);
+    }
+
+    template <typename OperatorT>
+    inline void
+    transform(const OperatorT & o) {
+        m_data.transform(o);
+    }
+
     inline void
     mulAdd(const SubRow & rhs, const int_t mul) {
         m_data += mul * rhs.m_data;
@@ -107,6 +130,9 @@ public:
     operator =(const T & rhs) {
         m_data = rhs;
     }
+
+    inline void
+    operator =(const RowVec & rhs);
 
     inline void
     operator *=(const int_t n) {
@@ -122,6 +148,9 @@ public:
     operator +=(const SubRow & rhs) {
         m_data += rhs.m_data;
     }
+
+    void
+    operator +=(const RowVec & rhs);
 
     template <typename T>
     inline void
@@ -197,11 +226,6 @@ public:
     operator +(const T & rhs) const {
         return m_vec + rhs;
     }
-    template <typename T>
-    inline arma::eGlue<arma::Col<long long>, arma::eOp<arma::subview_col<long long>, arma::eop_scalar_times>, arma::eglue_plus>
-    operator +(const T & rhs) const {
-        return m_vec + rhs;
-    }
 
     inline void
     operator +=(const SubRow & rhs) {
@@ -228,6 +252,8 @@ public:
 private:
     arma::icolvec m_vec;
     int_t p;
+
+    friend class SubRow;
 };
 
 inline RowVec
@@ -246,6 +272,21 @@ public:
         return m_submat;
     }
 
+    inline float
+    det() const {
+        return arma::det(arma::conv_to<arma::mat>::from(m_submat));
+    }
+
+    inline int_t
+    rank() const {
+        return arma::rank(arma::conv_to<arma::mat>::from(m_submat));
+    }
+
+    inline int_t
+    diagMultiple() const {
+        return diagonalMultiple(m_submat.diag());
+    }
+
     inline SubRow
     row(uint i) {
         return SubRow(m_submat.col(i), p);
@@ -255,13 +296,33 @@ public:
         return SubCol(m_submat.row(i), p);
     }
 
+    inline arma::diagview<int_t>
+    diag() {
+        return m_submat.diag();
+    }
+
+    inline void
+    transpose() {
+        m_submat = m_submat.t();
+    }
+
     inline SubMat
     submat(uint row_begin, uint col_begin, uint row_end, uint col_end) {
         return SubMat(m_submat.submat(col_begin, row_begin, col_end, row_end), p);
     }
 
+    inline SubMat
+    submat(uint row_begin, uint col_begin, uint row_end, uint col_end) const {
+        return SubMat(m_submat.submat(col_begin, row_begin, col_end, row_end), p);
+    }
+
     inline int_t &
-    operator ()(uint row, uint col) {
+    operator ()(const uint row, const uint col) {
+        return m_submat(col, row);
+    }
+
+    inline int_t
+    operator ()(const uint row, const uint col) const {
         return m_submat(col, row);
     }
 
@@ -294,12 +355,12 @@ public:
     IMat(const arma::imat & matrix, int_t p_)
      : n_rows(matrix.n_rows), n_cols(matrix.n_cols), M(matrix.t()), p(p_)
     {
-        M.transform(PositiveModulo(p));
+        M.transform(Modulo(p));
     }
     IMat(uint rows, uint cols, int_t p_)
-     : n_rows(rows), n_cols(cols), M(n_rows, n_cols), p(p_)
+     : n_rows(rows), n_cols(cols), M(n_cols, n_rows), p(p_)
     {
-        M.transform(PositiveModulo(p));
+        M.transform(Modulo(p));
     }
 
     inline int_t
@@ -317,8 +378,23 @@ public:
         return M.is_square();
     }
 
+    inline arma::diagview<int_t>
+    diag() {
+        return M.diag();
+    }
+
+    inline int_t
+    diagMultiple() const {
+        return diagonalMultiple(M.diag());
+    }
+
     inline int_t &
     operator ()(uint row, uint col) {
+        return M(col, row);
+    }
+
+    inline const int_t &
+    operator ()(uint row, uint col) const {
         return M(col, row);
     }
 
@@ -329,8 +405,10 @@ public:
     }
 
     inline void
-    resize(uint n_rows, uint n_cols) {
-        M.resize(n_cols, n_rows);
+    resize(uint rows_, uint cols_) {
+        M.resize(cols_, rows_);
+        n_rows = rows_;
+        n_cols = cols_;
     }
 
     inline void
@@ -352,6 +430,11 @@ public:
         return SubCol(M.row(i), p);
     }
 
+    inline void
+    swap_cols(uint i, uint j) {
+        M.swap_rows(i, j);
+    }
+
     inline int
     rank() const {
         return arma::rank(arma::conv_to<arma::mat>::from(M));
@@ -370,13 +453,13 @@ private:
 
 
 
-std::ostream& operator<<(std::ostream& os, const IMat& mat)
+inline std::ostream& operator<<(std::ostream& os, const IMat& mat)
 {
   os << mat.M.t();
   return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const SubMat& mat)
+inline std::ostream& operator<<(std::ostream& os, const SubMat& mat)
 {
   os << mat.m_submat.t();
   return os;
@@ -384,8 +467,10 @@ std::ostream& operator<<(std::ostream& os, const SubMat& mat)
 
 namespace mat {
     // TODO probably will create wrong object
-    IMat join_rows(const SubCol & r1, const SubCol & r2) {
-        return IMat(arma::imat(arma::join_cols(r1.get_base(), r2.get_base())),
+    inline IMat join_rows(const SubCol & r1, const SubCol & r2) {
+        return IMat(arma::imat(arma::join_cols(r1.get_base(), r2.get_base())).t(),
                     r1.get_mod());
     }
 }
+
+#include "matrix.tpp"

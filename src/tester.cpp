@@ -47,6 +47,7 @@ struct ArgTraits<Size> {
 int main(int argc, char const *argv[])
 {
     try {
+    srand(17186);
 
     TCLAP::CmdLine cmd("SNF library tester", ' ', "1.0");
 
@@ -76,11 +77,16 @@ int main(int argc, char const *argv[])
     cmd.parse(argc, argv);
 
     arma::imat matrix;
+    int count = 0;
+    srand(1387);
 
     if (randArg.isSet()) {
+CYCLE:;
+        // srand(count);
+        printf("Round: %d\n", count);
+        count += 1;
         Size size = sizeArg.getValue();
 
-        srand(time(NULL));
         matrix = arma::randi<arma::imat>(size.n_rows, size.n_cols);
         matrix.transform(PositiveModulo(3));
     } else if (fileArg.isSet()) {
@@ -108,6 +114,9 @@ int main(int argc, char const *argv[])
     // save file to file
     if (saveArg.isSet()) {
         saveMatrixToFile(saveArg.getValue(), matrix);
+    }
+    if (randArg.isSet()) {
+        goto CYCLE;
     }
 
     } catch (TCLAP::ArgException &e) {  // catch any exceptions

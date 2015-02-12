@@ -50,7 +50,7 @@ SNF::calculate_storjohann(IMat & matrix,
 
     I_ std::cout << "Stripping zero rows...\n";
     uint n_stripped = stripZeroRows(matrix);
-    I_ std::cout << "   Done!...\n";
+    I_ std::cout << "Result: \n" << matrix << std::endl;
 
     I_ std::cout << "Converting Hermite matrix to SNF...\n";
     hermiteTriangToSNF(matrix);
@@ -82,7 +82,7 @@ SNF::get_primes(const arma::imat & matrix)
 {
     long A_max = std::max(matrix.max(), std::abs(matrix.min()));
     long m = matrix.n_cols;
-    long l = 6 + positive_log(1 + m*std::floor(std::log2(std::sqrt(m) * A_max)));
+    long l = 6 + positive_log(1 + m*std::floor(positive_log(std::sqrt(m) * A_max)));
 
     NTL::ZZ b;
     NTL::power(b, std::ceil(std::sqrt(m)) * A_max, m);
@@ -98,10 +98,14 @@ SNF::get_primes(const arma::imat & matrix)
     NTL::ZZ prev_prime(NTL::INIT_VAL, 1 << (l - 2));
 
     std::vector<NTL::ZZ> primes;
-    while (total < b) {
-        prev_prime = NextPrime(prev_prime + 1);
-        total *= prev_prime;
-        primes.push_back(prev_prime);
+    if (b <= total) {
+        primes.push_back(NextPrime(prev_prime + 1));
+    } else {
+        while (total < b) {
+            prev_prime = NextPrime(prev_prime + 1);
+            total *= prev_prime;
+            primes.push_back(prev_prime);
+        }
     }
 
     I_ std::cout << "Number of primes: "      << primes.size() << std::endl;
@@ -170,7 +174,11 @@ FINAL_STAGE:;
             min_prof_idx = i;
         }
     }
-    return rank_profiles[min_prof_idx];
+    if (rank_profiles.empty()) {
+        return std::vector<uint>();
+    } else {
+        return rank_profiles[min_prof_idx];
+    }
 }
 
 std::vector<uint>

@@ -1,7 +1,7 @@
 # clang++ is a must for now
 CXX     := clang++
 
-OPT_LVL := -O3
+OPT_LVL := -O0
 DBG_LVL := -g3
 
 CFLAGS  := -std=c++11 -fpic -march=native -Wall -Wextra -march=native

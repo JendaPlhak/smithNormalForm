@@ -9,12 +9,12 @@
 #include "storjohannTriangular.h"
 #include "util.h"
 
-void triangularReduction(arma::subview<arma::sword>);
-void eliminateTrailingCol(arma::subview<arma::sword>);
-void ensureDivisibility(arma::subview<arma::sword>);
-void submatrixToSNF(arma::subview<arma::sword>);
-void processRow(arma::subview<arma::sword>);
-void eliminateExtraColumnsInFirstRow(arma::subview<arma::sword>);
+void triangularReduction(SubMat);
+void eliminateTrailingCol(SubMat);
+void ensureDivisibility(SubMat);
+void submatrixToSNF(SubMat);
+void processRow(SubMat);
+void eliminateExtraColumnsInFirstRow(SubMat);
 
 template <typename MatrixType>
 void
@@ -22,7 +22,7 @@ hermiteTriangToSNF_Internal(MatrixType &&);
 
 
 void
-checkSNF(const arma::subview<arma::sword> T)
+checkSNF(const SubMat T)
 {
     for (uint i = 0; i < T.n_rows; ++i) {
         for (uint j = 0; j < T.n_rows; ++j) {
@@ -42,13 +42,12 @@ checkSNF(const arma::subview<arma::sword> T)
 }
 
 void
-checkConditionsTheorem6(const arma::subview<arma::sword> T)
+checkConditionsTheorem6(const SubMat T)
 {
     uint k = T.n_rows;
-    arma::mat T_mat = arma::conv_to<arma::mat>::from(
-                        T.submat(0, 0, T.n_rows - 1, T.n_rows - 1));
+    SubMat T_mat = T.submat(0, 0, T.n_rows - 1, T.n_rows - 1);
 
-    if (k != arma::rank(T_mat)) {
+    if (k != T_mat.rank()) {
         throw IncorrectForm("First k columns of matrix T don't have rank k!");
     }
     // first k-1 columns of T must be in Smith normal form
@@ -79,7 +78,7 @@ checkConditionsTheorem6(const arma::subview<arma::sword> T)
     }
     // off-diagonal entries in row k-1 must be bounded in magnitude by D, a
     // positive multiple of the determinant of the principal kth submatrix of T
-    int_t determinant = std::abs(arma::det(T_mat));
+    int_t determinant = std::abs(T_mat.det());
     for (uint col = k; col < T.n_cols; ++col) {
         if (determinant < T(k - 1, col)) {
             throw IncorrectForm("off-diagonal entries in row k-1 must be"
@@ -91,7 +90,7 @@ checkConditionsTheorem6(const arma::subview<arma::sword> T)
 
 //! check if A is upper diagonal. If not, IncorrectForm exception is thrown
 void
-checkUpperDiagonal(const arma::imat & A)
+checkUpperDiagonal(const IMat & A)
 {
     for (uint i = 0; i < A.n_rows; ++i) {
         for (uint j = 0; j < i; ++j) {
@@ -105,18 +104,18 @@ checkUpperDiagonal(const arma::imat & A)
 //! checks whether matrix A is in correct form to perform conversion to Hermite
 //! normal form.
 void
-checkCorrectFormHermiteTransform(const arma::imat & A)
+checkCorrectFormHermiteTransform(const IMat & A)
 {
     checkUpperDiagonal(A);
-    // check if matrix is regular
-    int det = diagonalMultiple(A.diag());
-    if (0 == det) {
+    // check if principal matrix is regular
+    if (0 == A.diagMultiple()) {
         throw IncorrectForm("Input matrix is singular!");
     }
+    std::cout << A << std::endl;
     // check if off-diagonal entries are bounded by determinant
     for (uint i = 0; i < A.n_rows; ++i) {
         for (uint j = i + 1; j < A.n_cols; ++j) {
-            if (A(i, j) > det) {
+            if (A(i, j) > A.diagMultiple()) {
                 throw IncorrectForm("Off-diagonal entries of input matrix are"
                                     " not bounded by its determinant!");
             }
@@ -132,7 +131,7 @@ checkCorrectFormHermiteTransform(const arma::imat & A)
 * If conditions are not satisfied, exception is raised
 */
 void
-makeHermiteNormalForm(arma::imat & A)
+makeHermiteNormalForm(IMat & A)
 {
     checkUpperDiagonal(A);
     for (int k = A.n_rows - 2; k >= 0; --k) {
@@ -144,10 +143,10 @@ makeHermiteNormalForm(arma::imat & A)
 //! perform triangular reduction of input matrix T. For details please refer to
 //! chapter 2, Lemma 2.
 void
-triangularReduction(arma::subview<arma::sword> T)
+triangularReduction(SubMat T)
 {
     // initialization
-    int_t d = diagonalMultiple(T.submat(1, 1, T.n_rows - 1, T.n_cols - 1).diag());
+    int_t d = T.submat(1, 1, T.n_rows - 1, T.n_cols - 1).diagMultiple();
     if (T(0, 0) < 0) {
         T.row(0) = (-1) * T.row(0);
     }
@@ -168,7 +167,7 @@ triangularReduction(arma::subview<arma::sword> T)
 
 //! Wrapper so that the templated function can be implemented in .cpp file
 void
-hermiteTriangToSNF(arma::imat & A)
+hermiteTriangToSNF(IMat & A)
 {
     hermiteTriangToSNF_Internal(A);
 }
@@ -178,12 +177,13 @@ void
 hermiteTriangToSNF_Internal(MatrixType && A)
 {
     for (uint i = 1; i < A.n_rows; ++i) {
+        // printf("i = %d, A.n_cols - 1 = %d\n", i, A.n_cols - 1);
         submatrixToSNF(A.submat(0, 0, i, A.n_cols - 1));
     }
 }
 
 void
-submatrixToSNF(arma::subview<arma::sword> T)
+submatrixToSNF(SubMat T)
 {
     ensureDivisibility(T);
     eliminateTrailingCol(T);
@@ -199,7 +199,7 @@ submatrixToSNF(arma::subview<arma::sword> T)
 //! Implements Lemma 7 - ensures that
 //! gcd(a_i, t_i) = gcd(a_i, t_i, t_i+1, ..., t_k) for 0 <= i <= k-1
 void
-ensureDivisibility(arma::subview<arma::sword> T)
+ensureDivisibility(SubMat T)
 {
     int_t k  = T.n_rows;
     auto t = T.col(k - 1);
@@ -226,7 +226,7 @@ ensureDivisibility(arma::subview<arma::sword> T)
 
 //! implements Lemma 9
 void
-eliminateTrailingCol(arma::subview<arma::sword> T)
+eliminateTrailingCol(SubMat T)
 {
     // std::cout << "Eliminating trailing column\n";
     for (uint i = 0; i < T.n_rows - 1; ++i) {
@@ -240,10 +240,10 @@ eliminateTrailingCol(arma::subview<arma::sword> T)
 
 //! process first row of given view and convert it to form required by Lemma 9
 void
-processRow(arma::subview<arma::sword> T)
+processRow(SubMat T)
 {
     const uint k = T.n_rows;
-    arma::subview_col<int_t> t_col = T.col(k - 1);
+    SubCol t_col = T.col(k - 1);
     arma::diagview<int_t>    diag  = T.diag();
     int_t s = 0, t = 0, s1 = 0;
     extendedGCD(s, t, s1, diag[0], t_col[0]);
@@ -255,7 +255,7 @@ processRow(arma::subview<arma::sword> T)
         // printf("Before mod:\n");
         // std::cout << T << std::endl;
         if (k < T.n_cols) {
-            arma::subview_row<int_t> sub_row = T.row(i).subvec(k, T.n_cols - 1);
+            SubRow sub_row = T.row(i).subvec(k, T.n_cols - 1);
             sub_row -= q * T.row(0).subvec(k, T.n_cols - 1);
         }
         // std::cout << "    t[i] = " << t_col[i] << ", diag[i] = " << diag[i]
@@ -304,7 +304,7 @@ processRow(arma::subview<arma::sword> T)
 
 //! Implements Theorem 10 - eliminate columns k,.., m
 void
-eliminateExtraColumns(arma::imat & T)
+eliminateExtraColumns(IMat & T)
 {
     uint k = T.n_rows;
     uint m = T.n_cols;
@@ -322,7 +322,7 @@ eliminateExtraColumns(arma::imat & T)
 
 //! Process first row and eliminate all extra entries on indexes k,.., m
 void
-eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T)
+eliminateExtraColumnsInFirstRow(SubMat T)
 {
     uint k = T.n_rows;
     uint m = T.n_cols;
@@ -347,14 +347,13 @@ eliminateExtraColumnsInFirstRow(arma::subview<arma::sword> T)
 }
 
 void
-reduceResultingSquareToSNF(arma::imat & T)
+reduceResultingSquareToSNF(IMat & T)
 {
     if (0 == T.n_rows || 0 == T.n_cols) {
         return;
     }
     // transpose the nontrivial matrix
-    T.submat(0, 0, T.n_rows - 1, T.n_rows - 1) =
-                T.submat(0, 0, T.n_rows - 1, T.n_rows - 1).t();
+    T.submat(0, 0, T.n_rows - 1, T.n_rows - 1).transpose();
     makeHermiteNormalForm(T);
     hermiteTriangToSNF_Internal(T.submat(0, 0, T.n_rows - 1, T.n_rows - 1));
 

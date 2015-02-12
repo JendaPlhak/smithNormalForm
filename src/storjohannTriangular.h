@@ -13,10 +13,10 @@ public:
     std::string str() const { return what(); }
 };
 
-void makeHermiteNormalForm(arma::imat & A);
-void hermiteTriangToSNF(arma::imat & A);
-void eliminateExtraColumns(arma::imat & T);
-void reduceResultingSquareToSNF(arma::imat & T);
+void makeHermiteNormalForm(IMat& A);
+void hermiteTriangToSNF(IMat & A);
+void eliminateExtraColumns(IMat & T);
+void reduceResultingSquareToSNF(IMat & T);
 
 /**
  * Strips all trailing zero columns off the matrix T
