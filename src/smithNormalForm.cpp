@@ -10,6 +10,7 @@
 #include <armadillo>
 #include <algorithm>
 #include <math.h>
+#include "matrix.h"
 #include <vector>
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
@@ -18,9 +19,6 @@
 arma::imat
 SNF::calculate(arma::imat matrix)
 {
-    NTL::ZZ p;
-    NTL::conv(p, 11l);
-
     // generate primes for moduli system
     std::vector<NTL::ZZ> primes = get_primes(matrix);
 
@@ -30,17 +28,24 @@ SNF::calculate(arma::imat matrix)
         I_ std::cout << rank_profile[i] << " ";
     }
     I_ std::cout << std::endl;
-    calculate_storjohann(matrix);
+    for (const NTL::ZZ & p : primes) {
+        IMat a(arma::imat(matrix), ZZ_to_int_t(p));
+        calculate_storjohann(a, rank_profile, ZZ_to_int_t(p));
+    }
     return matrix;
 }
 
+
+// before mod implemented  0.020107 for 10x10
 void
-SNF::calculate_storjohann(arma::imat & matrix)
+SNF::calculate_storjohann(IMat & matrix,
+                            std::vector<uint> & rank_profile,
+                            int_t p)
 {
     I_ std::cout << "Input matrix: \n" << matrix << std::endl;
     std::cout << "Making Hermite triangular normal form...\n";
     // makeHermiteNormalForm(matrix);
-    triangularize(matrix);
+    triangularize(matrix, rank_profile, p);
     std::cout << "Result: \n" << matrix << std::endl;
 
     I_ std::cout << "Stripping zero rows...\n";
@@ -88,10 +93,9 @@ SNF::get_primes(const arma::imat & matrix)
         s = 2 * ceil(denom / (double) (l - 1));
     }
 
-    NTL::ZZ total;
-    NTL::conv(total, 1);
-    NTL::ZZ prev_prime;
-    NTL::conv(prev_prime, 1 << (l - 2)); // we will start the search from 2^(l-1)
+    NTL::ZZ total(NTL::INIT_VAL, 1);
+    // we will start the search from 2^(l-1)
+    NTL::ZZ prev_prime(NTL::INIT_VAL, 1 << (l - 2));
 
     std::vector<NTL::ZZ> primes;
     while (total < b) {

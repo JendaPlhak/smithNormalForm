@@ -32,9 +32,12 @@ int_t diagonalMultiple(const arma::diagview<int_t> & diag);
 //! implements valid x / y over Z
 int_t floored_factor(const int_t x, const int_t y);
 
-int_t ZZ_p_to_int_t(const NTL::ZZ_p & big_num);
+template <typename T>
+int_t ZZ_to_int_t(const T & big_num);
 
 void matrix_convert(const NTL::mat_ZZ_p & A_from, arma::imat & A_to);
 void matrix_convert(const arma::imat & A_from, NTL::mat_ZZ_p & A_to);
+
+#include "numeric.tpp"
 
 #endif // SNF_STORJOHANN_NUMERIC_H

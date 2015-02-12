@@ -1,4 +1,5 @@
 #include <boost/math/common_factor.hpp>
+#include <algorithm>
 #include <vector>
 
 #define ARMA_64BIT_WORD
@@ -24,9 +25,9 @@ columnReductionOutputCheck(Matrix_Type B, const int k);
 template <typename Matrix_Type>
 void hermiteTriangularFormCheck(Matrix_Type A);
 
-void conditioningRoutine(arma::subview<arma::sword>);
-void columnReduction(arma::subview<arma::sword> B, const int k, const int col2);
-void reduceBetweenProfiles(arma::imat & A,
+void conditioningRoutine(SubMat);
+void columnReduction(SubMat B, const int k, const int col2);
+void reduceBetweenProfiles(IMat & A,
                             const std::vector<uint> & rank_profile,
                             const uint new_prof);
 void reshape(arma::imat & A);
@@ -35,22 +36,22 @@ template <typename Matrix_Type>
 int
 mat_rank(Matrix_Type A)
 {
-    return arma::rank(arma::conv_to<arma::mat>::from(A));
+    return A.rank();
 }
 
 template <typename Matrix_Type>
 float
 mat_det(Matrix_Type A)
 {
-    return arma::det(arma::conv_to<arma::mat>::from(A));
+    return A.det();;
 }
 
 template <>
 float
-mat_det<>(arma::imat A)
+mat_det<>(IMat & A)
 {
     if (A.is_square()) {
-        return arma::det(arma::conv_to<arma::mat>::from(A));
+        return A.det();
     } else {
         return 0;
     }
@@ -75,7 +76,7 @@ PROFILE_FOUND:;
 }
 
 void
-triangularize(arma::imat & A)
+triangularize(IMat & A, std::vector<uint> rank_profile, int_t p)
 {
     float det_orig = std::abs(mat_det(A));
 
@@ -84,24 +85,32 @@ triangularize(arma::imat & A)
     uint n_cols = A.n_cols + 2;
 
     // add additional columns and rows.
-    arma::imat A_tmp(n_rows, n_cols);
+    IMat A_tmp(n_rows, n_cols, A.get_mod());
     A_tmp.zeros();
     A_tmp(0,0) = 1;
     A_tmp(n_rows - 1, n_cols - 1) = 1;
     A_tmp.submat(1, 1, n_rows - 2, n_cols - 2) = A;
 
-    std::vector<uint> rank_profile = { 0 };
+    // transform the profile so it corresponds to A_tmp
+    std::transform(rank_profile.begin(), rank_profile.end(), rank_profile.begin(),
+                    [](uint i) { return ++i; } );
+    rank_profile.insert(rank_profile.begin(), 0);
+    rank_profile.push_back(std::min(n_rows, n_cols) - 1);
+    for (uint i = 0; i < rank_profile.size(); ++i) {
+        I_ std::cout << rank_profile[i] << " ";
+    }
+    I_ std::cout << std::endl;
 
-    uint prev_rank = 0;
-    for (uint k = 0; k < n_rows - 1; ++k) {
+    for (uint row = 0; row < rank_profile.size() - 1; ++row) {
         D_ std::cout << "-------------------------------------------------------------------------\n";
-        D_ std::cout << "Round " << k << " input:" << std::endl;
+        D_ std::cout << "Round " << row << " input:" << std::endl;
         D_ std::cout << A_tmp << std::endl;
 
-        auto sub_A = A_tmp.submat(0, prev_rank, n_rows - 1, n_cols - 1);
-        uint new_rank_offset = get_next_rank(sub_A.submat(k, 0,
-                                                            sub_A.n_rows - 1,
-                                                            sub_A.n_cols - 1));
+        auto sub_A = A_tmp.submat(0, rank_profile[row], n_rows - 1, n_cols - 1);
+        uint new_rank_offset = rank_profile[row + 1] - rank_profile[row];
+        // uint new_rank_offset = get_next_rank(sub_A.submat(row, 0,
+        //                                                     sub_A.n_rows - 1,
+        //                                                     sub_A.n_cols - 1));
 
         D_ std::cout << "New rank offset: " << new_rank_offset << std::endl;
 
@@ -110,17 +119,15 @@ triangularize(arma::imat & A)
             break;
         }
 
-        columnReduction(sub_A, n_rows - k - 2, new_rank_offset);
+        columnReduction(sub_A, n_rows - row - 2, new_rank_offset);
 
         if (1 != new_rank_offset) {
-            reduceBetweenProfiles(A_tmp, rank_profile,
-                                    prev_rank + new_rank_offset);
+            std::vector<uint> v(&rank_profile[0], &rank_profile[row + 1]);
+            reduceBetweenProfiles(A_tmp, v,
+                                    rank_profile[row + 1]);
         }
 
-        prev_rank += new_rank_offset;
-        rank_profile.push_back(prev_rank);
-
-        D_ printf("Round %d result: (det = %d)\n", k, (int) mat_det(A_tmp));
+        D_ printf("Round %d result: (det = %d)\n", row, (int) mat_det(A_tmp));
         D_ std::cout << A_tmp << std::endl;
     }
     A = A_tmp.submat(1, 1, n_rows - 2, n_cols - 2);
@@ -142,7 +149,7 @@ triangularize(arma::imat & A)
 *
 */
 void
-conditioningRoutine(arma::subview<arma::sword> B, const uint col2)
+conditioningRoutine(SubMat B, const uint col2)
 {
     // Element B(0,0) has to be positive
     if (not (B(0,0) > 0)) {
@@ -162,7 +169,7 @@ conditioningRoutine(arma::subview<arma::sword> B, const uint col2)
     }
     D_ std::cout << "Result:\n";
     D_ std::cout << B << std::endl;
-    P_ conditioningRoutineInputCheck(arma::imat(arma::join_rows(B.col(0), B.col(col2))));
+    P_ conditioningRoutineInputCheck(mat::join_rows(B.col(0), B.col(col2)));
 
     if (B.n_rows == 2) { // There is no work to be done
         return;
@@ -186,29 +193,29 @@ conditioningRoutine(arma::subview<arma::sword> B, const uint col2)
         if (0 == N * (a_ + t * B(i,col2)) - N_ * (a + t * B(i,0))) {
             t = -gcdCombination(a_tmp, -b_tmp, N);
         }
-        B.row(1) += t * B.row(i);
+        B.row(1).mulAdd(B.row(i), t);
     }
 
     P_ conditioningRoutineOutputCheck(
-            arma::imat(arma::join_rows(B.col(0), B.col(col2))));
+            mat::join_rows(B.col(0), B.col(col2)));
 }
 
 void
-columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
+columnReduction(SubMat B, const int k, const int col2)
 {
     D_ printf("columnReduction scope:\n");
     D_ std::cout << B.submat(B.n_rows - k - 2, 0, B.n_rows - 1, B.n_cols - 1)
                  << std::endl;
     D_ printf("Before conditioningRoutine: \n");
-    D_ std::cout << arma::join_rows(B.col(0), B.col(col2)) << std::endl;
+    D_ std::cout << mat::join_rows(B.col(0), B.col(col2)) << std::endl;
     conditioningRoutine(B.submat(B.n_rows - k - 2, 0,
                                  B.n_rows - 1, B.n_cols - 1),
                         col2);
     D_ printf("After conditioningRoutine: \n");
-    D_ std::cout << arma::join_rows(B.col(0), B.col(col2)) << std::endl;
+    D_ std::cout << mat::join_rows(B.col(0), B.col(col2)) << std::endl;
 
     P_ columnReductionInputCheck(
-            arma::imat(arma::join_rows(B.col(0), B.col(col2))), k);
+            mat::join_rows(B.col(0), B.col(col2)), k);
 
     uint offset = B.n_rows - k - 2;
     int_t m1, m2, t1;
@@ -218,7 +225,7 @@ columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
 
     extendedGCD(m1, m2, t1, N, a, true); // gcd(N, a_k)
 
-    arma::irowvec vec = B.row(offset);
+    RowVec vec = B.row(offset);
     B.row(offset)     = m1 * B.row(offset) + m2       * B.row(offset + 1);
     B.row(offset + 1) = (-a / t1) * vec    + (N / t1) * B.row(offset + 1);
 
@@ -252,7 +259,7 @@ columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
     D_ std::cout << "After elimination:\n";
     D_ std::cout << B << std::endl;
     P_ columnReductionOutputCheck(
-            arma::imat(arma::join_rows(B.col(0), B.col(col2))), k);
+            mat::join_rows(B.col(0), B.col(col2)), k);
 }
 /**
  * Reduce columns between matrix profiles modulo profile entries
@@ -261,7 +268,7 @@ columnReduction(arma::subview<arma::sword> B, const int k, const int col2)
  * @param new_prof current rank profile
  */
 void
-reduceBetweenProfiles(arma::imat & A,
+reduceBetweenProfiles(IMat & A,
                         const std::vector<uint> & rank_profile,
                         const uint new_prof)
 {

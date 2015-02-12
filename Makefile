@@ -4,7 +4,7 @@ CXX     := clang++
 OPT_LVL := -O3
 DBG_LVL := -g3
 
-CFLAGS  := -std=c++11 -fpic -march=native -Wall -Wextra
+CFLAGS  := -std=c++11 -fpic -march=native -Wall -Wextra -march=native
 CFLAGS  += $(OPT_LVL) $(DBG_LVL)
 CFLAGS  += -Werror-implicit-function-declaration -D_GNU_SOURCE
 

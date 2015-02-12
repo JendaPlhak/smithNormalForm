@@ -2,6 +2,7 @@
 
 #include <armadillo>
 
+#include "numeric.h"
 #include "storjohannTriangular.h"
 
 class HermiteTriangularError : public IncorrectForm {
@@ -26,4 +27,4 @@ public:
     Input:  general integer matrix
     Action: Calculates triangular Hermite normal form.
  */
-void triangularize(arma::imat & A);
+void triangularize(IMat & A, std::vector<uint> rank_profile, int_t p);

@@ -205,7 +205,7 @@ matrix_convert(const NTL::mat_ZZ_p & A_from, arma::imat & A_to)
     A_to = arma::imat(A_from.NumRows(), A_from.NumCols());
     for (uint i = 0; i < A_from.NumRows(); ++i) {
         for (uint j = 0; j < A_from.NumCols(); ++j) {
-            A_to(i, j) = ZZ_p_to_int_t(A_from(i + 1, j + 1));
+            A_to(i, j) = ZZ_to_int_t(A_from(i + 1, j + 1));
         }
     }
 }
@@ -220,15 +220,4 @@ matrix_convert(const arma::imat & A_from, NTL::mat_ZZ_p & A_to)
             A_to(i + 1, j + 1) = A_from(i, j);
         }
     }
-}
-
-int_t
-ZZ_p_to_int_t(const NTL::ZZ_p & big_num) {
-    int_t output;
-
-    std::stringstream big_num_str;
-    big_num_str << big_num;
-    big_num_str >> output;
-
-    return output;
 }

@@ -363,11 +363,11 @@ reduceResultingSquareToSNF(arma::imat & T)
 }
 
 uint
-stripZeroRows(arma::imat & T)
+stripZeroRows(IMat & T)
 {
     uint zero_rows = 0;
     for (int i = T.n_rows - 1; i >= 0; --i) {
-        if (arma::any(T.row(i))) {
+        if (T.row(i).any()) {
             T.resize(T.n_rows - zero_rows, T.n_cols);
             return zero_rows;
         } else {

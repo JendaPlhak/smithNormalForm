@@ -2,6 +2,7 @@
 #define SNF_STORJOHANN_TRIANGULAR_H
 
 #include <armadillo>
+#include "matrix.h"
 
 class IncorrectForm : public std::logic_error {
 public:
@@ -22,7 +23,7 @@ void reduceResultingSquareToSNF(arma::imat & T);
  * @param T input matrix
  * @return Number of stripped rows
  */
-uint stripZeroRows(arma::imat & T);
+uint stripZeroRows(IMat & T);
 
 
 #endif // SNF_STORJOHANN_TRIANGULAR_H

@@ -2,10 +2,13 @@
 #define SNF_SMITH_NORMAL_FORM_H
 
 #include <armadillo>
+#include <vector>
 #include <NTL/ZZ.h>
 #include <NTL/ZZ_p.h>
 #include <NTL/mat_ZZ_p.h>
 
+#include "matrix.h"
+#include "numeric.h"
 
 class SNF {
 public:
@@ -16,7 +19,9 @@ public:
      */
     arma::imat calculate(arma::imat matrix);
 private:
-    void calculate_storjohann(arma::imat & m);
+    void calculate_storjohann(IMat & m,
+                                std::vector<uint> & rank_profile,
+                                int_t p);
     void calculate_probabilistic(arma::imat & m);
     /**
      * Computes moduli primes whose multiple bounds matrix determinant
