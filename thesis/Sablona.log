@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  18 MAR 2015 13:16
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  18 MAR 2015 18:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1010,13 +1010,13 @@ Package rerunfilecheck Info: File `Sablona.out' has not changed.
 (rerunfilecheck)             Checksum: E14D65E7BEA898E03884C216D6BD6FC3;1541.
  ) 
 Here is how much of TeX's memory you used:
- 13669 strings out of 493304
- 186219 string characters out of 6139871
+ 13670 strings out of 493304
+ 186226 string characters out of 6139871
  378606 words of memory out of 5000000
  16755 multiletter control sequences out of 15000+600000
  99433 words of font info for 164 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 170i,13n,47p,774b,552s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 168i,13n,47p,774b,552s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/cs/xl2.enc}{/usr/share/texlive
 /texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
@@ -1027,10 +1027,10 @@ msfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmri8a.pfb>
-Output written on Sablona.pdf (65 pages, 290522 bytes).
+Output written on Sablona.pdf (65 pages, 291830 bytes).
 PDF statistics:
- 469 PDF objects out of 1000 (max. 8388607)
- 387 compressed objects within 4 object streams
- 99 named destinations out of 1000 (max. 500000)
+ 470 PDF objects out of 1000 (max. 8388607)
+ 388 compressed objects within 4 object streams
+ 100 named destinations out of 1000 (max. 500000)
  171 words of extra memory for PDF output out of 10000 (max. 10000000)
 

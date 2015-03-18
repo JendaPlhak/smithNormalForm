@@ -22,8 +22,21 @@ a platí $q_i | q_{i+1}$ kde $i \in \{1, \dots, k-1\}$. Čísla $q_i$ pak nazýv
 \textit{invariantními faktory}.
 \end{defi}
 
-Než se pustíme do samotného důkazu, je dobré si uvědomit, jak vlastně vypadají
-invertibilní celočíselné matice. To popisuje následující lemma.
+
+\begin{vet}[O Smithově normálním tvaru]
+    Pro libovolnou celočíselnou matici $ B \in \Zmat $ existují invertibilní
+    matice $ P,Q \in \Zmat $ a matice $ A $ ve Smithově normálním tvaru takové,
+    že platí
+    \begin{center}
+        $ B = P \cdot A \cdot Q $
+    \end{center}
+    Smithův normální tvar je jednoznačný až na znaménka invariantních faktorů.
+\end{vet}
+
+
+Než se pustíme do samotného důkazu této věty, je dobré si uvědomit, jak vlastně
+vypadají invertibilní celočíselné matice. To popisuje následující lemma.
+
 
 \begin{lem}
     Buď $A \in \Zmat$. Pak je A invertiblní, právě tehdy když je čtvercová a
@@ -50,6 +63,10 @@ invertibilní celočíselné matice. To popisuje následující lemma.
     ze subdeterminantů (minorů) matice A a musí být proto celočíselné. Matice
     $A^{-1}$ je tedy celočíselná.
 \end{proof}
+
+Z tohoto lemmatu tedy plyne, že pokud chceme celočíselnou matici B převést do
+\snf pomocí invertibilních matic, musíme tak činit pouze prostřednictvím
+matic majících determinant $\pm1$.
 
 \section{Podkapitola}
 
