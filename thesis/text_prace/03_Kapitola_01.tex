@@ -1,0 +1,62 @@
+\chapter{Smithův normální tvar}
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+V této kapitole se budeme zbývat definicí Smithova normálního tvaru (budeme značit \snf) celočíselných matic $\Zmat$, dokážeme jeho existenci pro libovolnou $A \in \Zmat$ a konečně uvedeme souvislost mezi \snf  a konečně generovanými komutativními grupami.
+
+\begin{defi}Řekneme že matice A $ \in \Zmat $ je ve Smithově normálním tvaru jestliže
+\begin{center}
+$ A =
+    \begin{pmatrix}
+        q_1     & 0      & \cdots & \cdots & \cdots & \cdots & 0      \\
+        0       & q_2    & \ddots &        &        &        & \vdots \\
+        \vdots  & \ddots & \ddots & \ddots &        &        & \vdots \\
+        \vdots  &        & \ddots & q_k    & \ddots &        & \vdots \\
+        \vdots  &        &        & \ddots & 0      & \ddots & \vdots \\
+        \vdots  &        &        &        & \ddots & \ddots & 0      \\
+        0       & \cdots & \cdots & \cdots & \cdots & 0      & 0      \\
+    \end{pmatrix}
+$
+\end{center}
+a platí $q_i | q_{i+1}$ kde $i \in \{1, \dots, k-1\}$. Čísla $q_i$ pak nazýváme
+\textit{invariantními faktory}.
+\end{defi}
+
+Než se pustíme do samotného důkazu, je dobré si uvědomit, jak vlastně vypadají
+invertibilní celočíselné matice. To popisuje následující lemma.
+
+\begin{lem}
+    Buď $A \in \Zmat$. Pak je A invertiblní, právě tehdy když je čtvercová a
+    $\textnormal{det}(A) = \pm1$.
+\end{lem}
+\begin{proof}
+    Buď $A \in \Zmat$ invertibilní. Existuje tedy matice $A^{-1} \in \Zmat$
+    taková, že $AA^{-1} = E$. Pak je ovšem $A^{-1}$ inverzí pro $A$ také nad
+    $\mathbb{Q}$. Proto $A$ musí být čtvercová, neboť každá invertiblní matice
+    nad $\mathbb{Q}$ je čtvercová a má nenulový determinant. Navíc platí
+    \begin{center}
+        $det(A) \cdot \det(A^{-1}) = det(AA^{-1}) = det(E) = 1$
+    \end{center}
+    a protože determinant celočíselné matice je z definice determinantu
+    také celočíselný, musí platit $det(A) = det(A^{-1}) = \pm1$ neboť v okruhu
+    $\mathbb{Z}$ máme pouze dvě jednotky a to právě $\pm1$.
+
+    Buď naopak  $A \in \Zmat$ čtvercová s determinantem $\pm1$. Pak inverzní
+    matici $A^{-1}$ můžeme spočítat z algebraických doplňků jako
+    \begin{center}
+        $A^{-1} = \frac{1}{det(A)} \cdot A_{adj} = \pm A_{adj}$
+    \end{center}
+    nicméně prvky matice $A_{adj}$ - algebraické doplňky - se vypočítají
+    ze subdeterminantů (minorů) matice A a musí být proto celočíselné. Matice
+    $A^{-1}$ je tedy celočíselná.
+\end{proof}
+
+\section{Podkapitola}
+
+\lipsum[98-105]
+
+\subsection{Odstavec}
+
+\lipsum[140-145]
+\shorthandon{-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

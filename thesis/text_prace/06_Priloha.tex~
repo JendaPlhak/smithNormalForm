@@ -1,0 +1,12 @@
+\chapter*{Příloha}
+
+{\bf Sem můžete přidat přílohu. Pokud chcete ``přílohy'', tak upravte definici záhlaví v~souboru sci.muni.thesis.sty, viz řádek 644.}
+\medskip
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% GENERUJ TEXT %%%%%%%%%%%%%
+
+\shorthandoff{-}\lipsum[50-65]\shorthandon{-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
