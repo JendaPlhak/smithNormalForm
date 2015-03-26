@@ -66,8 +66,104 @@ vypadají invertibilní celočíselné matice. To popisuje následující lemma.
 
 Z tohoto lemmatu tedy plyne, že pokud chceme celočíselnou matici B převést do
 \snf pomocí invertibilních matic, musíme tak činit pouze prostřednictvím
-matic majících determinant $\pm1$.
+matic majících determinant $\pm1$. Nyní tedy můžeme přikročit k důkazu samotné
+věty o \snf.
 
+\begin{proof}[Důkaz. (Věty o Smithově normálním tvaru)]
+Nejprve dokážeme existenci \snf. Pro tento účel budeme potřebovat Euklidův
+algoritmus. Ten funguje následujícím způsobem.
+
+Pro libovolná $ a, b \in \mathbb{Z}$ taková, že $ |a| > |b| $ vydělíme číslo
+$ a $ číslem $ b $ se zbytkem. Tedy $ a = qb + c $. Pak ovšem platí, že
+$ gcd(a, b) = gcd(b, c) $ neboť
+
+\begin{center}
+$ gcd(a, b) = d \Rightarrow d \vert (a - qb) \Rightarrow d \vert c \Rightarrow d \vert gcd(b, c)$
+\end{center}
+a naopak
+\begin{center}
+$ gcd(b, c) = e \Rightarrow e \vert (qb + c) \Rightarrow e \vert a \Rightarrow e \vert gcd(a, b)$.
+\end{center}
+Takto můžeme postupovat rekurzivně a po konečném počtu kroků bude $ c = 0 $ a
+$ b $ příslušné danému kroku bude právě hledaný největší společný dělitel.
+Poznamenejme, že užití Euklidova algoritmu je z výpočetního hlediska výhodně, neboť
+má logaritmickou složitost.
+
+Dále protože výsledné transformační matice $ P, Q $ musí být invertibilní nad $\mathbb{Z}$,
+plyne z předchozího lemmatu, že jejich determinant musí být roven $ \pm 1 $.
+Evidentně tedy nemůžeme násobit řádek či sloupec matice jiným číslem než  $ \pm 1 $.
+Můžeme však prohodit libovolné dva řádky, protože to lze realizovat pomocí
+transformační matice,
+
+\begin{center}
+$
+    \begin{pmatrix}
+        1       &        &        &        &        &        &        \\
+                & \ddots &        &        &        &        &        \\
+                &        & 0      &        & 1      &        &        \\
+                &        &        & \ddots &        &        &        \\
+                &        & 1      &        & 0      &        &        \\
+                &        &        &        &        & \ddots &        \\
+                &        &        &        &        &        & 0      \\
+    \end{pmatrix}
+$
+\end{center}
+která má evidentně determinant roven $ -1 $. Analogicky můžeme prohazovat
+prohazovat libovolné dva sloupce. A konečně pomocí transformační matice
+\begin{center}
+$
+    \begin{pmatrix}
+        1       &        &        &        &        &        &        \\
+                & \ddots &        &        &        &        &        \\
+                &        & 1      &        &        &        &        \\
+                &        &        & \ddots &        &        &        \\
+                &        & m      &        & 1      &        &        \\
+                &        &        &        &        & \ddots &        \\
+                &        &        &        &        &        & 1      \\
+    \end{pmatrix}
+$
+\end{center}
+můžeme k libovolnému řádku přičíst $ m $-násobek jiného řádku.
+
+Nyní budeme postupovat následujícím způsobem. Na pozici $ (1, 1) $ přesuneme libovolný
+nenulový prvek matice $ B $ (Pokud $ B = 0 $, pak je již ve \snf a žádné operace
+provádět nemusíme). Pak postupně pro každý prvek pod a napravo od prvku $ b_1^1 $
+aplikujeme Euklidův algoritmus (konkrétně jeho implementaci pomocí řádkových a
+sloupcových operací, která potřebuje pouze operace násobení řádku/sloupce číslem $ -1 $,
+přičítání násobku řádku/sloupce k jinému a prohazování dvou řádků/sloupců),
+čímž na pozici $ (1, 1) $ vyrobíme největší společný prvků
+v prvním sloupci a řádku. Tyto prvky můžeme tedy snadno vyeliminovat, čímž získáme
+matici ve tvaru
+
+\begin{center}
+$ B =
+    \begin{pmatrix}
+        b_1^1   & 0      & \hdots & 0       \\
+        0       & \ast   & \hdots & \ast    \\
+        \vdots  & \vdots &        & \vdots   \\
+        0       & \ast   & \hdots & \ast    \\
+    \end{pmatrix}
+$.
+\end{center}
+
+
+Pokud nyní existuje nějaký prvek $ b_j^i $, který ještě není dělitelný $ b_1^1 $, můžeme
+přičíst $j$-tý sloupec k prvnímu sloupci a opět vyrobit na pozici $ (1, 1) $ prvek $ {b'}_{1}^{1} $
+takový, že $ {b'}_{1}^{1} \vert b_1^1 $ a zároveň $ {b'}_{1}^{1} \vert b_j^i $,
+který jej již dělit bude. Poznamenejme, že tento prvek bude nutně menší než původní
+$ b_1^1 $, díky čemuž náš algoritmus skončí po konečném počtu kroků.
+
+Celkem máme algoritmus, který převede matici $B$ do výše uvedeného tvaru a navíc
+$ {b}_{1}^{1} \vert b_j^i $. Označme takto vzniklou matici $ C $ a nechť $ q_k = c_1^1 $.
+Nyní můžeme postupovat indukcí a aplikovat tento algoritmus
+na submatici, která vznikne vynecháním prvního sloupce a řádku matice $C$.
+Neboť $ q_k $ dělil všechny prvky matice $C$, bude dělit i prvek v levém
+horním rohu submatice (označme jej $ q_{k+1} $) po aplikaci výše uvedeného algoritmu.
+Dostáváme, že $ q_k \vert q_{k+1}$, což jsme měli dokázat.
+
+
+
+\end{proof}
 \section{Podkapitola}
 
 \lipsum[98-105]
