@@ -153,15 +153,67 @@ takový, že $ {b'}_{1}^{1} \vert b_1^1 $ a zároveň $ {b'}_{1}^{1} \vert b_j^i
 který jej již dělit bude. Poznamenejme, že tento prvek bude nutně menší než původní
 $ b_1^1 $, díky čemuž náš algoritmus skončí po konečném počtu kroků.
 
-Celkem máme algoritmus, který převede matici $B$ do výše uvedeného tvaru a navíc
-$ {b}_{1}^{1} \vert b_j^i $. Označme takto vzniklou matici $ C $ a nechť $ q_k = c_1^1 $.
+Celkem máme algoritmus, který převede matici $B$ do výše uvedeného tvaru
+a navíc $ {b}_{1}^{1} \vert b_j^i $.
+Označme takto vzniklou matici $ C $ a nechť $ q_k = c_1^1 $.
 Nyní můžeme postupovat indukcí a aplikovat tento algoritmus
 na submatici, která vznikne vynecháním prvního sloupce a řádku matice $C$.
 Neboť $ q_k $ dělil všechny prvky matice $C$, bude dělit i prvek v levém
 horním rohu submatice (označme jej $ q_{k+1} $) po aplikaci výše uvedeného algoritmu.
 Dostáváme, že $ q_k \vert q_{k+1}$, což jsme měli dokázat.
 
+Zbývá dokázat jednoznačnost. Označme
+\begin{center}
+$ gcd_{i \times i }(A) = gcd\{det(X) \vert X \textrm{ je submatice } A \textrm{ tvaru }i \times i\} $
+\end{center}
 
+Prvně ukážeme, že platí rovnost
+\begin{center}
+$ q_1 \hdots q_i = gcd_{i \times i }(A)$
+\end{center}
+
+kde $ A $ je matice ve \snf. Pokud submatice $ X $ obsahuje $k$-tý řádek, ale
+neobsahuje $k$-tý sloupec matice A, bude její determinant evidentně nulový,
+neboť $ A $ je diagonální a $ X $ tak bude obsahovat nulový řádek. Stačí tedy
+uvažovat submatice jejichž diagonála leží na hlavní diagonále matice $ A $. To
+znamená, že platí
+\begin{center}
+$ gcd_{i \times i }(A) = gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} $.
+\end{center}
+Navíc A je ve \snf, proto $ q_i | q_{i+1} $ z čehož plyne
+\begin{center}
+$ gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} = q_1 \hdots q_i $,
+\end{center}
+což jsme chtěli dokázat.
+
+Konečně ukážeme, že největší společný dělitel subdeterminantů je invariantní
+vzhledem k elementárním řádkovým operacím (invariance vzhledem k sloupcovým
+operacím pak plyne ze symetrie).
+
+Invariance vzhledem k násobení řádku číslem $ -1 $ a vzhledem k prohození řádků
+je zřejmá, neboť tyto operace maximálně změní znaménko některých subdeterminantů.
+To ovšem nemá žádný vliv na výsledného největšího společného dělitele. Pro přičítání
+násobku řádku je situace ovšem poněkud složitější. Každý nový subdeterminant je
+pak celočíselnou kombinací subdeterminantů předchozí matice. Z toho plyne, že
+\begin{center}
+$ gcd_{i \times i }(A) \vert gcd_{i \times i }(A') $.
+\end{center}
+
+Jak jsme ale ukázali dříve, operace přičtení řádku je invertibilní. Můžeme tedy
+celý proces zopakovat opačným směrem a stejnou argumentací dostáváme
+\begin{center}
+$ gcd_{i \times i }(A') \vert gcd_{i \times i }(A) $.
+\end{center}
+Největší společný dělitel subdeterminantů se tedy nezmění.
+
+Předpokládejme nyní, že \snf není jednoznačný a existují matice $ A,C $ a $ P,Q,T,U$
+takové, že platí $ B = P \cdot A \cdot Q = T \cdot C \cdot U $, kde $ A,C $ jsou
+různé a ve \snf a $ P,Q,T,U$ jsou celočíselné invertibilní matice. Pak násobení
+invertibilními maticemi $ P,Q,T,U$ odpovídá postupnému provádění elemntárních
+řádkových a sloupcových úprav, o kterých jsme ovšem dokázali, že nemění největšího
+společného dělitele subdeterminantů. To speciálně znamená, že hlavní minory matic
+$ A,C $ ve Smithově normálním tvaru jsou si rovny a proto i invariatní faktory
+musí být stejně. To je spor s předpokladem. Smithův normální tvar je tedy jednoznačný.
 
 \end{proof}
 \section{Podkapitola}

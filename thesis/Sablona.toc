@@ -2,10 +2,10 @@
 \contentsline {chapter}{\IeC {\'U}vod}{viii}{chapter*.3}
 \contentsline {chapter}{P\IeC {\v r}ehled pou\IeC {\v z}it\IeC {\'e}ho zna\IeC {\v c}en\IeC {\'\i }}{ix}{chapter*.4}
 \contentsline {chapter}{\numberline {1}Smith\IeC {\r u}v norm\IeC {\'a}ln\IeC {\'\i } tvar}{1}{chapter.1}
-\contentsline {section}{\numberline {1.1}Podkapitola}{3}{section.1.1}
+\contentsline {section}{\numberline {1.1}Podkapitola}{4}{section.1.1}
 \contentsline {subsection}{\numberline {1.1.1}Odstavec}{20}{subsection.1.1.1}
-\contentsline {chapter}{\numberline {2}Druh\IeC {\'a} kapitola s matematikou $\DOTSI \intop \ilimits@ \tmspace -\thinmuskip {.1667em} f(x)\tmspace +\thinmuskip {.1667em}\mathrm {d}x$ v~n\IeC {\'a}zvu}{43}{chapter.2}
-\contentsline {section}{\numberline {2.1}Podkapitola}{46}{section.2.1}
-\contentsline {chapter}{Z\IeC {\'a}v\IeC {\v e}r}{47}{chapter*.6}
-\contentsline {chapter}{P\IeC {\v r}\IeC {\'\i }loha}{50}{chapter*.7}
-\contentsline {chapter}{Seznam pou\IeC {\v z}it\IeC {\'e} literatury}{53}{chapter*.8}
+\contentsline {chapter}{\numberline {2}Druh\IeC {\'a} kapitola s matematikou $\DOTSI \intop \ilimits@ \tmspace -\thinmuskip {.1667em} f(x)\tmspace +\thinmuskip {.1667em}\mathrm {d}x$ v~n\IeC {\'a}zvu}{44}{chapter.2}
+\contentsline {section}{\numberline {2.1}Podkapitola}{47}{section.2.1}
+\contentsline {chapter}{Z\IeC {\'a}v\IeC {\v e}r}{48}{chapter*.6}
+\contentsline {chapter}{P\IeC {\v r}\IeC {\'\i }loha}{51}{chapter*.7}
+\contentsline {chapter}{Seznam pou\IeC {\v z}it\IeC {\'e} literatury}{54}{chapter*.8}
