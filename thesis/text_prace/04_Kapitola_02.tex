@@ -155,7 +155,8 @@ $ 0 \leq \tilde{a}_{l-1}, \tilde{b}_{l} < N $ taková, že platí
         b_{l} / g & = q_2 N +  \tilde{b}_{l}
     \end{split}
 \end{equation}
-Čísla $ \tilde{a}_{l-1} $ a $ \tilde{b}_{l} $ jsou nesoudělná, protože TODO. Pomocí
+Čísla $ \tilde{a}_{l-1} $ a $ \tilde{b}_{l} $ jsou nesoudělná (snadno plyne z
+Bezoutovy rovnosti). Pomocí
 algoritmu uvedeného v TODO můžeme najít nejmenší kladné číslo $ t $ takové, že bude
 platit
 \begin{equation}\label{t_search}
@@ -163,7 +164,7 @@ platit
 \end{equation}
 a volbou $ c_l \leftarrow t $ zajistíme splnění podmínky (1). Skutečně:
 \begin{align*}
-    gcd(a_l, N) &= gcd(a_{l-1} + t b_l, N) && \text{we are trying to solve for } \\
+    gcd(a_l, N) &= gcd(a_{l-1} + t b_l, N)  \\
                 &= gcd(g (q_1 N +  \tilde{a}_{l-1})
                         + tg(q_2 N + \tilde{b}_{l}), N) \\
                 &= gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l})
@@ -190,8 +191,16 @@ To implikuje, že prvek x je určen jednoznačně a můžeme jej vyjádřit jako
 \begin{equation}\label{frac}
     x = -\frac{N \bar{a}_{l-1} - \bar{N} a_{l-1}} {N \bar{b}_l - \bar{N} b_l}
 \end{equation}
-Pokud by nám tedy v kroku \ref{t_search} vyšlo $ c_l = t = x $, nebyla by podmínka
-(2) splněna. To můžeme ovšem snadno napravit. Předpokládejme tedy, že $ 0 < t = x $
+Poznamenejme, že z indukčního předpokladu také plyne, že $ x \neq 0 $.
+
+Pokud nám tedy v kroku \ref{t_search} výjde $ c_l $ různé od $ x $, je vše v pořádku.
+Pokud ovšem $ c_l = t = x $, nebyla by podmínka (2) splněna.
+To ale můžeme snadno napravit. Předpokládejme tedy, že $ 0 < x = t $.
+Nechť $ \bar{t} $ je nejmenší nezáporné číslo, pro které platí
+$ gcd(\tilde{a}_{l-1} + \bar{t} (-\tilde{b}_{l}), N) = 1 $. Volbou $ c_l \leftarrow -\bar{t}$
+zajistíme splnění podmínky (2), neboť $ c_l = -\bar{t} \leq 0 < x $. Platnost
+podmínky (1) pro takovouto volbu $ c_l $ se pak dokáže zcela analogicky, jako
+jsme to již provedli výše pro $ c_l = t $.
 \end{proof}
 
 
@@ -199,7 +208,8 @@ Pokud by nám tedy v kroku \ref{t_search} vyšlo $ c_l = t = x $, nebyla by podm
 % \begin{equation*}\label{E}\tag{rovnice}
 %  \int\! f(x)\,\mathrm{d}x
 % \end{equation*}
-% odkaz na rovnici s \uv{tagem} \eqref{E} -- pokud nechcete vzorci přidělit číslo, ale nějaký vlastní symbol, používejte
+% odkaz na rovnici s \uv{tagem} \eqref{E} -- pokud nechcete vzorci přidělit číslo,
+% ale nějaký vlastní symbol, používejte
 % \uv{hvězdičkovaná} prostředí, tj. např. \verb+equation*+
 
 % odkaz na druhy vzorec \eqref{EE}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  2 APR 2015 17:30
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  2 APR 2015 21:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -758,11 +758,7 @@ Package hyperref Info: Option `unicode' set `true' on input line 203.
 Package: stringenc 2011/12/02 v1.10 Convert strings between diff. encodings (HO
 )
 )
-(./Sablona.aux
-
-LaTeX Warning: Label `division' multiply defined.
-
-)
+(./Sablona.aux)
 \openout1 = `Sablona.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 203.
@@ -791,8 +787,7 @@ LaTeX Font Info:     CS Times on input line 2.
 LaTeX Font Info:    (C) Z. Wagner,1998/01/31 on input line 3.
 LaTeX Font Info:    Created by CsPsFont utility v.1.0e (C) Z. Wagner, 1998/01/3
 1 on input line 4.
-)
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+) (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count138
 \scratchdimen=\dimen133
@@ -1023,33 +1018,28 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 360.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 360.
 Package rerunfilecheck Info: File `Sablona.out' has not changed.
 (rerunfilecheck)             Checksum: F2171667DFA3EF9A3678382E3337C7CC;1720.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
  ) 
 Here is how much of TeX's memory you used:
- 13983 strings out of 493304
- 190830 string characters out of 6139871
- 385727 words of memory out of 5000000
- 17104 multiletter control sequences out of 15000+600000
- 76536 words of font info for 104 fonts, out of 8000000 for 9000
+ 13979 strings out of 493304
+ 190774 string characters out of 6139871
+ 385729 words of memory out of 5000000
+ 17101 multiletter control sequences out of 15000+600000
+ 75300 words of font info for 103 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  46i,16n,47p,774b,555s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/cs/xl2.enc}{/usr/share/texlive
-/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/ty
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texliv
+e/texmf-dist/fonts/enc/dvips/cs/xl2.enc}</usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
 ls/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Sablona.pdf (24 pages, 172961 bytes).
+/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Sablona.pdf (24 pages, 169471 bytes).
 PDF statistics:
- 313 PDF objects out of 1000 (max. 8388607)
- 273 compressed objects within 3 object streams
+ 309 PDF objects out of 1000 (max. 8388607)
+ 270 compressed objects within 3 object streams
  75 named destinations out of 1000 (max. 500000)
  179 words of extra memory for PDF output out of 10000 (max. 10000000)
 
