@@ -64,10 +64,10 @@ společným dělitelem všech prvků daného sloupce. A přesně to je obsahem n
 $ B =
     \begin{pmatrix}
         N & \bar{N} \\
-        a & \bar{a}  \\
-        b_1 & \bar{b_1}  \\
+        a_0 & \bar{a}_0  \\
+        b_1 & \bar{b}_1  \\
         \vdots & \vdots  \\
-        b_k & \bar{b_k}  \\
+        b_k & \bar{b}_k  \\
     \end{pmatrix}
 $,
 \end{center}
@@ -90,41 +90,108 @@ takovou, že bude platit
 $ CB =
     \begin{pmatrix}
         N & \bar{N} \\
-        a_s & \bar{a_s}  \\
-        b_1 & \bar{b_1}  \\
+        a_k & \bar{a}_k  \\
+        b_1 & \bar{b}_1  \\
         \vdots & \vdots  \\
-        b_k & \bar{b_k}  \\
+        b_k & \bar{b}_k  \\
     \end{pmatrix}
 $ kde dgsdgddg
 sdgsdgsdgdgsdgdsdg
 \end{center}
 a navíc $ CB $ bude splňovat následující podmínky:
-\begin{enumerate}
+\begin{Cond}
     \item hlavní submatice
     $
         \begin{pmatrix}
             N & \bar{N} \\
-            a_s & \bar{a_s}  \\
+            a_k & \bar{a}_k  \\
         \end{pmatrix}
     $ je regulární a
-    \item $ gcd(x, N) = gcd(x, N, b_1, b_2, \cdots, b_k) $.
-\end{enumerate}
+    \item $ gcd(N, a_k) = gcd(N, a_0, b_1, b_2, \dots, b_k) $.
+\end{Cond}
 \end{vet}
 
 \begin{proof}
 Bez újmy na obecnosti můžeme předpokládat, že $ k > 0 $. Pokud by k bylo nulové,
 můžeme zřejmě za $ C $ zvolit identitu, které splní naše požadavky.
 Dále můžeme předpokládat, že hlavní submatice je regulární a tedy platí
-$ N \bar{a} - \bar{N} a \neq 0 $. Pokud by tomu tak nebylo, přičteme k druhému
-řádku nějaký řádek $ 2 < l \leq k + 2 $, pro který platí
-$ N \bar{b_l} - \bar{N} b_l \neq 0 $.
+$ N \bar{a}_0 - \bar{N} a_0 \neq 0 $. Pokud by tomu tak nebylo, přičteme k druhému
+řádku nějaký řádek $ 2 < s \leq k + 2 $, pro který platí
+$ N \bar{b}_s - \bar{N} b_s \neq 0 $.
 Takový řádek jistě bude existovat, neboť matice $ B $ má plnou hodnost. Výsledná
 matice pak bude mít hlavní submatici regulární. Pro takto upravenou matici můžeme
-spočítat hledané koeficienty $ c_i $ a konečně ke koeficientu $ c_l $ přičteme $ 1 $,
-což bude přesně odpovídat onomu přičtení $ l $-tého řádku, které jsme provedli na
+spočítat hledané koeficienty $ c_i $ a konečně ke koeficientu $ c_s $ přičteme $ 1 $,
+což bude přesně odpovídat onomu přičtení $ s $-tého řádku, které jsme provedli na
 začátku.
 
+Nyní ukážeme, jak iterativně vypočítat $ c_l $ pro $ l = 1,\dots,k $. Označme
+mezivýsledky našeho výpočtu následujícím způsobem:
+\begin{equation}\label{oznac}
+    \begin{split}
+        a_l &= a_0 + c_1 b_1 + \dots + c_l b_l \\
+        \bar{a}_l &= \bar{a}_0 + c_1 \bar{b}_1 +\dots+c_l \bar{b}_l
+    \end{split}
+\end{equation}
+Po provedení kroku $ l-1 $ a na začátku kroku $ l $ jsou vypočítány koeficienty
+$ c_1, \dots, c_{l-1} $ a jsou splněny podmínky
+\begin{center}
+    \begin{CondNum}
+        \item $ gcd(N, a_i) = gcd(N, a_0, b_1, b_2, \dots, b_i) $
+        \item $ N \bar{a}_i - \bar{N} a_i \neq 0 $
+    \end{CondNum}
+\end{center}
+pro $ i = l - 1 $. Poznamenejme, že pro $ i = 0 $ jsou podmínky (1)
+a (2) splněny triviálně. Teď musíme provést
+indukční krok - najít vhodné $ c_l $ takové, že budou splněny podmínky
+(1) a (2) pro $ i = l $.
 
+Nechť $ g = gcd(a_{l-1}, b_l) $. Pak můžeme dělením se zbytkem najít celá
+čísla $ q_1, q_2 $ a
+$ 0 \leq \tilde{a}_{l-1}, \tilde{b}_{l} < N $ taková, že platí
+
+\begin{equation}\label{division}
+    \begin{split}
+        a_{l - 1} / g & = q_1 N +  \tilde{a}_{l-1} \\
+        b_{l} / g & = q_2 N +  \tilde{b}_{l}
+    \end{split}
+\end{equation}
+Čísla $ \tilde{a}_{l-1} $ a $ \tilde{b}_{l} $ jsou nesoudělná, protože TODO. Pomocí
+algoritmu uvedeného v TODO můžeme najít nejmenší kladné číslo $ t $ takové, že bude
+platit
+\begin{equation}\label{t_search}
+    gcd(\tilde{a}_{l-1} + t \tilde{b}_{l}, N) = 1
+\end{equation}
+a volbou $ c_l \leftarrow t $ zajistíme splnění podmínky (1). Skutečně:
+\begin{align*}
+    gcd(a_l, N) &= gcd(a_{l-1} + t b_l, N) && \text{we are trying to solve for } \\
+                &= gcd(g (q_1 N +  \tilde{a}_{l-1})
+                        + tg(q_2 N + \tilde{b}_{l}), N) \\
+                &= gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l})
+                        + g (q_1 + t q_2) N, N) \\
+                &= gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l}), N) \\
+                &= gcd(g, N) \\
+                &= gcd(a_{l-1}, b_l, N) \\
+                &= gcd(N, a_0, b_1, b_2, \dots, b_l) \\
+\end{align*}
+přičemž poslední rovnost plyne z indukčního předpokladu.
+
+Nakonec musíme zajistit splnění i druhé podmínky (2). Buď $ l $ index aktuálního
+kroku a předpokládejme, že platí
+
+\begin{equation}\label{det}
+    \begin{vmatrix}
+        N & \bar{N} \\
+        a_{l-1} + x b_l & \bar{a}_{l-1} + x \bar{b}_l  \\
+    \end{vmatrix}
+    = 0
+\end{equation}
+pak ovšem z indukčního předpokladu plyne, že $ N \bar{b}_l - \bar{N} b_l \neq 0 $.
+To implikuje, že prvek x je určen jednoznačně a můžeme jej vyjádřit jako
+\begin{equation}\label{frac}
+    x = -\frac{N \bar{a}_{l-1} - \bar{N} a_{l-1}} {N \bar{b}_l - \bar{N} b_l}
+\end{equation}
+Pokud by nám tedy v kroku \ref{t_search} vyšlo $ c_l = t = x $, nebyla by podmínka
+(2) splněna. To můžeme ovšem snadno napravit. Předpokládejme tedy, že $ 0 < t = x $
 \end{proof}
 
 
