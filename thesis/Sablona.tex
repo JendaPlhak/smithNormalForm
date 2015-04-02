@@ -18,13 +18,13 @@
 %% Zvolte kodovani dokumentu
 %%%%%%%%%%%%
 
-\usepackage[utf8]{inputenc} 
+\usepackage[utf8]{inputenc}
 % \usepackage[cp1250]{inputenc} %% NASTAVENI PRO WINDOWS
 % \usepackage[T1]{fontenc} %% puvodni evropske fonty->spatne umistene hacky nad c, d s hackem ma za sebou mezeru
 \usepackage[IL2]{fontenc} %fonty vyladene pro cestinu/slovenstinu
 
 %%%%%%%%%%%%
-%% Nastavte si jazyk dokumentu 
+%% Nastavte si jazyk dokumentu
 %% lze pouzit volbu babel (pro pdflatex a latex) nebo bez babelu (pro pdfcslatex a cslatex
 %%
 %% pri volbe bez babelu bude zlobit v ukazkovych souborech prikaz ``\shorthandoff{-}'' a ``\shorthandoff{-}''
@@ -54,13 +54,14 @@
 % \usepackage{utopia}
 \usepackage{mathptmx}  %% volne dostupny font Adobe Times Roman
 \usepackage{amsthm}
+\usepackage{enumitem}
 %  \usepackage[mtbold,mtplusscr,mtpluscal]{mathtime} % komercni matematicky font, dostupne pouze na UMS
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BALIKY POTREBNE PRO SABLONU %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{longtable,lipsum} 
+\usepackage{longtable,lipsum}
 %%% balik ``longtable`` je potrebny pro sazeni kapitoly s pouzitym znacenim, jinak neni potreba
 %%% balik ``lipsum`` je pouze pro sablonu, aby se generoval nahodny text - pro samotnou praci je mozne jej odstranit
 
@@ -100,7 +101,7 @@
 %% \scalebox{1.15}{$y(-\infty)=0$} a~\scalebox{1.15}{$y'(\infty)=0$}}
 %%
 %% pro psani druhe polozky, tj. {Název práce} je nutne mit na pameti, ze matematicke symboly nelze do zalozek v PDF
-%% vlozit - proto slouzi prikaz \texorpdfstring{toto se vysazi}{toto se vlozi do zalozek v PDF} 
+%% vlozit - proto slouzi prikaz \texorpdfstring{toto se vysazi}{toto se vlozi do zalozek v PDF}
 %% nektere symboly vlozit lze, viz kapitolu 50 v dokumentaci
 %% http://mirrors.ctan.org/macros/latex/contrib/hyperref/hyperref.pdf
 %% viz take http://orgmode.org/worg/org-symbols.html
@@ -134,45 +135,45 @@ zdrojů, které jsou v práci citovány.}
 %%%%%%%%%%%%
 %% Konkrétní příklad
 % \NazevUstavu{Ústav matematiky a statistiky}{Department of Mathematics and Statistics}
-% 
+%
 % \RokOdevzdaniPrace{2012}
-% 
+%
 % \AkademickyRok{2011/12}
-% 
+%
 % \Autor{Petr Zemánek}{Mgr. Petr Zemánek, Ph.D.}
-% 
+%
 % \NazevPrace
 % {Rozbor řešení rovnice \scalebox{1.15}{${y''=f(x)\,x^{\scalebox{0.4}2}}$} s~počátečními podmínkami
 % \scalebox{1.15}{$y(-\infty)=0$} a~\scalebox{1.15}{$y'(\infty)=0$}}
 % {Rozbor řešení rovnice \texorpdfstring{$y''=f(x)\,x^2$}{y''=f(x)x\texttwosuperior} s~počátečními podmínkami
 % \texorpdfstring{$y(-\infty)=0$}{y(-∞)} a~\texorpdfstring{$y'(\infty)=0$}{y'(∞)=0}}
 % {Analysis of solution of the equation $y''=f(x)\,x^2$ with the initial conditions $y(-\infty)=0$ and $y'(\infty)=0$}
-% 
+%
 % {Lineární diferenciální rovnice {\it n}-tého řádu s~konstantními koeficienty a~jejich aplikace}{Linear
 % Differential Equations of {\it n}-th Order with Constant Coefficients and Their Applications}
-% 
+%
 % \VedouciPraceSTituly{Mgr. Petr Zemánek, Ph.D.}
-% 
+%
 % \StudijniProgram{Matematika}{Mathematics}
-% 
+%
 % \StudijniObor{Matematika}{Mathematics}
-% 
+%
 % \PocetStran{xiii\,$+$\,14}  %%% tyto hodnoty odpovidaji teto sablone
 %
 % \KlicovaSlova{Klíčové slovo; Klíčové slovo; Klíčové slovo; Klíčové slovo; Klíčové slovo; Klíčové slovo; Klíčové
 % slovo; Klíčové slovo}{Keyword; Keyword; Keyword; Keyword; Keyword; Keyword; Keyword; Keyword; Keyword}
-% 
+%
 % \Abstrakty%
 % {V této bakalářské/diplomové práci se věnujeme ...}%
 % {In this thesis we study ...}
-% 
+%
 % \TextPodekovani%
 % {Na tomto místě bych chtěl(-a) poděkovat ...}
-% 
+%
 % \TextProhlaseni{
 % Prohlašuji, že jsem svoji bakalářskou/diplomovou/rigorózní práci vypracoval(-a) samostatně s~využitím informačních
 % zdrojů, které jsou v práci citovány.}
-% 
+%
 % \DatumProhlaseni{27. ledna 2012}
 %
 
@@ -194,7 +195,7 @@ zdrojů, které jsou v práci citovány.}
 %%%%%%%%%%%%%%%%%%%%%%% ZAPNUTI OPAKOVANI MATEMATICKYCH SYMBOLU %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % \input{opakuj.sty}
-	
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ZACATEK DOKUMETU %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -208,19 +209,19 @@ zdrojů, které jsou v práci citovány.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%% POVINNE CASTI PRO PRACE PSANE SLOVENSKY %%%%%%%%%%%%%%%%%
-% 
+%
 % \NazevPraceSLOVENSKY{...}
-% 
+%
 % \NazevUstavuSLOVENSKY{...}
-% 
+%
 % \StudijniProgramSLOVENSKY{...}
-% 
+%
 % \StudijniOborSLOVENSKY{***}
-% 
+%
 % \KlicovaSlovaSLOVENSKY{bbb}
-% 
+%
 % \AbstraktSLOVENSKY{...}
-% 
+%
 % \VytvorPovinneStranySLOVENSKY
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -288,6 +289,9 @@ zdrojů, které jsou v práci citovány.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TEXT PRACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newlist{Cond}{enumerate}{10}
+\setlist[Cond]{label=\textbf{(c\arabic*)},ref=c\arabic*,leftmargin=*}
+
 \theoremstyle{plain}
 \newtheorem{vet}{Věta}[chapter] % reset theorem numbering for each chapter
 \newtheorem{lem}[vet]{Lemma} % definition numbers are dependent on theorem numbers
@@ -295,6 +299,7 @@ zdrojů, které jsou v práci citovány.}
 
 \theoremstyle{definition}
 \newtheorem{defi}[vet]{Definice} % definition numbers are dependent on theorem numbers
+\newtheorem{pozn}[vet]{Poznámka} % definition numbers are dependent on theorem numbers
 \newtheorem{pri}[vet]{Příklad} % same for example numbers
 
 
@@ -328,12 +333,12 @@ zdrojů, které jsou v práci citovány.}
 
 \renewcommand{\indexname}{Rejstřík}
 \HlavickaRejstrik
-\VytvorRejstrik  
+\VytvorRejstrik
 %%
-%% pro vytvoreni rejstriku se spravny ceskym razenim pouzijte 
+%% pro vytvoreni rejstriku se spravny ceskym razenim pouzijte
 %% csindex -d -h -k -z il2 nazev_souboru.idx
 %%
-%% nebo 
+%% nebo
 %% texindy -I latex -L czech -M lang/czech/utf8 nazev_souboru.idx
 %%
 %% na Ustavu matematiky a statistiky zadejte

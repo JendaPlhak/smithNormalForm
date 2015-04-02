@@ -1,50 +1,149 @@
-\chapter{Druhá kapitola s matematikou \texorpdfstring{$\int\! f(x)\,\mathrm{d}x$}{int f(x) dx} v~názvu}
-%% matematicke symboly nelze do zalozek v PDF vlozit - proto slouzi prikaz \texorpdfstring{toto se vysazi}{toto se
-%% vlozi do zalozek v PDF} - nektere symboly vlozit lze, viz kapitolu 50 v dokumentaci
-%% http://mirrors.ctan.org/macros/latex/contrib/hyperref/hyperref.pdf
-%% viz take http://orgmode.org/worg/org-symbols.html
-%%
+\chapter{Triangularizace celočíselných matic}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%% UKAZKA OPAKOVANI MATEMATICKYCH SYMBOLU %%%%%%%%%%%%%
-% 
-% ukázka opakování na řádkovém zlomu ukázka opakování na řádkovém zlomu zlom $c+ a+ b$
-% 
-% ukázka opakování na řádkovém zlomu ukázka opakování na řádkovém zlomu zl $c- a- b$
-% 
-% ukázka opakování na řádkovém zlomu ukázka opakování na řádkovém zlomu zlo $c\cdot a\cdot b$
-% 
-% ukázka opakování na řádkovém zlomu ukázka opakování na řádkovém zlomu zl $c\setminus a\setminus b$
-% 
+V této kapitole se budeme zabývat popisem algoritmu pro výpočet redukovaného
+schodovitého tvaru celočíselných matic. Tento algoritmus představil Arne Storjohann
+v článku nazvaném ,,\textit{A fast+practial+deterministic algorithm for
+triangularizing integer matrices}'' \cite{triang}. Definujme nejdříve tvar matice,
+jehož vytvoření bude našim cílem.
 
-Text text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text 
-text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text  text 
-text  text  text  text  text  text  text  text  text  text.
+\begin{defi}\label{RREF}
+    Řekneme že matice $ A \in \Zmat $ je v redukovaném schodovitém tvaru (\rst) jestliže
+    splňuje následující podmínky:
+    \begin{Cond}
+        \item Buď r hodnost matice A. Pak prvních r řádků je nenulových.
+        \item Pro každé $ 1 \leq i \leq r $ buď $A[i, j_i]$ první nenulový prvek v
+        $ i $-tém řádku. Pak $ j_1 < j_2 < \cdots < j_r $.
+        \item Pro každé $ 1 \leq i \leq r $ platí $ A[i, j_i] > 0 $.
+        \item Pro každé $ 1 \leq k < i \leq r $ platí $ A[i, j_i] > A[k, j_i] \geq 0 $.
+    \end{Cond}
+\end{defi}
 
-\begin{equation*}\label{E}\tag{rovnice}
- \int\! f(x)\,\mathrm{d}x
-\end{equation*}
-odkaz na rovnici s \uv{tagem} \eqref{E} -- pokud nechcete vzorci přidělit číslo, ale nějaký vlastní symbol, používejte
-\uv{hvězdičkovaná} prostředí, tj. např. \verb+equation*+
-\begin{equation}\label{EE}
- \iint\! f(x)\,\mathrm{d}x
-\end{equation}
-odkaz na druhy vzorec \eqref{EE}
+\begin{pozn}
+Poznamenejme, že první a druhá podmínka nám zaručují schodovitý tvar matice $ A $.
+Tento však zjevně není jednoznačný. Proto je nutné přidat ještě podmínky
+(\textit{c3}) a (\textit{c4}). (\textit{c3}) zajišťuje, že členy nad pivoty budou
+kladné a (\textit{c4}) říká, že prvky nad pivoty budou pivoty omezeny. Tyto
+podmínky pak určují tvar matice $ A $ jednoznačně vzhledem k elementárním
+operacím.
+\end{pozn}
 
-\lipsum[1]
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%% GENERUJ TEXT %%%%%%%%%%%%%
+\begin{pri}
+Pro ilustraci uvádíme následující matici v \rst:
+\begin{center}
+$
+    \begin{pmatrix}
+        2 & 33 & 6  & 0 & 39  & 73 \\
+        0 & 0  & 24 & 0 & 444 & 8  \\
+        0 & 0  & 0  & 1 & 22  & 23 \\
+        0 & 0  & 0  & 0 & 0   & 75 \\
+        0 & 0  & 0  & 0 & 0   & 0  \\
+    \end{pmatrix}
+$
+\end{center}
+\end{pri}
 
-\shorthandoff{-} 
-\lipsum[9-14]
+V následujících podkapitolách nejdříve popíšeme několik klíčových procedur, které
+budou upravovat vstupní matici $ A $, pomocí unimodulárních (mající determinant
+roven $\pm 1$, tedy invertibilních) matic.
+Tyto procedury postupně propojíme a v poslední podkapitole pak obdržíme samotný
+algoritmus pro výpočet \rst.
+
+\section{GCD redukce}
+Jak jsme viděli již v důkazu věty o Smithově normálním tvaru, častou operací,
+kterou s maticí při převodu do \snf provádíme, je eliminace všech prvků
+nacházejících se pod nějakým námi zvoleným pivotem. Takováto eliminace je poměrně
+náročná, neboť pro každý prvek musíme vytvářet největší společný dělitel s pivotem.
+Bylo by proto výhodné, kdybychom mohli nějakým způsobem upravit prvky ve sloupci tak,
+že největší společný dělitel nějakých dvou prvků daného sloupce bude zároveň největším
+společným dělitelem všech prvků daného sloupce. A přesně to je obsahem následující věty.
+
+\begin{vet}[GCD redukce]
+    Nechť $ B \in \Zmat $ je matice $ (k+2) \times k $ a $ rank(B) = 2 $, kterou
+    můžeme zapsat jako
+\begin{center}
+$ B =
+    \begin{pmatrix}
+        N & \bar{N} \\
+        a & \bar{a}  \\
+        b_1 & \bar{b_1}  \\
+        \vdots & \vdots  \\
+        b_k & \bar{b_k}  \\
+    \end{pmatrix}
+$,
+\end{center}
+kde N je kladné.
+Pak existuje deterministický algoritmus, který pro matici $ B $ vypočte unimodulární
+matici
+\begin{center}
+$ C =
+    \begin{pmatrix}
+        1 &    &     &        &     \\
+          & 1  & c_1 & \cdots & c_k \\
+          &    & 1   &        &     \\
+          &    &     & \ddots &     \\
+          &    &     &        & 1   \\
+    \end{pmatrix}
+$
+\end{center}
+takovou, že bude platit
+\begin{center}
+$ CB =
+    \begin{pmatrix}
+        N & \bar{N} \\
+        a_s & \bar{a_s}  \\
+        b_1 & \bar{b_1}  \\
+        \vdots & \vdots  \\
+        b_k & \bar{b_k}  \\
+    \end{pmatrix}
+$ kde dgsdgddg
+sdgsdgsdgdgsdgdsdg
+\end{center}
+a navíc $ CB $ bude splňovat následující podmínky:
+\begin{enumerate}
+    \item hlavní submatice
+    $
+        \begin{pmatrix}
+            N & \bar{N} \\
+            a_s & \bar{a_s}  \\
+        \end{pmatrix}
+    $ je regulární a
+    \item $ gcd(x, N) = gcd(x, N, b_1, b_2, \cdots, b_k) $.
+\end{enumerate}
+\end{vet}
+
+\begin{proof}
+Bez újmy na obecnosti můžeme předpokládat, že $ k > 0 $. Pokud by k bylo nulové,
+můžeme zřejmě za $ C $ zvolit identitu, které splní naše požadavky.
+Dále můžeme předpokládat, že hlavní submatice je regulární a tedy platí
+$ N \bar{a} - \bar{N} a \neq 0 $. Pokud by tomu tak nebylo, přičteme k druhému
+řádku nějaký řádek $ 2 < l \leq k + 2 $, pro který platí
+$ N \bar{b_l} - \bar{N} b_l \neq 0 $.
+Takový řádek jistě bude existovat, neboť matice $ B $ má plnou hodnost. Výsledná
+matice pak bude mít hlavní submatici regulární. Pro takto upravenou matici můžeme
+spočítat hledané koeficienty $ c_i $ a konečně ke koeficientu $ c_l $ přičteme $ 1 $,
+což bude přesně odpovídat onomu přičtení $ l $-tého řádku, které jsme provedli na
+začátku.
+
+
+\end{proof}
+
+
+
+% \begin{equation*}\label{E}\tag{rovnice}
+%  \int\! f(x)\,\mathrm{d}x
+% \end{equation*}
+% odkaz na rovnici s \uv{tagem} \eqref{E} -- pokud nechcete vzorci přidělit číslo, ale nějaký vlastní symbol, používejte
+% \uv{hvězdičkovaná} prostředí, tj. např. \verb+equation*+
+
+% odkaz na druhy vzorec \eqref{EE}
+
+\shorthandoff{-}
 \index{nějaká!položka}
-\lipsum[35-41]
 
 \section{Podkapitola}
 
-\lipsum[50-53]
 \index{jiná položka}
-\shorthandon{-} 
+\shorthandon{-}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
