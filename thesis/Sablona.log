@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  2 APR 2015 21:48
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  4 APR 2015 19:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -996,20 +996,20 @@ Kapitola 1.
 Kapitola 2.
 [5
 
-] [6] [7] [8]) (./text_prace/05_Zaver.tex [9
+] [6] [7] [8] [9] [10]) (./text_prace/05_Zaver.tex [11
 
 
-]) (./text_prace/06_Priloha.tex
-[10
+])
+(./text_prace/06_Priloha.tex [12
 
 
-]) (./text_prace/07_Literatura.tex [11
+]) (./text_prace/07_Literatura.tex [13
 
 
 ])
 No file Sablona.ind.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 360.
-[12
+[14
 
 ]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 360.
@@ -1017,29 +1017,30 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 360.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 360.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 360.
 Package rerunfilecheck Info: File `Sablona.out' has not changed.
-(rerunfilecheck)             Checksum: F2171667DFA3EF9A3678382E3337C7CC;1720.
+(rerunfilecheck)             Checksum: DE670C333CE99D9941A479B8C301E25D;1732.
  ) 
 Here is how much of TeX's memory you used:
- 13979 strings out of 493304
- 190774 string characters out of 6139871
- 385729 words of memory out of 5000000
- 17101 multiletter control sequences out of 15000+600000
- 75300 words of font info for 103 fonts, out of 8000000 for 9000
+ 13995 strings out of 493304
+ 190915 string characters out of 6139871
+ 388948 words of memory out of 5000000
+ 17107 multiletter control sequences out of 15000+600000
+ 76536 words of font info for 104 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  46i,16n,47p,774b,555s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texliv
-e/texmf-dist/fonts/enc/dvips/cs/xl2.enc}</usr/share/texlive/texmf-dist/fonts/ty
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/cs/xl2.enc}{/usr/share/texlive
+/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
 ls/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Sablona.pdf (24 pages, 169471 bytes).
+/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Sablona.pdf (26 pages, 183987 bytes).
 PDF statistics:
- 309 PDF objects out of 1000 (max. 8388607)
- 270 compressed objects within 3 object streams
- 75 named destinations out of 1000 (max. 500000)
+ 335 PDF objects out of 1000 (max. 8388607)
+ 293 compressed objects within 3 object streams
+ 84 named destinations out of 1000 (max. 500000)
  179 words of extra memory for PDF output out of 10000 (max. 10000000)
 

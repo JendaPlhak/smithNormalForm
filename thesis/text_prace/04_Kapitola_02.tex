@@ -57,7 +57,7 @@ Bylo by proto výhodné, kdybychom mohli nějakým způsobem upravit prvky ve sl
 že největší společný dělitel nějakých dvou prvků daného sloupce bude zároveň největším
 společným dělitelem všech prvků daného sloupce. A přesně to je obsahem následující věty.
 
-\begin{vet}[GCD redukce]
+\begin{vet}[GCD redukce] \label{gcd_red}
     Nechť $ B \in \Zmat $ je matice $ (k+2) \times k $ a $ rank(B) = 2 $, kterou
     můžeme zapsat jako
 \begin{center}
@@ -95,8 +95,12 @@ $ CB =
         \vdots & \vdots  \\
         b_k & \bar{b}_k  \\
     \end{pmatrix}
-$ kde dgsdgddg
-sdgsdgsdgdgsdgdsdg
+\qquad \text{kde} \qquad
+\begin{matrix}
+    a_k &= a_0 + c_1 b_1 + \dots + c_k b_k \\
+    \bar{a}_k &= \bar{a}_0 + c_1 \bar{b}_1 + \dots + c_k \bar{b}_k \\
+\end{matrix}
+$
 \end{center}
 a navíc $ CB $ bude splňovat následující podmínky:
 \begin{Cond}
@@ -198,13 +202,190 @@ Pokud ovšem $ c_l = t = x $, nebyla by podmínka (2) splněna.
 To ale můžeme snadno napravit. Předpokládejme tedy, že $ 0 < x = t $.
 Nechť $ \bar{t} $ je nejmenší nezáporné číslo, pro které platí
 $ gcd(\tilde{a}_{l-1} + \bar{t} (-\tilde{b}_{l}), N) = 1 $. Volbou $ c_l \leftarrow -\bar{t}$
-zajistíme splnění podmínky (2), neboť $ c_l = -\bar{t} \leq 0 < x $. Platnost
+zajistíme splnění podmínky (2), protože $ c_l = -\bar{t} \leq 0 < x $. Platnost
 podmínky (1) pro takovouto volbu $ c_l $ se pak dokáže zcela analogicky, jako
 jsme to již provedli výše pro $ c_l = t $.
 \end{proof}
 
+\section{Sloupcová redukce}
 
+V této části si ukážeme, jak využít výsledků předcházející věty \ref{gcd_red} k
+eliminaci prvků ve sloupečku. Mějme tedy jako v předchozím $ n \times 2 $
+vstupní matici $ B $, kteroužto můžeme zapsat následujícím způsobem:
+\begin{align} \label{B_col}
+B =
+    \begin{pmatrix}
+        N & \bar{N} \\
+        a_0 & \bar{a}_0  \\
+        b_1 & \bar{b}_1  \\
+        \vdots & \vdots  \\
+        b_k & \bar{b}_k  \\
+    \end{pmatrix}
+,
+\end{align}
+kde $ k \geq 0 $, $ N > 0 $ a trailing $ (k+2) \times 2 $ submatrix má plnou
+hodnost (nejsme si vědomi českého ekvivalentu pro výraz trailing (sub)matrix,
+a budeme jej proto v následujícím textu používát v nezměněné původní podobě).
 
+Našim cílem bude nalézt $ n \times n $ unimodulární matice
+\begin{align} \label{Q_C}
+C =
+    \begin{pmatrix}
+        1 &        &   &      &        &     \\
+          & \ddots &   &      &        &     \\
+          &        & 1 & \ast & \cdots & \ast \\
+          &        &   & 1    &        &     \\
+          &        &   &      & \ddots &     \\
+          &        &   &      &        & 1   \\
+    \end{pmatrix}
+\quad \text{a} \quad
+Q =
+    \begin{pmatrix}
+        1 &        &   & \ast   & \ast   &   &        &   \\
+          & \ddots &   & \vdots & \vdots &   &        &   \\
+          &        & 1 & \ast   & \ast   &   &        &   \\
+          &        &   & \ast   & \ast   &   &        &   \\
+          &        &   & \ast   & \ast   &   &        &   \\
+          &        &   & \ast   & \ast   & 1 &        &   \\
+          &        &   & \vdots & \vdots &   & \ddots &   \\
+          &        &   & \ast   & \ast   &   &        & 1 \\
+    \end{pmatrix}
+,
+\end{align}
+které budou reprezentovat příslušné invertibilní operace takové, že součin matic
+$ QCB $ můžeme psát jako
+\begin{align} \label{QCB}
+QCB =
+    \begin{pmatrix}
+        \ast   & \ast   \\
+        \vdots & \vdots \\
+        \ast   & \ast   \\
+        t_1    & \ast   \\
+               & t_2    \\
+               & \ast   \\
+               & \vdots \\
+               & \ast   \\
+    \end{pmatrix}
+\end{align}
+a budou splněny podmínky následující věty.
+
+\begin{vet}[Sloupcová redukce] \label{col_red}
+Mějme matici $ B \in Mat_{n \times 2}\mathbb{Z} $, kterou můžeme zapsat jako v
+\ref{B_col} s tím, že $ k \geq 0$, $ N > 0 $ a trailing $ (k+2) \times 2 $
+submatrix má plnou hodnost. Pak existuje algoritmus \textbf{ColumnReduction}($B, k$),
+který na vstupu vezme $ B $ a $ k $, a jako výstup vrátí $ n \times n $
+matice $ C $ a $ Q $, které lze vyjádřit jako v \ref{Q_C}. Navíc bude platit, že
+součin $ QCB $ lze psát jako \ref{QCB} a bude splňovat následující podmínky:
+
+\begin{Cond}
+    \item $ t_1 > 0 $ a $ t_2 > 0 $,
+    \item prvky nad $ t_1 $ v prvním sloupci jsou nezáporné a shora omezené číslem
+    $ t_1 - 1 $,
+    \item prvky nad a pod $ t_2 $ ve druhém sloupci jsou nezáporné a shora omezené
+    číslem $ t_2 - 1 $.
+\end{Cond}
+
+\end{vet}
+\begin{proof}
+Nejprve aplikujeme algoritmus věty \ref{gcd_red} o GCD redukci na submatici
+matice B tvořenou posledními $ k + 2 $ řádky. Tím získáme transformační
+$ (k + 2) \times (k + 2) $ matici $ C' $, kterou když vhodně vložíme do jednotkové
+matice $ n \times n $, získáme hledanou matici $ C $, která bude splňovat naše
+požadavky. Konkrétně:
+\begin{align*}
+C =
+    \begin{pmatrix}
+        1 &        &   &    \\
+          & \ddots &   &    \\
+          &        & 1 &    \\
+          &        &   & C' \\
+    \end{pmatrix}
+.
+\end{align*}
+Aplikací matice $ C $ na vstupní matici $ B $ dostáváme
+\begin{align*}
+CB =
+    \begin{pmatrix}
+        \ast   & \ast   \\
+        \vdots & \vdots \\
+        \ast   & \ast   \\
+        N      & \bar{N} \\
+        a_k    & \bar{a}_k  \\
+        b_1    & \bar{b}_1  \\
+        \vdots & \vdots  \\
+        b_k    & \bar{b}_k  \\
+    \end{pmatrix}
+\end{align*}
+s tím, že $ gcd(N, a_k) = gcd(N, a_k, b_1, b_2, \dots, b_k) $ a navíc submatice
+\begin{align*}
+    \begin{pmatrix}
+        N      & \bar{N} \\
+        a_k    & \bar{a}_k  \\
+    \end{pmatrix}
+\end{align*}
+bude regulární.
+
+Aplikací rozšířeného Euklidova algoritmu na dvojici $ (N, a_k) $ obdržíme
+uspořádanou trojici $ (t_1, m_1, m_2) $ takovou, že
+$ m_1 N + m_2 a_k = t_1 = gcd(N, a_k) $. Nyní můžeme vytvořit matici
+
+\begin{align*}
+U =
+    \begin{pmatrix}
+        m_1         & m_2      \\
+        -sa_k / t_1 & sN / t_1 \\
+    \end{pmatrix}
+,
+\end{align*}
+kde $ s \in \{1, -1\} $ je zvoleno tak, aby
+$ t_2 = (-sa_k / t_1) \bar{N} + (sN / t_1) \bar{a}_k $ bylo kladné. Matice $ U $
+je unimodulární, neboť
+\begin{align*}
+\det U =
+    \begin{vmatrix}
+        m_1         & m_2      \\
+        -sa_k / t_1 & sN / t_1 \\
+    \end{vmatrix}
+    = \frac{s(m_1 N + m_2 a_k)}{t_1} = \frac{s t_1}{t_1} = \pm 1
+.
+\end{align*}
+A konečně můžeme zkonstruovat matici
+
+\begin{align*}
+Q =
+    \begin{pmatrix}
+        1 &        &   &   &   &        &   \\
+          & \ddots &   &   &   &        &   \\
+          &        & 1 &   &   &        &   \\
+          &        &   & U &   &        &   \\
+          &        &   &   & 1 &        &   \\
+          &        &   &   &   & \ddots &   \\
+          &        &   &   &   &        & 1 \\
+    \end{pmatrix}
+,
+\end{align*}
+která, jak plyne z předchozího, bude také unimodulární. Aplikací $ Q $ na matici
+$ CB $ dostáváme
+\begin{align*}
+QCB =
+    \begin{pmatrix}
+        \ast   & \ast      \\
+        \vdots & \vdots    \\
+        \ast   & \ast      \\
+        t_1    & \ast      \\
+               & t_2       \\
+        b_1    & \bar{b}_1 \\
+        \vdots & \vdots    \\
+        b_k    & \bar{b}_k \\
+    \end{pmatrix}
+\end{align*}
+a platí $ t_1 \mid b_i$ kde $ i = 1, \dots, k $. Můžeme tedy snadno vyeliminovat
+prvky pod $ t_1 $. Následně snadno provedeme redukci prvků nad $ t_1 $ a
+konečně i prvků nad a pod $ t_2 $. To lze provést pomocí elementárních řádkových
+operací, které můžeme odpovídajícím způsobem zapsat do matice $ Q $. Takto
+upravená matice $ Q $ již bude splňovat podmínky věty a důkaz je tak hotov.
+
+\end{proof}
 % \begin{equation*}\label{E}\tag{rovnice}
 %  \int\! f(x)\,\mathrm{d}x
 % \end{equation*}
@@ -216,8 +397,6 @@ jsme to již provedli výše pro $ c_l = t $.
 
 \shorthandoff{-}
 \index{nějaká!položka}
-
-\section{Podkapitola}
 
 \index{jiná položka}
 \shorthandon{-}
