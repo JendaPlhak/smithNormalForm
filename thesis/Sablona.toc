@@ -2,11 +2,10 @@
 \contentsline {chapter}{\IeC {\'U}vod}{viii}{chapter*.3}
 \contentsline {chapter}{P\IeC {\v r}ehled pou\IeC {\v z}it\IeC {\'e}ho zna\IeC {\v c}en\IeC {\'\i }}{ix}{chapter*.4}
 \contentsline {chapter}{\numberline {1}Smith\IeC {\r u}v norm\IeC {\'a}ln\IeC {\'\i } tvar}{1}{chapter.1}
-\contentsline {section}{\numberline {1.1}Podkapitola}{4}{section.1.1}
-\contentsline {subsection}{\numberline {1.1.1}Odstavec}{4}{subsection.1.1.1}
 \contentsline {chapter}{\numberline {2}Triangularizace celo\IeC {\v c}\IeC {\'\i }seln\IeC {\'y}ch matic}{5}{chapter.2}
 \contentsline {section}{\numberline {2.1}GCD redukce}{6}{section.2.1}
 \contentsline {section}{\numberline {2.2}Sloupcov\IeC {\'a} redukce}{8}{section.2.2}
-\contentsline {chapter}{Z\IeC {\'a}v\IeC {\v e}r}{11}{chapter*.5}
-\contentsline {chapter}{P\IeC {\v r}\IeC {\'\i }loha}{12}{chapter*.6}
-\contentsline {chapter}{Seznam pou\IeC {\v z}it\IeC {\'e} literatury}{13}{chapter*.7}
+\contentsline {section}{\numberline {2.3}RST algoritmus}{11}{section.2.3}
+\contentsline {chapter}{Z\IeC {\'a}v\IeC {\v e}r}{13}{chapter*.5}
+\contentsline {chapter}{P\IeC {\v r}\IeC {\'\i }loha}{14}{chapter*.6}
+\contentsline {chapter}{Seznam pou\IeC {\v z}it\IeC {\'e} literatury}{15}{chapter*.7}

@@ -43,10 +43,14 @@ $
 \end{pri}
 
 V následujících podkapitolách nejdříve popíšeme několik klíčových procedur, které
-budou upravovat vstupní matici $ A $, pomocí unimodulárních (mající determinant
+budou upravovat vstupní matici $ A $ pomocí unimodulárních (mající determinant
 roven $\pm 1$, tedy invertibilních) matic.
 Tyto procedury postupně propojíme a v poslední podkapitole pak obdržíme samotný
 algoritmus pro výpočet \rst.
+
+
+
+
 
 \section{GCD redukce}
 Jak jsme viděli již v důkazu věty o Smithově normálním tvaru, častou operací,
@@ -206,6 +210,10 @@ zajistíme splnění podmínky (2), protože $ c_l = -\bar{t} \leq 0 < x $. Plat
 podmínky (1) pro takovouto volbu $ c_l $ se pak dokáže zcela analogicky, jako
 jsme to již provedli výše pro $ c_l = t $.
 \end{proof}
+
+
+
+
 
 \section{Sloupcová redukce}
 
@@ -386,21 +394,83 @@ operací, které můžeme odpovídajícím způsobem zapsat do matice $ Q $. Tak
 upravená matice $ Q $ již bude splňovat podmínky věty a důkaz je tak hotov.
 
 \end{proof}
-% \begin{equation*}\label{E}\tag{rovnice}
-%  \int\! f(x)\,\mathrm{d}x
-% \end{equation*}
-% odkaz na rovnici s \uv{tagem} \eqref{E} -- pokud nechcete vzorci přidělit číslo,
-% ale nějaký vlastní symbol, používejte
-% \uv{hvězdičkovaná} prostředí, tj. např. \verb+equation*+
 
-% odkaz na druhy vzorec \eqref{EE}
 
-\shorthandoff{-}
-\index{nějaká!položka}
 
-\index{jiná položka}
-\shorthandon{-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{RST algoritmus}
+V následujícím textu využijeme výše popsanou proceduru Sloupcové redukce k vytvoření
+RST algoritmu, který na vstupu bere $ n' \times m' $ vstupní matici $ A' $ a
+vrací její redukovaný schodovitý tvar včetně transformační matice. Nejdříve však
+musíme definovat pojem rank profile (nejsme si vědomi existence vhodného českého
+ekvivalentu, proto budeme používat původní anglický výraz).
+
+\begin{defi}
+Buď $ A $ matice $ n \times m $ a nechť $ r $ značí hodnost matice $ A $. Nechť
+$ G $ je reprezentace matice $ A $ ve schodovitém tvaru. Pod pojmem
+\textbf{rank profile} pak rozumíme uspořádanou $ r $-tici $ (j_1, \dots, j_r) $, kde
+$ j_i $ je sloupcový index prvního nenulového prvku v $ i $-tém řádku matice $ G $.
+\end{defi}
+
+Abychom se vyhnuli ošetřování množství speciálních případů (například matice
+mající hodnost $ 0 $ a podobně), budeme namísto matice $ A' $ uvažovat matici
+
+\begin{align} \label{input_A}
+A =
+    \begin{pmatrix}
+        1 &    &   \\
+          & A' &   \\
+          &    & 1 \\
+    \end{pmatrix}
+.
+\end{align}
+Poznamenejme, že takováto matice bude mít rank profile ve tvaru
+$ (1, j_2, \dots, j_{r - 1}, m) $, kde $ r \geq 2 $ je hodnost matice $ A $ a
+$ n \times m $ jsou její rozměry.
+
+Nyní budeme definovat RST algoritmus. Pro názornost nejdříve uvedeme variantu,
+která potřebuje dopředu znát rank profile. Ten je možné spočítat například
+Gausovou eliminační metodou. Poznamenejme, že Gausova eliminace spadá do složitostní
+třídy $ \mathcal{O}(n^3) $, což je zanedbatelné vzhledem k celkové složitosti
+našeho algoritmu. Přesto však později uvedeme také jednoduchou modifikaci RST
+algoritmu, která již rank profile nevyžaduje. Nyní přistupme k samotné definici.
+
+\begin{algorithm}
+{
+    \textbf{Algoritmus:} Výpočet redukovaného schodovitého tvaru
+}
+
+\KwData{
+    Celočíselná $ n \times m $ matice $ A $ mající rank profile
+    $ (j_1, \dots, j_r) $, kterou lze zapsat jako v \ref{input_A}.
+}
+\KwResult{
+    Matice $ Q, C $ a $ T $ splňující $ QCA = T $, kde $ Q $ a $ C $ jsou
+    unimodulární a $ T $ má prvních $ m - 1 $ sloupců v redukovaném schodovitém
+    tvaru.
+}
+\Begin{
+    $ Q \leftarrow I_n $\;
+    $ C \leftarrow I_n $\;
+    $ T \leftarrow A $\;
+    % \vspace{\baselineskip}
+    \For{ $k \leftarrow 2$ \KwTo $ r - 1 $} {
+        $ B_k \leftarrow n \times 2 $ matice $ (col(T, j_k) \mid col(T, j_{k + 1})) $\;
+        $ (Q_k, C_k) \leftarrow $ \textbf{ColumnReduction}$ (B_k, n - k - 1) $\;
+        $ Q \leftarrow Q_k C_k Q C_{k}^{-1} $\;
+        $ C \leftarrow C_k C $\;
+        $ T \leftarrow Q_k C_k T $\;
+    }
+    \Return{$ (Q, C, T) $}
+}
+
+\end{algorithm}
+
+\begin{vet} \label{RST_algo}
+Algoritmus pro výpočet redukovaného schodovitého tvaru je korektní.
+\end{vet}
+\begin{proof}
+\end{proof}
 
 
 \cleardoublepage
