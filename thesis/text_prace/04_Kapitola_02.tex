@@ -466,6 +466,70 @@ algoritmu, která již rank profile nevyžaduje. Nyní přistupme k samotné def
 
 \end{algorithm}
 
+Abychom dokázali, že výše uvedený algoritmus je skutečně korektní, ukážeme nejdříve,
+že matice $ Q_i, C_i, T_i $, které dostáváme v průběhu výpočtu, můžeme zapsat
+následujícím způsobem:
+
+\begin{align} \label{block_form}
+    \stackrel{\mbox{$Q_i$}}{
+        \left(
+        \begin{array}{c|ccc|c}
+          I_1 & &      & &  \\ \hline
+              & &      & &  \\
+              & & \ast & &  \\
+              & &      & &  \\ \hline
+              & &      & &  \\
+              & & \ast & & I_{n - i - 1} \\
+              & &      & &  \\
+        \end{array}
+        \right)
+    }
+    \stackrel{\mbox{$C_i$}}{
+        \left(
+        \begin{array}{c|ccc|c}
+          I_1 & &      & &  \\ \hline
+              & &      & &  \\
+              & & \ast & & \ast \\
+              & &      & &  \\ \hline
+              & &      & &  \\
+              & &      & & I_{n - i - 1} \\
+              & &      & &  \\
+        \end{array}
+        \right)
+    }
+    A =
+    \stackrel{\mbox{$T_i$}}{
+        \left(
+        \begin{array}{c|ccc|ccc}
+          I_1 & &     &    & &      & \\ \hline
+              & &     &    & &      & \\
+              & & R_i &    & & \ast & \\
+              & &     &    & &      & \\ \hline
+              & &     &    & &      & \\
+              & &     &    & & \ast & \\
+              & &     &    & &      & \\
+        \end{array}
+        \right)
+    }
+\end{align}
+pro $ i = 0, 1, \dots, r-1 $, kde $ R_i $ je matice v redukovaném schodovitém
+tvaru.
+
+\begin{lem} \label{RST_algo_lemma}
+Pro všechna $ i = 0, 1, \dots, r - 1 $ můžeme matice $ Q_i, C_i $ a  $ T_i $
+psát jako v \ref{block_form}, kde $ R_i $ je $ (i - 1) \times (j_{i + 1} - 2) $
+matice v redukovaném schodovitém tvaru. Navíc bude platit:
+\begin{Cond}
+    \item $ Q_i $ a $ C_i $ jsou unimodulární a
+    \item prvek $ T_i[i+1, j_{i+1}] $, který budeme značit $ N_{i + 1} $, bude
+    nenulový a navíc bude platit $ 0 \leq T_i[l, j_{i+1}] < N_{i+1} $ pro
+    $ l = 1, \dots, i, i+1, \dots, m $.
+\end{Cond}
+\end{lem}
+\begin{proof}
+\end{proof}
+
+
 \begin{vet} \label{RST_algo}
 Algoritmus pro výpočet redukovaného schodovitého tvaru je korektní.
 \end{vet}
