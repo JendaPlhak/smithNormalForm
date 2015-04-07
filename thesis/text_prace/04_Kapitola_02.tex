@@ -435,7 +435,7 @@ třídy $ \mathcal{O}(n^3) $, což je zanedbatelné vzhledem k celkové složito
 našeho algoritmu. Přesto však později uvedeme také jednoduchou modifikaci RST
 algoritmu, která již rank profile nevyžaduje. Nyní přistupme k samotné definici.
 
-\begin{algorithm}
+\begin{algorithm} \label{RST_algorithm}
 {
     \textbf{Algoritmus:} Výpočet redukovaného schodovitého tvaru
 }
@@ -583,18 +583,80 @@ To všechno nám dohromady dává následující rovnosti:
 a rovnost \ref{block_form} je pro $ i = k $ skutečně splněna.
 
 Nakonec uveďme, že díky struktuře součinu matic $ \tilde{Q} \tilde{C} B_k $, kterou
-nám garantuje věta \ref{col_red} a díky tomu, že submatice tvořená řádky
+nám garantuje věta \ref{col_red}, a díky tomu, že submatice tvořená řádky
 $ k, k+1, \dots, m $ a sloupci $ j_k, j_k + 1, \dots, j_{k+1} - 1 $ má hodnost
 $ 1 $ (plyne z definice rank profile a indukčního předpokladu), bude možné matici
 $ T^{(k)} = \tilde{Q} \tilde{C} T^{(k - 1)} $ schématicky zapsat jako v rovnosti
 \ref{block_form} a navíc bude splňovat požadavky našeho lemmatu.
 \end{proof}
 
+RST algoritmus \ref{RST_algorithm} bere na vstupu libovolnou matici $ A' $ o
+rozměrech $ n \times m $, která všam musí byt vložena do $ (n + 2) \times (m + 2) $
+matice $ A $ tak, jak je znázorňu je \ref{input_A}. Nyní ukážeme, že toto není
+nikterak omezující, protože výstupní matice
+($ Q^{(r - 1)} $, $ C^{(r - 1)} $, $ T^{(r - 1)} $) mohou být zachyceny
+následujícím schématem:
+
+\begin{align} \label{final_result}
+    \stackrel{\mbox{$Q^{(r - 1)}$}}{
+        \left(
+        \begin{array}{c|ccc|c}
+          I_1 & &      & &  \\ \hline
+              & &      & &  \\
+              & &  Q'  & &  \\
+              & &      & &  \\ \hline
+              & & \ast & & I_1 \\
+        \end{array}
+        \right)
+    }
+    \stackrel{\mbox{$C^{(r - 1)}$}}{
+        \left(
+        \begin{array}{c|ccc|c}
+          I_1 & &      & &  \\ \hline
+              & &      & &  \\
+              & &  C'  & & \ast  \\
+              & &      & &  \\ \hline
+              & &      & & I_1 \\
+        \end{array}
+        \right)
+    }
+    \stackrel{\mbox{$A$}}{
+        \left(
+        \begin{array}{c|ccc|c}
+          I_1 & &      & &  \\ \hline
+              & &      & &  \\
+              & &  A'  & &  \\
+              & &      & &  \\ \hline
+              & &      & & I_1 \\
+        \end{array}
+        \right)
+    }
+    =
+    \stackrel{\mbox{$T^{(r - 1)}$}}{
+        \left(
+        \begin{array}{c|ccc|ccc}
+          I_1 & &             & &      \\ \hline
+              & &             & &      \\
+              & &  R_{r - 1}  & & \ast \\
+              & &             & &      \\ \hline
+              & &             & & N_r  \\
+        \end{array}
+        \right)
+    }
+\end{align}
 
 \begin{vet} \label{RST_algo}
-Algoritmus pro výpočet redukovaného schodovitého tvaru je korektní.
+Algoritmus pro výpočet redukovaného schodovitého tvaru je korektní. Výstupní
+matice ($ Q^{(r - 1)} $, $ C^{(r - 1)} $, $ T^{(r - 1)} $) mají tvar,
+který odpovídá rovnosti \ref{final_result}. Speciálně platí, že $ Q' $ a $ C' $
+jsou unimodulární a splňují $ Q'C'A' = R_{r - 1} $, kde $ R_{r - 1} $ je
+redukovaný stupňovitý tvar matice $ A' $.
 \end{vet}
 \begin{proof}
+Platnost rovnosti \ref{final_result} snadno plyne přímo z lemmatu
+\ref{RST_algo_lemma} a rovnosti \ref{block_form} pro $ i = r - 1 $. Stejně tak
+lze snadno odvodit, že $ Q' $ a $ C' $ jsou unimodulární a splňují
+$ Q'C'A' = R_{r - 1} $.
 \end{proof}
 
 
