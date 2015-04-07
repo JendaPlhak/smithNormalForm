@@ -450,28 +450,29 @@ algoritmu, která již rank profile nevyžaduje. Nyní přistupme k samotné def
     tvaru.
 }
 \Begin{
-    $ Q \leftarrow I_n $\;
-    $ C \leftarrow I_n $\;
-    $ T \leftarrow A $\;
+    $ Q^{(0)} \leftarrow I_n $\;
+    $ C^{(0)} \leftarrow I_n $\;
+    $ T^{(0)} \leftarrow A $\;
     % \vspace{\baselineskip}
-    \For{ $k \leftarrow 2$ \KwTo $ r - 1 $} {
-        $ B_k \leftarrow n \times 2 $ matice $ (col(T, j_k) \mid col(T, j_{k + 1})) $\;
-        $ (Q_k, C_k) \leftarrow $ \textbf{ColumnReduction}$ (B_k, n - k - 1) $\;
-        $ Q \leftarrow Q_k C_k Q C_{k}^{-1} $\;
-        $ C \leftarrow C_k C $\;
-        $ T \leftarrow Q_k C_k T $\;
+    \For{ $k \leftarrow 1$ \KwTo $ r - 1 $} {
+        $ B_k \leftarrow n \times 2 $ matice $ (col(T^{(k - 1)}, j_k) \mid col(T^{(k - 1)}, j_{k + 1})) $\;
+        $ (\tilde{Q}, \tilde{C}) \leftarrow $ \textbf{ColumnReduction}$ (B_k, n - k - 1) $\;
+        $ Q^{(k)} \leftarrow \tilde{Q} \tilde{C} Q^{(k - 1)} \tilde{C}^{-1} $\;
+        $ C^{(k)} \leftarrow \tilde{C} C^{(k - 1)} $\;
+        $ T^{(k)} \leftarrow \tilde{Q} \tilde{C} T^{(k - 1)} $\;
     }
-    \Return{$ (Q, C, T) $}
+    \Return{$ (Q^{(r - 1)}, C^{(r - 1)}, T^{(r - 1)}) $}
 }
 
 \end{algorithm}
+\newpage
 
 Abychom dokázali, že výše uvedený algoritmus je skutečně korektní, ukážeme nejdříve,
-že matice $ Q_i, C_i, T_i $, které dostáváme v průběhu výpočtu, můžeme zapsat
+že matice $ Q^{(i)}, C^{(i)}, T^{(i)} $, které dostáváme v průběhu výpočtu, můžeme zapsat
 následujícím způsobem:
 
 \begin{align} \label{block_form}
-    \stackrel{\mbox{$Q_i$}}{
+    \stackrel{\mbox{$Q^{(i)}$}}{
         \left(
         \begin{array}{c|ccc|c}
           I_1 & &      & &  \\ \hline
@@ -484,7 +485,7 @@ následujícím způsobem:
         \end{array}
         \right)
     }
-    \stackrel{\mbox{$C_i$}}{
+    \stackrel{\mbox{$C^{(i)}$}}{
         \left(
         \begin{array}{c|ccc|c}
           I_1 & &      & &  \\ \hline
@@ -498,7 +499,7 @@ následujícím způsobem:
         \right)
     }
     A =
-    \stackrel{\mbox{$T_i$}}{
+    \stackrel{\mbox{$T^{(i)}$}}{
         \left(
         \begin{array}{c|ccc|ccc}
           I_1 & &     &    & &      & \\ \hline
@@ -516,17 +517,77 @@ pro $ i = 0, 1, \dots, r-1 $, kde $ R_i $ je matice v redukovaném schodovitém
 tvaru.
 
 \begin{lem} \label{RST_algo_lemma}
-Pro všechna $ i = 0, 1, \dots, r - 1 $ můžeme matice $ Q_i, C_i $ a  $ T_i $
+Pro všechna $ i = 0, 1, \dots, r - 1 $ můžeme matice $ Q^{(i)}, C^{(i)} $ a  $ T^{(i)} $
 psát jako v \ref{block_form}, kde $ R_i $ je $ (i - 1) \times (j_{i + 1} - 2) $
 matice v redukovaném schodovitém tvaru. Navíc bude platit:
 \begin{Cond}
-    \item $ Q_i $ a $ C_i $ jsou unimodulární a
-    \item prvek $ T_i[i+1, j_{i+1}] $, který budeme značit $ N_{i + 1} $, bude
-    nenulový a navíc bude platit $ 0 \leq T_i[l, j_{i+1}] < N_{i+1} $ pro
+    \item $ Q^{(i)} $ a $ C^{(i)} $ jsou unimodulární a
+    \item \label{RST_2} prvek $ T^{(i)}[i+1, j_{i+1}] $, který budeme značit $ N_{i + 1} $, bude
+    nenulový a navíc bude platit $ 0 \leq T^{(i)}[l, j_{i+1}] < N_{i+1} $ pro
     $ l = 1, \dots, i, i+1, \dots, m $.
 \end{Cond}
 \end{lem}
 \begin{proof}
+Důkaz provedeme indukcí. V inicálním stavu algoritmu $ i = 0 $ jsou požadavky lemmatu
+triviálně splněny, neboť $ Q^{(0)} = C^{(0)} = I_n $. Předpokládejme tedy, že
+lemma platí pro $ i = k - 1 < r $, pro nějaké $ k $ kladné.
+Dokážeme, že pak lemma platí také pro $ i = k $.
+
+$ n \times 2 $ submatici $ B_k $, tvořenou sloupci $ j_k $ a $ j_{k+1} $ matice
+$ T^{(k-1)} $, můžeme psát jako
+\begin{align*}
+B_k =
+    \begin{pmatrix}
+        \ast   & \ast   \\
+        \vdots & \vdots \\
+        \ast   & \ast   \\
+        N_k    & \bar{N}_k \\
+        a_a    & \bar{a}_0  \\
+        b_1    & \bar{b}_1  \\
+        \vdots & \vdots  \\
+        b_k'    & \bar{b}_k'  \\
+    \end{pmatrix},
+\end{align*}
+kde $ k' = n - k - 1 $. Z indukčního předpokladu plyne, že submatice $ B_k $ má
+následující dvě vlastnosti.
+(1) $ N_k > 0 $, což plyne z podmínky \ref{RST_2} a toho, že $ N_k = T^{(k - 1)}[k, j_k] $.
+A také (2) submatice složená z posledních $ k' + 2 $ řádků matice $ B_k $
+bude mít plnou hodnost. To dostaneme z toho, že $ B_k $ je složená ze sloupců
+$ j_k $ a $ j_{k+1} $ matice $ T^{(k - 1)} $ a navíc všechny prvky nalevo od
+$ j_k $-tého sloupce v řádcích $k, k+1, \dots, m $ matice $ T^{(k - 1)} $ jsou nulové
+(skutečně, jedná se o prvky, které se nachází pod blokem $ R_{k-1} $ z vyjádření
+\ref{block_form}).
+
+Vlastnosti (1) a (2) nám zaručují, že submatice $ B_k $ je validním vstupem pro
+algoritmus \textbf{ColumnReduction}. Z něj pak získáme matice $ \tilde{Q} $ a
+$ \tilde{C} $, které budou unimodulární. Navíc díky jejich specifické struktuře,
+kterou nám garantuje věta \ref{col_red}, budou mít matice
+$ { Q^{(k)} \leftarrow \tilde{Q} \tilde{C} Q^{(k - 1)} \tilde{C}^{-1} } $ a
+$ { C^{(k)} \leftarrow \tilde{C} C^{(k - 1)} } $
+strukturu zachycenou v rovnosti \ref{block_form}.
+
+Nyní ukážeme, že rovnost \ref{block_form} je splněna pro $ i = k $
+na konci $ k $-tého cyklu našeho algoritmu. To znamená ověřit rovnost
+$ T^{(k)} = Q^{(k)} C^{(k)} A $. Poznamenejme, že matici $ T^{(k)} $ vypočítáme
+jakožto $ T^{(k)} \leftarrow \tilde{Q} \tilde{C} T^{(k - 1)} $ a navíc
+z indukčního předpokladu vím, že platí $ T^{(k - 1)} = Q^{(k - 1)} C^{(k - 1)} A $.
+To všechno nám dohromady dává následující rovnosti:
+
+\begin{align*}
+    T^{(k)} &= \tilde{Q} \tilde{C} T^{(k - 1)} \\
+            &= \tilde{Q} \tilde{C} (Q^{(k - 1)} C^{(k - 1)} A) \\
+            &= \tilde{Q} \tilde{C} (Q^{(k - 1)} (\tilde{C}^{-1} \tilde{C}) C^{(k - 1)} A) \\
+            &= (\tilde{Q} \tilde{C} Q^{(k - 1)} \tilde{C}^{-1}) (\tilde{C} C^{(k - 1)}) A \\
+            &= Q^{(k)} C^{(k)} A
+\end{align*}
+a rovnost \ref{block_form} je pro $ i = k $ skutečně splněna.
+
+Nakonec uveďme, že díky struktuře součinu matic $ \tilde{Q} \tilde{C} B_k $, kterou
+nám garantuje věta \ref{col_red} a díky tomu, že submatice tvořená řádky
+$ k, k+1, \dots, m $ a sloupci $ j_k, j_k + 1, \dots, j_{k+1} - 1 $ má hodnost
+$ 1 $ (plyne z definice rank profile a indukčního předpokladu), bude možné matici
+$ T^{(k)} = \tilde{Q} \tilde{C} T^{(k - 1)} $ schématicky zapsat jako v rovnosti
+\ref{block_form} a navíc bude splňovat požadavky našeho lemmatu.
 \end{proof}
 
 
