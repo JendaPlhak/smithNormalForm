@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  17 APR 2015 19:08
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.17)  19 APR 2015 18:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1046,53 +1046,25 @@ Kapitola 1.
 Kapitola 2.
 [5
 
-] [6] [7] [8] [9] [10] [11] [12] [13] [14]) (./text_prace/05_Kapitola_03.tex
+] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15])
+(./text_prace/05_Kapitola_03.tex
 Kapitola 3.
-) (./text_prace/05_Zaver.texpdfTeX warning (ext4): destination with the same id
-entifier (name{page.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1 \chapter
-            *{Závěr} [1
+) (./text_prace/05_Zaver.tex [16
 
 
-]pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
- been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1 \chapter
-            *{Závěr} [2]pdfTeX warning (ext4): destination with the same iden
-tifier (name{page.3}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.9 \cleardoublepage
-                     [3
+] [17] [18
 
-]) (./text_prace/06_Priloha.texpdfTeX warning (ext4): destination with the same
- identifier (name{page.4}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.12 \cleardoublepage
-                      [4
+]) (./text_prace/06_Priloha.tex
+[19
 
 
-]) (./text_prace/07_Literatura.texpdfTeX warning (ext4): destination with the s
-ame identifier (name{page.5}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.46 \cleardoublepage
-                      [5
+]) (./text_prace/07_Literatura.tex [20
 
 
 ])
 No file Sablona.ind.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 363.
-pdfTeX warning (ext4): destination with the same identifier (name{page.6}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.363 \end{document}
-                     [6
+[21
 
 ]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 363.
@@ -1103,10 +1075,10 @@ Package rerunfilecheck Info: File `Sablona.out' has not changed.
 (rerunfilecheck)             Checksum: 5B238CAF2EB8F20CF681293C7765B37A;2216.
  ) 
 Here is how much of TeX's memory you used:
- 15370 strings out of 493304
- 210319 string characters out of 6139871
- 433992 words of memory out of 5000000
- 18454 multiletter control sequences out of 15000+600000
+ 15385 strings out of 493304
+ 210442 string characters out of 6139871
+ 434137 words of memory out of 5000000
+ 18458 multiletter control sequences out of 15000+600000
  74031 words of font info for 102 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  46i,16n,47p,774b,556s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1121,10 +1093,10 @@ ls/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb
 xlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 urw/times/utmri8a.pfb>
-Output written on Sablona.pdf (32 pages, 203485 bytes).
+Output written on Sablona.pdf (33 pages, 209358 bytes).
 PDF statistics:
- 401 PDF objects out of 1000 (max. 8388607)
- 351 compressed objects within 4 object streams
- 100 named destinations out of 1000 (max. 500000)
+ 423 PDF objects out of 1000 (max. 8388607)
+ 372 compressed objects within 4 object streams
+ 111 named destinations out of 1000 (max. 500000)
  187 words of extra memory for PDF output out of 10000 (max. 10000000)
 
