@@ -88,8 +88,8 @@ Hledaný algoritmus můžeme zapsat následujícím způsobem:
         }
     \end{algorithm}
 Nyní ukážeme, že takto definovaný algoritmus je skutečně korektní. V prvních
-dvou případech, kdy za $ c $ volíme $ 0 $ a $ 1 $, jsou evidentně podmínky
-kladené na koeficient $ c $ splněny. Zaměřme tedy naši pozornost na třetí
+dvou případech, kdy za $ c $ volíme $ 0 $ a $ 1 $, jsou podmínky
+kladené na koeficient $ c $ evidentně splněny. Zaměřme tedy naši pozornost na třetí
 možnost. Z $ \gcd(a,N) \neq 1 $ plyne, že $ g $ ve svém rozkladu obsahuje
 alespoň jedno prvočíslo dělící $ N $, je tedy korektní aplikovat lemma
 \ref{factorization} na čísla $ N $ a $ g $. Výsledná čísla $ X, Y $ pak budou
@@ -97,16 +97,37 @@ nesoudělná a pro výpočet vhodného $ c $ můžeme využít
 Čínskou zbytkovou větu.
 
 Díky tomu můžeme odvodit $ \gcd(a + cb,X) = \gcd(a + b,X) = 1 $. První rovnost
-plyne z požadavků, které klademe na $ c $. Druhá pak z toho, že $ X $ bude
+plyne z požadavků, které klademe na $ c $. Dokážeme ještě druhou rovnost.
+Předpokládejme, že $ \gcd(a + b,X) = d > 1 $. Pak ale
+$ d = \gcd(a + b,X) = \gcd(gk + b,gh) $, pro vhodná $ k, h $. Z Bezoutovy rovnosti
+ovšem dostáváme celá čísla $ i, j $ taková, že můžeme psát
+\begin{align*}
+    d &= \gcd(a + b,X)  \\
+      &= \gcd(gk + b,gh) \\
+      &= i(gk + b) + jgh \\
+      &= (ik + jk)g + ib
+\end{align*}
+Druhá pak z toho, že $ X $ bude
 obsahovat všechny společné dělitele $ N $ a $ a $ a navíc z předpokladů máme
 $ \gcd(a,b,N) = 1 $.
 Podobně platí
-$ \gcd(a + cb,Y) = \gcd(a,Y) = 1 $, protože z lemmatu \ref{factorization}
-máme $ \gcd(g, Y) = 1 $, $ N = XY $ a zvolili jsme $ g = \gcd(a, N) $.
+$ \gcd(a + cb,Y) = \gcd(a,Y) = 1 $, protože lemma \ref{factorization} zaručuje
+$ \gcd(g, Y) = 1 $, $ N = XY $ a zvolili jsme $ g = \gcd(a, N) $.
 
 A konečně z ekvivalence
 $ \gcd(a + cb,N) = 1 \iff \gcd(a + cb,X) = 1 \wedge \gcd(a + cb,Y) = 1 $
 dostáváme naše tvrzení.
+\end{proof}
+\begin{dus}\label{Bach_Dus}
+Uvedený algoritmus můžeme snadno rozšířit na případy, kdy hledáme $ 0 < c < N $
+takové, že $ \gcd(a + cb,N) = d $, kde $ d = \gcd(a,b,N) $.
+\end{dus}
+\begin{proof}
+Pomocí algoritmu z lemmatu \ref{bach} můžeme najít řešení úlohy
+$ \gcd(\frac{a}{d} + c\frac{b}{d},\frac{N}{d}) = 1 $. Takto získané $ c $ pak
+jistě splní naše požadavky, neboť pronásobením předchozí rovnosti číslem $ d $
+dostáváme $ d = d \gcd(\frac{a}{d} + c\frac{b}{d},\frac{N}{d}) =
+\gcd(d(\frac{a}{d} + c\frac{b}{d}),d\frac{N}{d}) = \gcd(a + cb,N) $.
 \end{proof}
 
 V následujících podkapitolách nejdříve popíšeme několik klíčových procedur, které
