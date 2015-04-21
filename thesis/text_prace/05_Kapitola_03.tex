@@ -95,10 +95,6 @@ podmínky, ale navíc bude platit
 \end{Cond}
 \end{lem}
 \begin{proof}
-Poznamenejme, že prvek $ T_{i,j} $ se bude vztahovat k aktuálnímu stavu
-transformované matice v průběhu algoritmu. Ostatní proměnné (jako například $ t_i $)
-budou odpovídat původním hodnotám, které jsme si zafixovali na začátku algoritmu.
-
 Algoritmus bude pracovat iterativně vzhledem k proměnné $ r $, která bude značit
 aktuálně zpracovávaný řádek. Je zřejmé, že pro $ r = k $, bude platit
 \begin{align} \label{gcd_eq_induction}
@@ -131,5 +127,101 @@ T' =
     \right)
 .
 \end{align*}
+Nyní počítejme:
+\begin{align*}
+    \gcd(T'_{i,i}, T'_{i,k}) &= \gcd(a_i, t_{i} + cT_{i+1})  \\
+                             &= \gcd(a_i, t_{i}, t_{i+1}) \\
+                             &= \gcd(a_i, t_{i}, a_{i+1}, t_{i+1}) \\
+                             &= \gcd(a_i, t_{i}, t_{i+1},\dots,t_{k}),
+\end{align*}
+přičemž předposlední rovnost plyne z toho, že $ a_i \vert a_{i+1} $ a
+poslední dostaneme z indukčního předpokladu. Rovnost \ref{gcd_eq_induction} je
+tedy splněna.
 
+Nyní stačí jen redukovat prvky v $ i $-tém řádku napravo od $ a_i $. Díky tomu,
+že $ a_i \vert a_{i+1} $, bude $ i + 1 $ prvek $ ca_{i+1} $ vynulován a
+matice sestavená z prvních $ k - 1 $ sloupců matice $ T' $ zůstane nezměněna.
+\end{proof}
+
+\begin{lem} \label{Sloup_elim_SNF}
+Buď $ T $ matice splňující stejné podmínky jako v požadavcích lemmatu \ref{Sloup_elim_GCD}
+a nechť je navíc splněna podmínka (c4). Pak existuje deterministický
+algoritmus, který převede matici $ T $ na ekvivalentní matici splňující stejné
+podmínky, ale navíc bude platit
+\begin{Cond}[resume=Sloup_elim_CONDS]
+    \item $ T_{1,1} $ dělí všechny prvky v prvních $ k $ sloupcích matice $ T $,
+    \item $ T_{1,k} = 0 $.
+\end{Cond}
+\end{lem}
+\begin{proof}
+Našim cílem je transformovat matici $ T $ na ekvivalentní matici
+\begin{align*}
+T' =
+    \left(
+    \begin{array}{ccccc|ccc}
+        s_1 &     &        &         &                 & \ast   & \hdots & \ast   \\
+            & a_2 &        &         & t_2 a_1/s_1     & \vdots &        & \vdots \\
+            &     & \ddots &         & \vdots          & \vdots &        & \vdots \\
+            &     &        & a_{k-1} & t_{k-1} a_1/s_1 & \vdots &        & \vdots \\
+            &     &        &         & t_k a_1/s_1     & \ast   & \hdots & \ast \\
+    \end{array}
+    \right),
+\end{align*}
+kde $ s_1 = \gcd(a_1, t_1) $. Nechť je trojice $ (s, t, s_1) $ řešením Bezoutovy
+rovnosti $ s a_1 + t t_1 = s_1 $. Koeficienty $ (s, t, s_1) $ můžeme nalézt
+například pomocí rozšířeného Euklidova algoritmu.
+Pomocí těchto čísel definujme $ m \times m $ matici $ V $ jakožto
+\begin{align*}
+V =
+    \left(
+    \begin{array}{c|c|c|c}
+      s      & \hdots  & - t_1 / s_1 &         \\ \hline
+      \vdots & I_{k-2} & \vdots      &         \\ \hline
+      t      & \hdots  & a_1 / s_1   &         \\ \hline
+             &         &             & I_{m-k} \\
+    \end{array}
+    \right)
+.
+\end{align*}
+Taková matice bude mít zřejmě determinant roven $ \pm 1 $ a bude tedy
+unimodulární. Nyní tuto transformační matici aplikujeme na matici $ T $.
+Výsledek této operace můžeme zapsat jako
+
+\begin{align*}
+TV =
+    \left(
+    \begin{array}{ccccc|ccc}
+        s_1        &     &        &         &                 & \ast   & \hdots & \ast   \\
+        tt_2       & a_2 &        &         & t_2 a_1/s_1     & \vdots &        & \vdots \\
+        \vdots     &     & \ddots &         & \vdots          & \vdots &        & \vdots \\
+        tt_{k - 1} &     &        & a_{k-1} & t_{k-1} a_1/s_1 & \vdots &        & \vdots \\
+        tt_k       &     &        &         & t_k a_1/s_1     & \ast   & \hdots & \ast \\
+    \end{array}
+    \right)
+.
+\end{align*}
+Prvek v prvním řádku a $ k $-tém sloupci bude skutečně nulový neboť
+$ a_1(-\frac{t_1}{s_1}) + t_1 \frac{a_1}{s_1} = 0 $. Z podmínky (c4) navíc plyne,
+že $ s_1 \vert t_i $ pro $ i = 1,\dots, k $ neboť $ s_1 = \gcd(a_1, t_1) $.
+Díky tomu můžeme vyeliminovat všechny prvky pod diagonálou v prvním sloupci.
+To že $ s_1 \vert t_i $ nám navíc zajišťuje splnění podmínky (c5), čímž je lemma
+dokázáno.
+\end{proof}
+
+Nyní můžeme přistoupit k samotnému důkazu věty \ref{Sloup_elim}.
+\begin{proof}[Důkaz věty o sloupcové eliminaci]
+Buď $ T $ matice $ k \times m $, která splňuje podmínky uvedné v předpokladech
+věty. Pokud $ k = 1 $, pak se naše submatice sestává z jediného prvku, je tedy
+triviálně ve Smithově normálním tvaru a náš algoritmus může skončit. Nechť je
+tedy $ k > 1 $. Na matici $ T $ nejdříve aplikujeme algoritmus lemmatu
+\ref{Sloup_elim_GCD}. Tím zajistíme splnění předpokladů pro postupnou aplikaci
+algoritmu lemmatu \ref{Sloup_elim_SNF}. Algoritmus budeme aplikovat na čtvercové
+submatice $ i \times i $, pro $ i = k,k-1,\dots, 2 $, které leží na diagonále
+původní matice $ T $ a pravý dolní roh se překývá s prvkem $ T_{k,k} $
+(v angličitně je nazýváme trailing matrices).
+
+Takto zajistíme úpravu matice $ T $ do vhodného tvaru a nakonec zbývá jen
+vhodným způsobem pronásobit $ k $-tý řádek $ -1 $ tak, aby platilo
+$ T_{k,k} = |T_{k,k}| $. Hlavní submatice o rozměrech $ k \times k $ pak bude
+ve Smithově normálním tvaru, čímž je věta dokázána.
 \end{proof}
