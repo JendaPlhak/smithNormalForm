@@ -1,0 +1,135 @@
+\chapter{Výpočet Smithova normálního tvaru trojúhelníkových matic}
+
+V této sekci navážeme na předchozí kapitolu a uvedeme co to je Hermitův normální
+tvar a jaký je jeho vztah k redukovanému schodovitému tvaru.
+Těchto výsledků pak využijeme pro vytvoření algoritmu, který vypočítá
+Smithův normální tvar právě z Hermitova normálního tvaru.
+Při popisu algoritmů a výsledků v této kapitole budeme vycházet zejména z článku
+,,\textit{Computing Hermite and Smith normal forms of triangular integer matrices}''
+\cite{SNF_Arne}, který v roce 1998 publikoval Arne Storjohann.
+
+
+\section{Hermitův normální tvar}
+
+\begin{defi}\label{hermi}
+    Nechť $ H \in Mat_{n \times n}\mathbb{Z} $ je matice mající plnou hodnost,
+    kterou lze zapsat následujícím způsobem:
+    \begin{align}
+        H =
+        \begin{pmatrix}
+            h_1 & h_{12} & \hdots & h_{1n} \\
+                & h_2    & \hdots & h_{2n} \\
+                &        & \ddots & \vdots \\
+                &        &        & h_n    \\
+        \end{pmatrix}.
+    \end{align}
+    Pak $ H $ je v Hermitově normálním tvaru, právě když splňuje následující
+    podmínky:
+    \begin{Cond}
+        \item Pro každé $ j \in \{1,\dots, n\}$ platí $ h_j > 0 $ a zároveň
+        \item $ 0 \leq h_{ij} < h_j $ pro všechna $ 1 \leq i < j \leq n $.
+    \end{Cond}
+\end{defi}
+\begin{pozn}
+    Matice splňující požadavky předchozí definice jsou tedy horní trojúhelníkové
+    a regulární. Navíc pro ně platí, že prvky nad diagonálou jsou nezáporné a
+    shora omezené prvkem na diagonále, který musí být kladný.
+\end{pozn}
+
+V článku \cite{SNF_Arne} autor dále rozvádí, jakým způsobem je možné vypočítat
+Hermitův normální tvar z horní trojúhelníkové matice, jejíž prvky jsou omezeny
+determinantem. Tím se však v tomto textu nemusíme zabývat, neboť lze snadno
+nahlédnout, že máme-li matici v redukovaném schodovitém tvaru a vhodným způsobem
+přeskupíme její sloupce, dostaneme matici jejíž hlavní čtvercová submatice bude
+splňovat podmínky Hermitova normálního tvaru. Toto schéma detailněji popíšeme
+na konci této kapitoly a navíc uvedeme algoritmus pro výpočet \snf{} čtvercové
+matice v Hermitově normálním tvaru.
+
+
+\section{Sloupcová eliminace}
+
+Buď $ T $ $ k \times m $ matice mající hodnost $ k $, jejíž prvních $ k - 1 $
+sloupců je ve Smithově normálním tvaru. Matici $ T $ můžeme schématicky zapsat
+následujícím způsobem:
+
+\begin{align} \label{T_matrix}
+T =
+     \left(
+    \begin{array}{ccccc|ccc}
+        a_1 &     &        &         & t_1     & \ast   & \hdots & \ast   \\
+            & a_2 &        &         & t_2     & \vdots &        & \vdots \\
+            &     & \ddots &         & \vdots  & \vdots &        & \vdots \\
+            &     &        & a_{k-1} & t_{k-1} & \vdots &        & \vdots \\
+            &     &        &         & t_k     & \ast   & \hdots & \ast   \\
+    \end{array}
+        \right)
+.
+\end{align}
+
+Cílem této sekce bude dokázat následující tvrzení.
+
+\begin{vet}[Sloupcová eliminace] \label{Sloup_elim}
+Nechť $ T $ je matice, kterou lze zapsat stejně jako v rovnosti \ref{T_matrix}
+a navíc splňuje následující podmínky:
+\begin{Cond}[series=Sloup_elim_CONDS]
+    \item hlavní $ k \times k $ submatice má plnou hodnost,
+    \item prvních $ k - 1 $ sloupců je ve Smithově normálním tvaru,
+    \item prvky $ t_i $, $ i \in \{1,\dots, k-1\} $, jsou redukovány modulo $ t_k $.
+\end{Cond}
+Pak existuje deterministický algoritmus, který pomocí ekvivalentních řádkových
+a sloupcových operací převede hlavní $ k \times k $ submatici $ T $ do
+Smithova normálního tvaru.
+\end{vet}
+
+Pro lepší čitelnost rozdělíme důkaz této věty do několika lemmat, které na konci
+této kapitoly spojíme v kompletní důkaz.
+
+\begin{lem} \label{Sloup_elim_GCD}
+Buď $ T $ matice splňující stejné podmínky jako v předpokladech věty
+\ref{Sloup_elim} a navíc nechť $ k > 1 $. Pak existuje deterministický
+algoritmus, který převede matici $ T $ na ekvivalentní matici splňující stejné
+podmínky, ale navíc bude platit
+\begin{Cond}[resume=Sloup_elim_CONDS]
+    \item $ \gcd(a_i, t_i) = \gcd(a_i, t_i, t_{i+1},\dots, t_k) $ pro
+        $ 1 \leq i \leq k - 1 $.
+\end{Cond}
+\end{lem}
+\begin{proof}
+Poznamenejme, že prvek $ T_{i,j} $ se bude vztahovat k aktuálnímu stavu
+transformované matice v průběhu algoritmu. Ostatní proměnné (jako například $ t_i $)
+budou odpovídat původním hodnotám, které jsme si zafixovali na začátku algoritmu.
+
+Algoritmus bude pracovat iterativně vzhledem k proměnné $ r $, která bude značit
+aktuálně zpracovávaný řádek. Je zřejmé, že pro $ r = k $, bude platit
+\begin{align} \label{gcd_eq_induction}
+    \gcd(T_{r,r}, T_{r,k}) = \gcd(T_{r,r}, T_{r,k},T_{r+1,k},\dots, T_{k,k}).
+\end{align}
+Můžeme tedy předpokládat, že pro nějaké $ i $, $ 1 \leq i < k $, splňuje
+matice $ T $ rovnost \ref{gcd_eq_induction} pro všechna $ r = k, k-1,\dots, i + 1 $.
+Nyní ukážeme, jakým způsobem aplikovat ekvivalentní řádkové a sloupcové operace
+na matici $ T $ tak, aby výsledná matice splňovala podmínky (c1)-(c4) a platila
+rovnost \ref{gcd_eq_induction} pro $ r = k, k-1,\dots, i $.
+
+Buď $ 0 \leq c < a_i $ řešením rovnosti
+$ \gcd(t_i + ct_{i+1}, a_i) = \gcd(t_i, t_{i+1}, a_i) $.
+Takovéto $ c $ můžeme získat z důsledku \ref{Bach_Dus}. Přičtením $ c $-násobku
+řádku $ i + 1 $ k $ i $-tému řádku $ \operatorname{row}(T, i) \pluseq \operatorname{row}(T, i + 1) $
+získáme matici $ T' $ ve tvaru
+
+\begin{align*}
+T' =
+    \left(
+    \begin{array}{ccccccc|ccc}
+        a_1 &        &     &          &        &         & t_1              & \ast   & \hdots & \ast   \\
+            & \ddots &     &          &        &         & \vdots           & \vdots &        & \vdots \\
+            &        & a_i & ca_{i+1} &        &         & t_{i} + ct_{i+1} & \vdots &        & \vdots \\
+            &        &     & a_{i+1}  &        &         & t_{i+1}          & \vdots &        & \vdots \\
+            &        &     &          & \ddots &         & \vdots           & \vdots &        & \vdots \\
+            &        &     &          &        & a_{k-1} & t_{k-1}          & \vdots &        & \vdots \\
+            &        &     &          &        &         & t_k              & \ast   & \hdots & \ast   \\
+    \end{array}
+    \right)
+.
+\end{align*}
+
+\end{proof}
