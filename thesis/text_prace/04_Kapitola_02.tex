@@ -83,7 +83,7 @@ Hledaný algoritmus můžeme zapsat následujícím způsobem:
                 \ref{factorization} pro proměnné $ g $ a $ N $\;
 
                 $ c \leftarrow $ číslo $ 0 < c < N $ takové, že
-                    $ c \equiv 1 \bmod X $ a zároveň $ c \equiv 0 \bmod Y $\;
+                    $ c \equiv 1 (\bmod X) $ a zároveň $ c \equiv 0 (\bmod Y) $\;
             }
         }
     \end{algorithm}
@@ -93,26 +93,48 @@ kladené na koeficient $ c $ evidentně splněny. Zaměřme tedy naši pozornost
 možnost. Z $ \gcd(a,N) \neq 1 $ plyne, že $ g $ ve svém rozkladu obsahuje
 alespoň jedno prvočíslo dělící $ N $, je tedy korektní aplikovat lemma
 \ref{factorization} na čísla $ N $ a $ g $. Výsledná čísla $ X, Y $ pak budou
-nesoudělná a pro výpočet vhodného $ c $ můžeme využít
-Čínskou zbytkovou větu.
+nesoudělná a ukážeme, že $ c $, získané z uvedené soustavy kongruencí pro
+$ X $ a $ Y $, bude skutečně splňovat požadavky lemmatu.
 
-Díky tomu můžeme odvodit $ \gcd(a + cb,X) = \gcd(a + b,X) = 1 $. První rovnost
-plyne z požadavků, které klademe na $ c $. Dokážeme ještě druhou rovnost.
-Předpokládejme, že $ \gcd(a + b,X) = d > 1 $. Pak ale
-$ d = \gcd(a + b,X) = \gcd(gk + b,gh) $, pro vhodná $ k, h $. Z Bezoutovy rovnosti
-ovšem dostáváme celá čísla $ i, j $ taková, že můžeme psát
+Zřejmě platí, že $ \gcd(a+cb, N) = 1 \Leftrightarrow a + cb $ není dělitelné žádným
+prvočíslem $ p \in \mathbb{P}$, $p \vert N $. Díky tomu můžeme rozlišit dva
+případy:
+
+(\textit{i}) $ \gcd(p,a) = 1 \Leftrightarrow p \vert Y $.
+Pak můžeme zvolit $ c \equiv 0 (\bmod p) $. Z toho plyne
 \begin{align*}
-    d &= \gcd(a + b,X)  \\
-      &= \gcd(gk + b,gh) \\
-      &= i(gk + b) + jgh \\
-      &= (ik + jk)g + ib
+    \gcd(a + cb,p) = \gcd(a, p) = 1.
 \end{align*}
-Druhá pak z toho, že $ X $ bude
-obsahovat všechny společné dělitele $ N $ a $ a $ a navíc z předpokladů máme
-$ \gcd(a,b,N) = 1 $.
-Podobně platí
-$ \gcd(a + cb,Y) = \gcd(a,Y) = 1 $, protože lemma \ref{factorization} zaručuje
-$ \gcd(g, Y) = 1 $, $ N = XY $ a zvolili jsme $ g = \gcd(a, N) $.
+Pro úplnost ještě uveďme, že skutečně můžeme požadovat, aby $ c $ bylo kongruentní
+nule. Do problémů bychom se totiž mohli dostat v případě, že by platilo
+$ \gcd(a + b, N) = 1 $ a tedy $ c $ by muselo být rovno jedné. Avšak tento případ
+ošetřuje druhá větev našeho algoritmu a tento problém se nás tedy netýká.
+
+(\textit{ii}) $ \gcd(p,a) = p \Leftrightarrow p \vert a \Leftrightarrow p | X $.
+Poznamenejme, že z $ p \vert a $ plyne $ gcd(p, b) = 1 $, protože kdyby $ p $
+dělilo $ b $, tak bychom dostali spor s předpokladem $ \gcd(a,b,N) = 1 $. Tyto
+vlastnosti nám zajišťují platnost následujících rovností
+\begin{align*}
+    \gcd(a + b,p) = \gcd(b, p) = 1.
+\end{align*}
+Zvolme $ c $ takové, že $ c \equiv 1 (\bmod p) $.
+Teď už jen stačí dokázat implikaci
+\begin{align*}
+    p \vert a + cb \Rightarrow p \vert a + b.
+\end{align*}
+$ p \vert a + cb $ je ekvivalentní podmínce
+$ a + cb \equiv 0 (\bmod p)$. Avšak
+$ a + cb \equiv a + b (\bmod p)$ a proto implikace platí.
+Pokud by nyní $ p $ dělilo $  a + cb $, pak by muselo dělit také $ a + b $,
+což je ve sporu s tím, že $ \gcd(a + b,p) = 1 $. Proto platí
+$ \gcd(a + cb,p) = 1 $.
+
+Výše uvedené kongruence a argumentace bude fungovat úplně stejně také pro všechny
+mocniny prvočíslel $ p^k \vert N $.
+Celkem tedy můžeme rozdělit čísla tvaru $ p^k $ dělící $ N $ na ta, která jsou obsažena v
+$ X $ a ta, která jsou obsažena v $ Y $. Ta budou jistě nesoudělná a aplikací
+Čínské zbytkové věty dostáváme ze dvou soustav kongruencí pouze soustavu dvou
+kongruencí $ c \equiv 1 (\bmod X) $ a $ c \equiv 0 (\bmod Y) $.
 
 A konečně z ekvivalence
 $ \gcd(a + cb,N) = 1 \iff \gcd(a + cb,X) = 1 \wedge \gcd(a + cb,Y) = 1 $

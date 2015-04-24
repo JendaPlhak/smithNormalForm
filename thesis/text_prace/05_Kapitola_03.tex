@@ -211,9 +211,11 @@ dokázáno.
 Nyní můžeme přistoupit k samotnému důkazu věty \ref{Sloup_elim}.
 \begin{proof}[Důkaz věty o sloupcové eliminaci]
 Buď $ T $ matice $ k \times m $, která splňuje podmínky uvedné v předpokladech
-věty. Pokud $ k = 1 $, pak se naše submatice sestává z jediného prvku, je tedy
-triviálně ve Smithově normálním tvaru a náš algoritmus může skončit. Nechť je
-tedy $ k > 1 $. Na matici $ T $ nejdříve aplikujeme algoritmus lemmatu
+věty. Pokud $ k = 1 $, pak se naše submatice sestává z jediného prvku. Proto
+stačí případným vynásobením řádku číslem $ -1 $ zajistit $ T_{1,1} = |T_{1,1}| $
+a matice bude ve Smithově normálním tvaru.
+
+Nechť je $ k > 1 $. Na matici $ T $ nejdříve aplikujeme algoritmus lemmatu
 \ref{Sloup_elim_GCD}. Tím zajistíme splnění předpokladů pro postupnou aplikaci
 algoritmu lemmatu \ref{Sloup_elim_SNF}. Algoritmus budeme aplikovat na čtvercové
 submatice $ i \times i $, pro $ i = k,k-1,\dots, 2 $, které leží na diagonále
