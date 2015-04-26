@@ -112,7 +112,7 @@ ošetřuje druhá větev našeho algoritmu a tento problém se nás tedy netýk�
 
 (\textit{ii}) $ \gcd(p,a) = p \Leftrightarrow p \vert a \Leftrightarrow p | X $.
 Poznamenejme, že z $ p \vert a $ plyne $ gcd(p, b) = 1 $, protože kdyby $ p $
-dělilo $ b $, tak bychom dostali spor s předpokladem $ \gcd(a,b,N) = 1 $. Tyto
+dělilo i $ b $, tak bychom dostali spor s předpokladem $ \gcd(a,b,N) = 1 $. Tyto
 vlastnosti nám zajišťují platnost následujících rovností
 \begin{align*}
     \gcd(a + b,p) = \gcd(b, p) = 1.
@@ -129,7 +129,7 @@ Pokud by nyní $ p $ dělilo $  a + cb $, pak by muselo dělit také $ a + b $,
 což je ve sporu s tím, že $ \gcd(a + b,p) = 1 $. Proto platí
 $ \gcd(a + cb,p) = 1 $.
 
-Výše uvedené kongruence a argumentace bude fungovat úplně stejně také pro všechny
+Výše uvedené kongruence a argumentace budou fungovat úplně stejně také pro všechny
 mocniny prvočíslel $ p^k \vert N $.
 Celkem tedy můžeme rozdělit čísla tvaru $ p^k $ dělící $ N $ na ta, která jsou obsažena v
 $ X $ a ta, která jsou obsažena v $ Y $. Ta budou jistě nesoudělná a aplikací
@@ -138,7 +138,7 @@ kongruencí $ c \equiv 1 (\bmod X) $ a $ c \equiv 0 (\bmod Y) $.
 
 A konečně z ekvivalence
 $ \gcd(a + cb,N) = 1 \iff \gcd(a + cb,X) = 1 \wedge \gcd(a + cb,Y) = 1 $
-dostáváme naše tvrzení.
+plyne naše tvrzení.
 \end{proof}
 \begin{dus}\label{Bach_Dus}
 Uvedený algoritmus můžeme snadno rozšířit na případy, kdy hledáme $ 0 < c < N $

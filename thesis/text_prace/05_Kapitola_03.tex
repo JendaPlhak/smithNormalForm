@@ -175,9 +175,9 @@ Pomocí těchto čísel definujme $ m \times m $ matici $ V $ jakožto
 V =
     \left(
     \begin{array}{c|c|c|c}
-      s      & \hdots  & - t_1 / s_1 &         \\ \hline
-      \vdots & I_{k-2} & \vdots      &         \\ \hline
-      t      & \hdots  & a_1 / s_1   &         \\ \hline
+      s      &         & - t_1 / s_1 &         \\ \hline
+             & I_{k-2} &             &         \\ \hline
+      t      &         & a_1 / s_1   &         \\ \hline
              &         &             & I_{m-k} \\
     \end{array}
     \right)
@@ -226,4 +226,87 @@ Takto zajistíme úpravu matice $ T $ do vhodného tvaru a nakonec zbývá jen
 vhodným způsobem pronásobit $ k $-tý řádek $ -1 $ tak, aby platilo
 $ T_{k,k} = |T_{k,k}| $. Hlavní submatice o rozměrech $ k \times k $ pak bude
 ve Smithově normálním tvaru, čímž je věta dokázána.
+\end{proof}
+
+
+
+\section{Vynulování extra sloupců}
+Iterativní aplikací algoritmu z předchozí sekce můžeme získat matici ve tvaru
+(toto ještě formálně dokážeme v následující sekci)
+\begin{align} \label{extra_cols}
+T =
+    \left(
+    \begin{array}{cccc|cccc}
+        a_1 &     &        &     & b_{1,1} & b_{1,2} & \hdots & b_{1,m-k} \\
+            & a_2 &        &     & b_{2,1} & b_{2,2} & \hdots & b_{2,m-k} \\
+            &     & \ddots &     & \vdots  & \vdots  &        & \vdots    \\
+            &     &        & a_k & b_{k,1} & b_{k,2} & \hdots & b_{k,m-k} \\
+    \end{array}
+    \right).
+\end{align}
+
+Cílem této sekce bude dokázat následující tvrzení.
+\begin{vet} \label{Zero_extra}
+Buď $ T $ matice o rozměrech $ k \times m $, kterou lze zapsat stejně jako
+v rovnosti \ref{extra_cols} a nechť submatice tvořena prvními $ k $ sloupci má
+plnou hodnost a je navíc ve Smithově normálním tvaru.
+Pak existuje deterministický algoritmus, který pomocí ekvivalentních řádkových
+a sloupcových operací převede $ T $ na ekvivalentní matici $ T' $ jejíž
+hlavní $ k \times k $ submatice bude dolní trojúhelníková a posledních $ m - k $
+sloupců bude nulových.
+\end{vet}
+\begin{proof}
+Nechť $ s_1 = \gcd(a_1, b_{1,j}) $. Pomocí rozšířeného Euklidova algoritmu
+můžeme najít dvojici koeficientů $ (s,t) $ takovou, že
+$ s a_1 + t b_{1,j} = s_1 $. Vezměme za $ V $ identická matici a doplňme do ní
+$ V_{1,1} = s $, $ V_{j,1} = t $, $ V_{1,j} = -b_{1,j} / s_1 $ a
+$ V_{j,j} = a_1 / s_1 $. Pak z Laplaceova rozvoje a díky Bezoutově rovnosti
+dostaneme $ \det(V) = 1 $. Aplikací matice $ V $ na $ T $ dostaneme
+\begin{align*}
+TV =
+    \left(
+    \begin{array}{cccc|ccccccc}
+        s_1      &     &        &     & b_{1,1} & \hdots & b_{1,j-1} &                   & b_{1,j+1} & \hdots & b_{1,m-k} \\
+        tb_{2,j} & a_2 &        &     & b_{2,1} & \hdots & b_{2,j-1} & b_{2,j} a_1 / s_1 & b_{2,j+1} & \hdots & b_{2,m-k} \\
+        \vdots   &     & \ddots &     & \vdots  &        & \vdots    & \vdots            & \vdots    &        & \vdots    \\
+        tb_{k,j} &     &        & a_k & b_{k,1} & \hdots & b_{k,j-1} & b_{k,j} a_1 / s_1 & b_{k,j+1} & \hdots & b_{k,m-k} \\
+    \end{array}
+    \right).
+\end{align*}
+
+Prvek v prvním řádku, $ j $-tém sloupci bude skutečně nulový neboť
+$ a_1 (-b_{1,j} / s_1) +  b_{1,j} (a_1 / s_1) = 0 $. Tento algoritmus můžeme
+aplikovat postupně pro $ j = 1,\dots,m-k $. Uvědomme si, že prvky v prvním řádku
+pod diagonálou se budou postupně měnit, avšak to nebude mít žádný vliv na
+eliminaci prvků v prvním řádku. Stejně tak se budou měnit prvky pod prvním řádkem
+v matici $ (b_{i,j}) $, avšak opět to na výslednou eliminaci nebude mít žádný
+dopad. Výsledná matice $ T' $ tak bude mít tvar
+\begin{align*}
+T' =
+    \left(
+    \begin{array}{cccc|ccc}
+        s_1    &     &        &     &         &        &           \\
+        \ast   & a_2 &        &     & \ast    & \hdots & \ast      \\
+        \vdots &     & \ddots &     & \vdots  &        & \vdots    \\
+        \ast   &     &        & a_k & \ast    & \hdots & \ast      \\
+    \end{array}
+    \right).
+\end{align*}
+
+Výše uvedený postup můžeme rekurzivně aplikovat na trailing
+$ (k - i + 1) \times (m - i + 1) $ submatici matice $ T' $ pro $ i = 2,\dots, k$.
+Tímto způsobem nakonec dostaneme matici $ T' $ do tvaru
+
+\begin{align} \label{extra_cols_reduced}
+T' =
+    \left(
+    \begin{array}{cccc|cccc}
+        s_1    &        &        &     & 0       & \hdots & \hdots & 0      \\
+        \ast   & s_2    &        &     & \vdots  & \ddots &        & \vdots \\
+        \vdots & \ddots & \ddots &     & \vdots  &        & \ddots & \vdots \\
+        \ast   & \hdots & \ast   & s_k & 0       & \hdots & \hdots & 0      \\
+    \end{array}
+    \right)
+\end{align}
+a důkaz je hotov.
 \end{proof}

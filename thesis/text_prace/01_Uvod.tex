@@ -1,8 +1,19 @@
 \chapter*{Úvod}
 \addcontentsline{toc}{chapter}{Úvod}
 
-Cílem této práce je seznámit čtenáře s efektivním algoritmem pro výpočet Smithova normálního tvaru celočíselných matic. 
+Cílem této práce je seznámit čtenáře s efektivním algoritmem pro výpočet Smithova normálního tvaru celočíselných matic.
 
+Pro potřeby tohoto textu musíme nejprve zavést některé pojmy, které
+nám umožní snazší výklad některých algoritmů.
+
+\begin{defi}\label{hlavni_submatice}
+    Buď $ A $ matice $ n \times m $. \textit{Hlavní} $ k \times l $ submaticí matice $ A $
+    budeme rozumět submatici o rozměrech $ k \times l $, jejíž levý horní roh
+    je shodný s levým horním rohem matice $ A $.
+    \textit{Trailing} $ k \times l $ submaticí matice $ A $ budeme rozumět submatici o
+    rozměrech $ k \times l $, jejíž pravý dolní roh je shodný s pravým dolním
+    rohem matice $ A $.
+\end{defi}
 
 \cleardoublepage
 
