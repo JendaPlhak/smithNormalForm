@@ -54,7 +54,7 @@ následujícím způsobem:
 
 \begin{align} \label{T_matrix}
 T =
-     \left(
+    \left(
     \begin{array}{ccccc|ccc}
         a_1 &     &        &         & t_1     & \ast   & \hdots & \ast   \\
             & a_2 &        &         & t_2     & \vdots &        & \vdots \\
@@ -62,7 +62,7 @@ T =
             &     &        & a_{k-1} & t_{k-1} & \vdots &        & \vdots \\
             &     &        &         & t_k     & \ast   & \hdots & \ast   \\
     \end{array}
-        \right)
+    \right)
 .
 \end{align}
 
@@ -309,4 +309,102 @@ T' =
     \right)
 \end{align}
 a důkaz je hotov.
+\end{proof}
+
+
+\section{Výpočet \snf{} trojúhelníkových matic}
+
+\begin{vet} \label{SNF_Triang}
+Buď $ A $ $ n \times m $ celočíselná matice, jejíž hlavní $ n \times n $
+submatice je regulární a horní trojúhelníková. Pak existuje deterministický
+algoritmus, který matici $ A $ převede do Smithova normálního tvaru.
+\end{vet}
+\begin{proof}
+V první fázi pro $ r = 1,\dots, n $ postupně aplikujeme algoritmus věty
+\ref{Sloup_elim} na hlavní $ r \times r $ submatici matice $ A $. V $ r $-tém
+kroku tak převedeme hlavní $ r \times r $ submatici do Smithova normálního
+tvaru. Korektnost tohoto postupu ověříme induktivně. Označme $ A^{(r)} $ pracovní
+matici na začátku $ r $-tého kroku. Zřejmě pro $ r = 1 $ k žádným problémům
+nedojde a algoritmus z věty \ref{Sloup_elim} vlastně neprovede žádné operace.
+Předpokládejme tedy, že jsme korektně zpracovali prvních $ r - 1 $ submatic.
+Matice $ A^{(r)} $ na začátku $ r $-tého kroku tak bude mít tvar
+\begin{align*}
+A^{(r)} =
+    \left(
+    \begin{array}{c|c}
+        T_1 & T_2 \\ \hline
+            & B   \\
+    \end{array}
+    \right)
+,
+\end{align*}
+kde z indukčního předpokladu $ T_1 $ je $ r \times r $ horní trojúhelníková
+regulární matice mající prvních $ r - 1 $ sloupců ve Smithově normálním tvaru.
+$ T_2 $ je matice o rozměrech $ r \times (m - r) $ a konečně matice $ B $ je
+rovna trailing $ (n - r) \times (m - r) $ submatici matice $ A $. Opět můžeme
+předpokládat, že transformace, které jsme doposud provedli, neměly
+žádný vliv na trailing submatice neboť pro $ r = 1 $ se žádné úpravy neprovedou.
+Na začátku $ r $-tého kroku tedy skutečně můžeme předpokládat, že matice $ B $
+má uvedené vlastnosti.
+
+Nyní aplikujeme algoritmus z věty \ref{Sloup_elim} na matici
+\begin{align*}
+T =
+    \left(
+    \begin{array}{c|c}
+        T_1 & T_2
+    \end{array}
+    \right)
+  =
+    \left(
+    \begin{array}{ccccc|ccc}
+        a_1 &     &        &         & t_1     & \ast   & \hdots & \ast   \\
+            & a_2 &        &         & t_2     & \vdots &        & \vdots \\
+            &     & \ddots &         & \vdots  & \vdots &        & \vdots \\
+            &     &        & a_{r-1} & t_{r-1} & \vdots &        & \vdots \\
+            &     &        &         & t_r     & \ast   & \hdots & \ast   \\
+    \end{array}
+    \right)
+.
+\end{align*}
+Všechny řádkové operace tak budou omezeny pouze na prvních $ r $ řádků. Všechny
+sloupcové operace se sloupci, které zasahují do matice $ B $,
+se navíc budou omezovat na přičtení nějakého násobku sloupce z $ T_1 $. Avšak
+submatice pod $ T_1 $ je nulová a proto zůstane matice $ B $ nezměněna.
+
+Konečně vstupní matice $ T $ je zřejmě korektním vstupnem pro algoritmus
+věty \ref{Sloup_elim}, výsledná matice tak bude splňovat všechny naše požadavky
+a indukční krok je hotov.
+
+Výsledkem těchto transformací bude ekvivalentní matice $ A' $ ve tvaru
+\begin{align*}
+A' =
+    \left(
+    \begin{array}{c|c}
+        S' & B
+    \end{array}
+    \right)
+,
+\end{align*}
+kde $ S' $ je regulární $ n \times n $ matice ve Smithově normálním tvaru.
+Ve druhé fázi tak můžeme použít algoritmus věty \ref{Zero_extra} a transformovat
+matici $ A' $ na ekvivalentní matici tvaru
+\begin{align*}
+    \left(
+    \begin{array}{c|c}
+        R & O
+    \end{array}
+    \right)
+,
+\end{align*}
+kde $ R $ je $ n \times n $ regulární dolní trojúhelníková matice a $ O $ je
+nulová matice.
+
+Mějme transformační unimodulární matice $ P, Q $, které převádí matici $ R $
+do Smithova normálního tvaru $ S $. Tedy $ P R Q = S $. Můžeme ovšem počítat
+$ P R Q = S = S^T = (P R Q)^T = Q^T R^T P^T $. Z toho ovšem plyne, že
+transponovaná matice $ R^T $ bude mít stejný Smithův normální tvar jako původní
+matice $ R $. Proto můžeme aplikovat postup z první fáze na matici $ R^T $,
+čímž získáme Smithův normální tvar matice $ R $ a tedy i Smithův normální tvar
+matice $ A $.
 \end{proof}
