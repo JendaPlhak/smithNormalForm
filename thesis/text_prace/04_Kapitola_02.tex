@@ -48,23 +48,49 @@ v roce 1992 E. Bach \cite{Bach}. Nejprve však dokažme následující tvrzení:
 
 \begin{lem} \label{factorization}
     Mějme kladná celá čísla $ g > 1 $ a $ N $ taková, že $ g | N $. Pak
-    existuje algoritmus, který najde celá čísla $ X, Y $ taková, že
+    existuje algoritmus, který najde kladná celá čísla $ X, Y $ taková, že
     $ N = XY $, $ \gcd(X, Y) = 1 $ a $ \gcd(g, Y) = 1 $.
 \end{lem}
 \begin{proof}
-    Nechť $ \tilde{X} = g $ a $ \tilde{Y} = \frac{N}{g} $. Pak můžeme vypočítat
-    $ h = \gcd(\tilde{X}, \tilde{Y}) $ a
-    zvolit $ X = \tilde{X}h $, $ Y = \frac{\tilde{Y}}{h}$.
-    Z toho plyne, že $ \gcd(X,Y) = 1 $. Avšak $ 1 = \gcd(X,Y) = \gcd(gh,Y) $
-    implikuje, že také $ \gcd(g,Y) = 1 $. A konečně počítejme:
-    $ XY = \tilde{X}h \frac{\tilde{Y}}{h} = gh \frac{N}{gh} = N $.
+    Uvažme následující algoritmus
+        \begin{algorithm} \label{factorization_Algo}
+        \Begin{
+           $ X \leftarrow g $\;
+           $ Y \leftarrow \frac{N}{g} $\;
+           \While{ $ \gcd(X, Y) \neq 1 $ } {
+                $ h \leftarrow \gcd(X, Y) $\;
+                $ X \leftarrow X h $\;
+                $ Y \leftarrow \frac{Y}{h} $\;
+           }
+
+        }
+    \end{algorithm}
+    Je zřejmé, že uvedený cyklus bude vždy konečný, neboť v každé iteraci platí
+    $ h > 1 $ a proměnná $ Y $ se tak s každou iterací zmenší. Protože navíc
+    pro každou iteraci platí $ Y > 0 $, tak se v nejhorším případě dostaneme do
+    situace, kdy $ Y = 1 $. Pak ale zřejmě $ \gcd(X, Y) = 1 $. Případně skončíme
+    dříve a podmínka bude rovněž splněna.
+
+    Dále jistě bude $ N = XY $, neboť po prvním kroku platí
+    $ XY = g \frac{N}{g} = N $ a v každém dalším kroku pouze přesouváme
+    prvočísla z $ Y $ do $ X $.
+
+    Konečně neboť jsme do $ X $ po prvním kroku pouze přidávali prvočísla,
+    můžeme psát $ 1 = \gcd(X,Y) = \gcd(gk,Y) $, kde $ k $ je vhodný koeficient
+    takový, že $ g k = X $. To ovšem implikuje, že také $ \gcd(g,Y) = 1 $ a
+    důkaz je hotov.
 \end{proof}
+\begin{pozn}
+Hledání čísel $ X $ a $ Y $ skutečně musíme provádět iterativně. Například pro
+volbu $ g = 2 $ a $ N = 24 $ bychom po první iteraci dostali $ X = 4 $ a $ Y = 6 $,
+což jsou zřejmě čísla soudělná.
+\end{pozn}
 
 A nyní již k samotnému Bachovu lemmatu.
 \begin{lem} [Bach] \label{bach}
     Mějme celá čísla $ a, b $ a $ N $, pro která platí $ N > 0 $ a zároveň \newline
     $ \gcd(a,b,N) = 1 $. Pak existuje deterministický algoritmus, který pro
-    čísla $ a, b $ a $ N $ vypočte celé číslo $ 0 < c < N $ takové, že
+    čísla $ a, b $ a $ N $ vypočte celé číslo $ 0 \leq c < N $ takové, že
     $ \gcd(a + cb,N) = 1 $.
 \end{lem}
 \begin{proof}
@@ -92,54 +118,43 @@ dvou případech, kdy za $ c $ volíme $ 0 $ a $ 1 $, jsou podmínky
 kladené na koeficient $ c $ evidentně splněny. Zaměřme tedy naši pozornost na třetí
 možnost. Z $ \gcd(a,N) \neq 1 $ plyne, že $ g $ ve svém rozkladu obsahuje
 alespoň jedno prvočíslo dělící $ N $, je tedy korektní aplikovat lemma
-\ref{factorization} na čísla $ N $ a $ g $. Výsledná čísla $ X, Y $ pak budou
-nesoudělná a ukážeme, že $ c $, získané z uvedené soustavy kongruencí pro
-$ X $ a $ Y $, bude skutečně splňovat požadavky lemmatu.
+\ref{factorization} na čísla $ N $ a $ g $. Výsledná čísla $ X, Y $ budou
+nesoudělná a koeficient $ c $ můžeme najít pomocí Čínské zbytkové věty. Ukážeme,
+že $ c $, získané z uvedené soustavy kongruencí pro $ X $ a $ Y $, bude skutečně
+splňovat požadavky lemmatu.
 
 Zřejmě platí, že $ \gcd(a+cb, N) = 1 \Leftrightarrow a + cb $ není dělitelné žádným
-prvočíslem $ p \in \mathbb{P}$, $p \vert N $. Díky tomu můžeme rozlišit dva
-případy:
+prvočíslem $ p \in \mathbb{P}$, $p \vert N $. Pro další postup budeme potřebovat
+následující implikace.
 
-(\textit{i}) $ \gcd(p,a) = 1 \Leftrightarrow p \vert Y $.
-Pak můžeme zvolit $ c \equiv 0 (\bmod p) $. Z toho plyne
-\begin{align*}
-    \gcd(a + cb,p) = \gcd(a, p) = 1.
-\end{align*}
-Pro úplnost ještě uveďme, že skutečně můžeme požadovat, aby $ c $ bylo kongruentní
-nule. Do problémů bychom se totiž mohli dostat v případě, že by platilo
-$ \gcd(a + b, N) = 1 $ a tedy $ c $ by muselo být rovno jedné. Avšak tento případ
-ošetřuje druhá větev našeho algoritmu a tento problém se nás tedy netýká.
+$ p \nmid a \Rightarrow p \mid Y $. Obměnou implikace dostáváme
+$ p \mid a \Leftarrow p \nmid Y \Leftrightarrow p \mid X $. Avšak
+$ p \mid X \Rightarrow p \mid g \Rightarrow p \mid a $, proto implikace platí.
+Nechť naopak $ p \mid Y $. Pak ale
+$ p \mid Y \Rightarrow p \nmid g \Rightarrow p \nmid a $. Celkem jsme dostali
+ekvivalenci $ p \nmid a \Leftrightarrow p \mid Y $. Z toho navíc negací plyne, že
+$ p \mid a \Leftrightarrow p \mid X $.
 
-(\textit{ii}) $ \gcd(p,a) = p \Leftrightarrow p \vert a \Leftrightarrow p | X $.
-Poznamenejme, že z $ p \vert a $ plyne $ gcd(p, b) = 1 $, protože kdyby $ p $
-dělilo i $ b $, tak bychom dostali spor s předpokladem $ \gcd(a,b,N) = 1 $. Tyto
-vlastnosti nám zajišťují platnost následujících rovností
-\begin{align*}
-    \gcd(a + b,p) = \gcd(b, p) = 1.
-\end{align*}
-Zvolme $ c $ takové, že $ c \equiv 1 (\bmod p) $.
-Teď už jen stačí dokázat implikaci
-\begin{align*}
-    p \vert a + cb \Rightarrow p \vert a + b.
-\end{align*}
-$ p \vert a + cb $ je ekvivalentní podmínce
-$ a + cb \equiv 0 (\bmod p)$. Avšak
-$ a + cb \equiv a + b (\bmod p)$ a proto implikace platí.
-Pokud by nyní $ p $ dělilo $  a + cb $, pak by muselo dělit také $ a + b $,
-což je ve sporu s tím, že $ \gcd(a + b,p) = 1 $. Proto platí
-$ \gcd(a + cb,p) = 1 $.
+Pro spor předpokládejme, že existuje nějaké $ p \in \mathbb{P}$,
+$ p \vert N $ a $ p \vert a + cb $.
+Díky výše uvedeným ekvivalencím můžeme rozlišit dva případy.
 
-Výše uvedené kongruence a argumentace budou fungovat úplně stejně také pro všechny
-mocniny prvočíslel $ p^k \vert N $.
-Celkem tedy můžeme rozdělit čísla tvaru $ p^k $ dělící $ N $ na ta, která jsou obsažena v
-$ X $ a ta, která jsou obsažena v $ Y $. Ta budou jistě nesoudělná a aplikací
-Čínské zbytkové věty dostáváme ze dvou soustav kongruencí pouze soustavu dvou
-kongruencí $ c \equiv 1 (\bmod X) $ a $ c \equiv 0 (\bmod Y) $.
+(\textit{i}) $ p \nmid a \Leftrightarrow p \mid Y $.
+Z předpokladu pak plyne, že $ a + cb \equiv 0 (\bmod p) $. Avšak z toho, že
+$ p \mid Y $ a z požadavků, které klademe na $ c $ dostaneme
+$ a + cb \equiv a \equiv 0 (\bmod p) $. To ovšem implikuje  $ p \mid a $, což
+je spor.
 
-A konečně z ekvivalence
-$ \gcd(a + cb,N) = 1 \iff \gcd(a + cb,X) = 1 \wedge \gcd(a + cb,Y) = 1 $
-plyne naše tvrzení.
+(\textit{ii}) $ p \vert a \Leftrightarrow p | X $.
+Podobně jako v předchozím případě platí $ a + cb \equiv a + b \equiv 0 (\bmod p) $.
+Z toho plyne, že $ p \vert a + b $. Avšak předpokládali jsme, že $ p \vert a $.
+Proto nutně $ p \vert b $. Pak ale $ p \vert \gcd(a,b,N) $, spor.
+
 \end{proof}
+\begin{pozn}
+První dvě větve uvedeného algoritmu ve skutečnosti nejsou pro dokázání lemmatu
+potřebné. Uvádíme je pouze z optimalizačních důvodů.
+\end{pozn}
 \begin{dus}\label{Bach_Dus}
 Uvedený algoritmus můžeme snadno rozšířit na případy, kdy hledáme $ 0 < c < N $
 takové, že $ \gcd(a + cb,N) = d $, kde $ d = \gcd(a,b,N) $.
