@@ -198,7 +198,7 @@ Bylo by proto výhodné, kdybychom mohli nějakým způsobem upravit prvky ve sl
 společným dělitelem všech prvků daného sloupce. A přesně to je obsahem následující věty.
 
 \begin{vet}[GCD redukce] \label{gcd_red}
-    Nechť $ B $ je celočíselná matice $ (k+2) \times 2 $ a $ rank(B) = 2 $, kterou
+    Nechť $ B $ je celočíselná matice $ (k+2) \times 2 $ , $ rank(B) = 2 $, kterou
     můžeme zapsat jako
 \begin{center}
 $ B =
@@ -308,7 +308,7 @@ $ N $, čímž dostaneme $ (a \mathbin{\%} N) t + (b \mathbin{\%} N) u = 1 $. Zb
 po dělení číslem $ N $ proto budou nesoudělné.
 
 Pomocí algoritmu, který jsme použili v důkazu lemmatu \ref{bach}, můžeme najít
-nejmenší kladné číslo $ t $ takové, že bude platit
+kladné číslo $ t $ takové, že bude platit
 \begin{equation}\label{t_search}
     gcd(\tilde{a}_{l-1} + t \tilde{b}_{l}, N) = 1
 \end{equation}
@@ -327,22 +327,31 @@ a volbou $ c_l \leftarrow t $ zajistíme splnění podmínky (1). Skutečně:
 přičemž poslední rovnost plyne z indukčního předpokladu.
 
 Nakonec musíme zajistit splnění i druhé podmínky (2). Buď $ l $ index aktuálního
-kroku a předpokládejme, že platí
+kroku a uvažujme rovnost
 
 \begin{equation}\label{det}
     \begin{vmatrix}
         N & \bar{N} \\
         a_{l-1} + x b_l & \bar{a}_{l-1} + x \bar{b}_l  \\
     \end{vmatrix}
-    = 0
+    = 0.
 \end{equation}
-pak ovšem z indukčního předpokladu plyne, že $ N \bar{b}_l - \bar{N} b_l \neq 0 $.
+Tu můžeme upravit do tvaru
+\begin{equation}
+    (N \bar{b}_l - \bar{N} b_l) x = -(N \bar{a}_{l-1} - \bar{N} a_{l-1}).
+\end{equation}
+Poznamenejme, že výraz napravo je z indukčního předpokladu nenulový. Nyní můžeme
+rozlišit dva případy.
+
+    (\textit{i}) Výraz $ N \bar{b}_l - \bar{N} b_l $ je roven nule. V tom
+případě nemůže existovat žádné $ x $, které by mohlo podmínku (2) pokazit.
+
+(\textit{ii}) $ N \bar{b}_l - \bar{N} b_l \neq 0 $.
 To implikuje, že prvek x je určen jednoznačně a můžeme jej vyjádřit jako
 \begin{equation}\label{frac}
     x = -\frac{N \bar{a}_{l-1} - \bar{N} a_{l-1}} {N \bar{b}_l - \bar{N} b_l}
+      \neq 0
 \end{equation}
-Poznamenejme, že z indukčního předpokladu také plyne, že $ x \neq 0 $.
-
 Pokud nám tedy v kroku \ref{t_search} výjde $ c_l $ různé od $ x $, je vše v pořádku.
 Pokud ovšem $ c_l = t = x $, nebyla by podmínka (2) splněna.
 To ale můžeme snadno napravit. Předpokládejme tedy, že $ 0 < x = t $.
@@ -360,11 +369,14 @@ jsme to již provedli výše pro $ c_l = t $.
 \section{Sloupcová redukce}
 
 V této části si ukážeme, jak využít výsledků předcházející věty \ref{gcd_red} k
-eliminaci prvků ve sloupečku. Mějme tedy jako v předchozím $ n \times 2 $
+eliminaci prvků ve sloupečku. Mějme tedy $ n \times 2 $
 vstupní matici $ B $, kteroužto můžeme zapsat následujícím způsobem:
 \begin{align} \label{B_col}
 B =
     \begin{pmatrix}
+        \ast   & \ast   \\
+        \vdots & \vdots \\
+        \ast   & \ast   \\
         N & \bar{N} \\
         a_0 & \bar{a}_0  \\
         b_1 & \bar{b}_1  \\
@@ -373,9 +385,8 @@ B =
     \end{pmatrix}
 ,
 \end{align}
-kde $ k \geq 0 $, $ N > 0 $ a trailing $ (k+2) \times 2 $ submatrix má plnou
-hodnost (nejsme si vědomi českého ekvivalentu pro výraz trailing (sub)matrix,
-a budeme jej proto v následujícím textu používát v nezměněné původní podobě).
+kde $ k \geq 0 $, $ N > 0 $ a trailing $ (k+2) \times 2 $ submatice má plnou
+hodnost.
 
 Našim cílem bude nalézt $ n \times n $ unimodulární matice
 \begin{align} \label{Q_C}
@@ -422,7 +433,7 @@ a budou splněny podmínky následující věty.
 \begin{vet}[Sloupcová redukce] \label{col_red}
 Mějme matici $ B \in Mat_{n \times 2}\mathbb{Z} $, kterou můžeme zapsat jako v
 \ref{B_col} s tím, že $ k \geq 0$, $ N > 0 $ a trailing $ (k+2) \times 2 $
-submatrix má plnou hodnost. Pak existuje algoritmus \textbf{ColumnReduction}($B, k$),
+submatice má plnou hodnost. Pak existuje algoritmus \textbf{ColumnReduction}($B, k$),
 který na vstupu vezme $ B $ a $ k $, a jako výstup vrátí $ n \times n $
 matice $ C $ a $ Q $, které lze vyjádřit jako v \ref{Q_C}. Navíc bude platit, že
 součin $ QCB $ lze psát jako \ref{QCB} a bude splňovat následující podmínky:
@@ -476,7 +487,7 @@ s tím, že $ gcd(N, a_k) = gcd(N, a_k, b_1, b_2, \dots, b_k) $ a navíc submati
 bude regulární.
 
 Aplikací rozšířeného Euklidova algoritmu na dvojici $ (N, a_k) $ obdržíme
-uspořádanou trojici $ (t_1, m_1, m_2) $ takovou, že
+koeficienty $ t_1 $, $ m_1 $, $ m_2 $ takové, že
 $ m_1 N + m_2 a_k = t_1 = gcd(N, a_k) $. Nyní můžeme vytvořit matici
 
 \begin{align*}
@@ -533,7 +544,7 @@ a platí $ t_1 \mid b_i$ kde $ i = 1, \dots, k $. Můžeme tedy snadno vyelimino
 prvky pod $ t_1 $. Následně snadno provedeme redukci prvků nad $ t_1 $ a
 konečně i prvků nad a pod $ t_2 $. To lze provést pomocí elementárních řádkových
 operací, které můžeme odpovídajícím způsobem zapsat do matice $ Q $. Takto
-upravená matice $ Q $ již bude splňovat podmínky věty a důkaz je tak hotov.
+upravená matice $ Q $ již bude splňovat podmínky věty a důkaz je hotov.
 
 \end{proof}
 
@@ -597,7 +608,8 @@ algoritmu, která již rank profile nevyžaduje. Nyní přistupme k samotné def
     $ T^{(0)} \leftarrow A $\;
     % \vspace{\baselineskip}
     \For{ $k \leftarrow 1$ \KwTo $ r - 1 $} {
-        $ B_k \leftarrow n \times 2 $ matice $ (col(T^{(k - 1)}, j_k) \mid col(T^{(k - 1)}, j_{k + 1})) $\;
+        $ B_k \leftarrow n \times 2 $ matice
+            $ (\operatorname{col}(T^{(k - 1)}, j_k) \mid \operatorname{col}(T^{(k - 1)}, j_{k + 1})) $\;
         $ (\tilde{Q}, \tilde{C}) \leftarrow $ \textbf{ColumnReduction}$ (B_k, n - k - 1) $\;
         $ Q^{(k)} \leftarrow \tilde{Q} \tilde{C} Q^{(k - 1)} \tilde{C}^{-1} $\;
         $ C^{(k)} \leftarrow \tilde{C} C^{(k - 1)} $\;
@@ -675,7 +687,7 @@ triviálně splněny, neboť $ Q^{(0)} = C^{(0)} = I_n $. Předpokládejme tedy,
 lemma platí pro $ i = k - 1 < r $, pro nějaké $ k $ kladné.
 Dokážeme, že pak lemma platí také pro $ i = k $.
 
-$ n \times 2 $ submatici $ B_k $, tvořenou sloupci $ j_k $ a $ j_{k+1} $ matice
+Submatici $ B_k $, tvořenou sloupci $ j_k $ a $ j_{k+1} $ matice
 $ T^{(k-1)} $, můžeme psát jako
 \begin{align*}
 B_k =
@@ -712,7 +724,7 @@ Nyní ukážeme, že rovnost \ref{block_form} je splněna pro $ i = k $
 na konci $ k $-tého cyklu našeho algoritmu. To znamená ověřit rovnost
 $ T^{(k)} = Q^{(k)} C^{(k)} A $. Poznamenejme, že matici $ T^{(k)} $ vypočítáme
 jakožto $ T^{(k)} \leftarrow \tilde{Q} \tilde{C} T^{(k - 1)} $ a navíc
-z indukčního předpokladu vím, že platí $ T^{(k - 1)} = Q^{(k - 1)} C^{(k - 1)} A $.
+z indukčního předpokladu plyne, že platí $ T^{(k - 1)} = Q^{(k - 1)} C^{(k - 1)} A $.
 To všechno nám dohromady dává následující rovnosti:
 
 \begin{align*}
@@ -733,7 +745,7 @@ $ T^{(k)} = \tilde{Q} \tilde{C} T^{(k - 1)} $ schématicky zapsat jako v rovnost
 \end{proof}
 
 RST algoritmus \ref{RST_algorithm} bere na vstupu libovolnou matici $ A' $ o
-rozměrech $ n \times m $, která všam musí byt vložena do $ (n + 2) \times (m + 2) $
+rozměrech $ n \times m $, která však musí byt vložena do $ (n + 2) \times (m + 2) $
 matice $ A $ tak, jak je znázorňu je \ref{input_A}. Nyní ukážeme, že toto není
 nikterak omezující, protože výstupní matice
 ($ Q^{(r - 1)} $, $ C^{(r - 1)} $, $ T^{(r - 1)} $) mohou být zachyceny
