@@ -41,10 +41,7 @@ Hermitův normální tvar z horní trojúhelníkové matice, jejíž prvky jsou 
 determinantem. Tím se však v tomto textu nemusíme zabývat, neboť lze snadno
 nahlédnout, že máme-li matici v redukovaném schodovitém tvaru a vhodným způsobem
 přeskupíme její sloupce, dostaneme matici jejíž hlavní čtvercová submatice bude
-splňovat podmínky Hermitova normálního tvaru. Toto schéma detailněji popíšeme
-na konci této kapitoly a navíc uvedeme algoritmus pro výpočet \snf{} čtvercové
-matice v Hermitově normálním tvaru.
-
+splňovat podmínky Hermitova normálního tvaru.
 
 \section{Sloupcová eliminace}
 
@@ -109,7 +106,7 @@ rovnost \ref{gcd_eq_induction} pro $ r = k, k-1,\dots, i $.
 Buď $ 0 \leq c < a_i $ řešením rovnosti
 $ \gcd(t_i + ct_{i+1}, a_i) = \gcd(t_i, t_{i+1}, a_i) $.
 Takovéto $ c $ můžeme získat z důsledku \ref{Bach_Dus}. Přičtením $ c $-násobku
-řádku $ i + 1 $ k $ i $-tému řádku $ \operatorname{row}(T, i) \pluseq \operatorname{row}(T, i + 1) $
+řádku $ i + 1 $ k $ i $-tému řádku $ \operatorname{row}(T, i) \pluseq c \operatorname{row}(T, i + 1) $
 získáme matici $ T' $ ve tvaru
 
 \begin{align*}
@@ -129,17 +126,16 @@ T' =
 \end{align*}
 Nyní počítejme:
 \begin{align*}
-    \gcd(T'_{i,i}, T'_{i,k}) &= \gcd(a_i, t_{i} + cT_{i+1})  \\
-                             &= \gcd(a_i, t_{i}, t_{i+1}) \\
-                             &= \gcd(a_i, t_{i}, a_{i+1}, t_{i+1}) \\
-                             &= \gcd(a_i, t_{i}, t_{i+1},\dots,t_{k}),
+    \gcd(a_i, t_{i} + ct_{i+1}) &= \gcd(a_i, t_{i}, t_{i+1}) \\
+                                &= \gcd(a_i, t_{i}, a_{i+1}, t_{i+1}) \\
+                                &= \gcd(a_i, t_{i}, t_{i+1},\dots,t_{k}),
 \end{align*}
-přičemž předposlední rovnost plyne z toho, že $ a_i \vert a_{i+1} $ a
+přičemž předposlední rovnost plyne z toho, že $ a_i \mid a_{i+1} $ a
 poslední dostaneme z indukčního předpokladu. Rovnost \ref{gcd_eq_induction} je
 tedy splněna.
 
 Nyní stačí jen redukovat prvky v $ i $-tém řádku napravo od $ a_i $. Díky tomu,
-že $ a_i \vert a_{i+1} $, bude $ i + 1 $ prvek $ ca_{i+1} $ vynulován a
+že $ a_i \mid a_{i+1} $, bude $ i + 1 $ prvek $ ca_{i+1} $ vynulován a
 matice sestavená z prvních $ k - 1 $ sloupců matice $ T' $ zůstane nezměněna.
 \end{proof}
 
@@ -202,9 +198,9 @@ TV =
 \end{align*}
 Prvek v prvním řádku a $ k $-tém sloupci bude skutečně nulový neboť
 $ a_1(-\frac{t_1}{s_1}) + t_1 \frac{a_1}{s_1} = 0 $. Z podmínky (c4) navíc plyne,
-že $ s_1 \vert t_i $ pro $ i = 1,\dots, k $ neboť $ s_1 = \gcd(a_1, t_1) $.
+že $ s_1 \mid t_i $ pro $ i = 1,\dots, k $ neboť $ s_1 = \gcd(a_1, t_1) $.
 Díky tomu můžeme vyeliminovat všechny prvky pod diagonálou v prvním sloupci.
-To že $ s_1 \vert t_i $ nám navíc zajišťuje splnění podmínky (c5), čímž je lemma
+To že $ s_1 \mid t_i $ nám navíc zajišťuje splnění podmínky (c5), čímž je lemma
 dokázáno.
 \end{proof}
 
@@ -212,7 +208,7 @@ Nyní můžeme přistoupit k samotnému důkazu věty \ref{Sloup_elim}.
 \begin{proof}[Důkaz věty o sloupcové eliminaci]
 Buď $ T $ matice $ k \times m $, která splňuje podmínky uvedné v předpokladech
 věty. Pokud $ k = 1 $, pak se naše submatice sestává z jediného prvku. Proto
-stačí případným vynásobením řádku číslem $ -1 $ zajistit $ T_{1,1} = |T_{1,1}| $
+stačí případným vynásobením řádku číslem $ -1 $ zajistit $ 0 \leq T_{1,1} $
 a matice bude ve Smithově normálním tvaru.
 
 Nechť je $ k > 1 $. Na matici $ T $ nejdříve aplikujeme algoritmus lemmatu
@@ -224,7 +220,7 @@ původní matice $ T $ a pravý dolní roh se překývá s prvkem $ T_{k,k} $
 
 Takto zajistíme úpravu matice $ T $ do vhodného tvaru a nakonec zbývá jen
 vhodným způsobem pronásobit $ k $-tý řádek $ -1 $ tak, aby platilo
-$ T_{k,k} = |T_{k,k}| $. Hlavní submatice o rozměrech $ k \times k $ pak bude
+$ 0 \leq T_{k,k} $. Hlavní submatice o rozměrech $ k \times k $ pak bude
 ve Smithově normálním tvaru, čímž je věta dokázána.
 \end{proof}
 
@@ -411,4 +407,25 @@ matice $ A $.
 
 
 \section{Algoritmus pro výpočet Smithova normálního tvaru}
-Mějme libovolnou celočíselnou matici $ A $ o rozměrech $ m \times n $.
+Mějme libovolnou celočíselnou matici $ A $ o rozměrech $ n \times m $. Na matici
+$ A $ můžeme nejprve aplikovat algoritmus z věty \ref{RST_algo}), který ji
+převede do redukovaného schodovitého tvaru. Výslednou matici označme $ B $.
+
+Pro další výpočty stačí uvažovat jen prvních $ k \leq n $ nenulových řádků
+matice $ B $. Označme matici tvořenou těmito řádky $ B' $. Sloupce
+matice $ B' $ můžeme přeuspořádat tak, aby hlavní $ k \times k $
+submatice byla trojúhelníková a regulární. To uděláme tím, že všechny sloupce
+obsahující pivot posuneme co nejvíce dopředu tak, aby zůstalo zachováno pořadí
+sloupců obsahujících pivot.
+
+Takto upravená matice bude korektním vstupem pro algoritmus věty
+\ref{SNF_Triang}. Tímto algoritmem pak můžeme spočítat výsledný Smithův normální
+tvar.
+
+\begin{pozn}
+Na různých místech předchozího textu si pozorný čtenář mohl povšimnout zdánlivě
+nepotřebných požadavků na redukování prvků matice například pivotem či nějakým
+jiným význačným prvkem. Důvodem je snaha o omezení velikosti čísel, se kterými
+musíme pracovat. Konkrétní výsledky a odhady je možné nalézt v článcích
+\cite{triang} a \cite{SNF_Arne}.
+\end{pozn}
