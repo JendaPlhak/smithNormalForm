@@ -13,6 +13,6 @@
 \contentsline {section}{\numberline {3.4}V\IeC {\'y}po\IeC {\v c}et SNF{} troj\IeC {\'u}heln\IeC {\'\i }kov\IeC {\'y}ch matic}{21}{section.3.4}
 \contentsline {section}{\numberline {3.5}Algoritmus pro v\IeC {\'y}po\IeC {\v c}et Smithova norm\IeC {\'a}ln\IeC {\'\i }ho tvaru}{22}{section.3.5}
 \contentsline {chapter}{\numberline {4}Paralelizace}{24}{chapter.4}
-\contentsline {chapter}{Z\IeC {\'a}v\IeC {\v e}r}{25}{chapter*.5}
-\contentsline {chapter}{P\IeC {\v r}\IeC {\'\i }loha}{26}{chapter*.6}
-\contentsline {chapter}{Seznam pou\IeC {\v z}it\IeC {\'e} literatury}{27}{chapter*.7}
+\contentsline {chapter}{Z\IeC {\'a}v\IeC {\v e}r}{26}{chapter*.5}
+\contentsline {chapter}{P\IeC {\v r}\IeC {\'\i }loha}{27}{chapter*.6}
+\contentsline {chapter}{Seznam pou\IeC {\v z}it\IeC {\'e} literatury}{28}{chapter*.7}
