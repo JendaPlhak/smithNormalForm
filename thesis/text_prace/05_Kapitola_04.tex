@@ -1,0 +1,71 @@
+\chapter{Paralelizace}
+
+Buď $ A $ celočíselná matice $ n \times m $ a předpokládejme, že $ n < m $. Pak
+z Hadamardovy nerovnosti (pro bližší infromace čtenáře odkazujeme na publikaci
+\cite{Hadamard}) plyne, že $ \det(A) \leq (m^{1/2} \Vert A \Vert )^m $, kde
+$ \Vert A \Vert $ značí nejmenší celé číslo takové, že
+$ \vert a^i_j \vert \leq \Vert A \Vert $. Z článku \cite{Had_tight} plyne, že
+Hadamardův odhad je poněkud pesimistický a v případě náhodných matic vychází
+determinant v průměru poněkud lépe, přesto však tento odhad dává tušit, že
+se v případě počítačové implementace algoritmu pro výpočet Smithova normálního
+tvaru můžeme poměrně rychle dostat do problémů s kapacitou celočíselných typů.
+
+To samozřejmě můžeme řešit specializovanými knihovnami, které
+reprezentují celé číslo jako třídu zaobalující pole celých čísel. Nicméně
+efektivita takového řešení už není ideální a navíc tento přístup zvyšuje
+paměťovou náročnost. Hodilo by se nám proto, kdybychom mohli celý výpočet
+rozložit na více částí, pro které už by nebylo problém dosáhnout výsledku pomocí
+standardní integerovské aritmetiky a následně všechny částečné vysledky spojit
+do hledaného Smithova normálního tvaru. Toho můžeme dosáhnout pomocí Čínské
+zbytkové věty.
+
+
+\begin{vet}[Čínská zbytková věta] \label{Chin_Rem}
+Mějme kladná celá čísla $ m_1,\dots,m_k $, která jsou po dvou nesoudělná. Pak
+pro libovolnou posloupnost celých čísel $ a_1,\dots,a_k $ existuje nějaké celé
+číslo $ x $, které je řešením následující soustavy kongruencí.
+
+\begin{equation}
+    \begin{aligned} \label{congrs}
+        x &\equiv a_1 \pmod{m_1}                   \\
+        x &\equiv a_2 \pmod{m_2}                   \\
+          &\mathrel{\makebox[\widthof{=}]{\vdots}}  \\
+        x &\equiv a_k \pmod{m_k}                   \\
+    \end{aligned}
+\end{equation}
+%
+Navíc pro libovolná dvě řešení $ x_1, x_2 $ uvedené soustavy platí
+$ x_1 \equiv x_2 \pmod{m_1 m_2 \cdots m_k} $.
+\end{vet}
+
+\begin{proof}
+Zaměřme svou pozornost nejprve na existenci řešení. Označme
+$ M = m_1 m_2 \cdots m_k $. Pak zřejmě pro každé $ i \in \{1,\dots,k\} $
+platí $ \gcd(m_i, M / m_i) = 1 $, protože $ m_i $ jsou po dvou nesoudělná.
+Díky tomu můžeme pomocí rozšířeného Euklidova algoritmu najít celá čísla
+$ s_i, t_i $ taková, že $ s_i m_i + t_i \frac{M}{m_i} = 1 $. Nyní označme
+$ d_i = t_i \frac{M}{m_i} $. Z toho plyne rovnost $ s_i m_i + d_i = 1 $ a navíc
+\begin{align*}
+d_i \equiv
+\left\{
+  \begin{array}{lr}
+    1 \pmod{ m_j } & : j = i \\
+    0 \pmod{ m_j }  & : j \neq i
+  \end{array}
+\right.
+\end{align*}
+Skutečně, pokud $ j = i $, tak dostáváme
+$ 1 \equiv s_i m_i + d_i \equiv d_i \pmod{m_i} $. Pokud naopak $ j \neq i $, pak
+zřejmě $ m_j \mid d_i $ a proto bude $ d_i $ kongruentní s nulou modulo $ m_j $.
+
+Položme $ x = \sum\limits_{i = 1}^{k} a_i d_i $. Pak díky výše uvedené
+vlastnosti $ d_i $ bude $ x $ řešením soustavy \eqref{congrs}.
+
+Nechť pro nějaká dvě řešení soustavy \eqref{congrs} platí
+$ x_1 \not\equiv x_2 \pmod{m_1 m_2 \cdots m_k} $. Pak ale
+$ x_1 \equiv x_2 \pmod{m_i} \Rightarrow m_i \mid x_1 - x_2 $. Protože $ m_i $
+jsou po dvou nesoudělná, tak z předchozí implikace dále plyne, že
+$ x_1 - x_2 $ bude dělitelné také součinem všech $ m_i $. Tedy
+$ M \mid x_1 - x_2 $. To je ovšem spor s předpokladem, který je ekvivalentní
+tomu, že $ M \nmid x_1 - x_2 $.
+\end{proof}
