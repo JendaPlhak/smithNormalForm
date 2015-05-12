@@ -70,7 +70,7 @@ $ M \mid x_1 - x_2 $. To je ovšem spor s předpokladem, který je ekvivalentní
 tomu, že $ M \nmid x_1 - x_2 $.
 \end{proof}
 
-\begin{vet}
+\begin{vet} \label{Chin_Rem_Iso}
 \end{vet}
 \begin{proof}
 Uvažme zobrazení 
@@ -114,3 +114,13 @@ Platnost rovnosti $ \varphi(x \cdot y) = \varphi(x) \cdot \varphi(y) $ se ověř
 analogicky. Zobrazení $ \varphi $ tedy skutečně je izomorfismus okruhů a zkoumané
 prostory jsou proto izomorfní.
 \end{proof}
+
+Důsledek \ref{Chin_Rem_Iso} nám vlastně říká, že pokud chceme provádět sérii 
+výpočtů (sčítání, odčítání, násobení) nad celými čísly a jsme dopředu schopni 
+omezit výsledek nějakým číslem $ m $, tak to můžeme provést paralelně modulo
+prvočíselné faktory $ m $. Konkrétně nejprve faktorizujeme $ m $ na mocniny
+prvočísel. Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
+čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů. 
+Nyní můžeme paralelně aplikovat operace, které potřebujeme provést a konečně 
+pomocí konstrukce uvedené v důkazu věty \ref{Chin_Rem} spojíme částečné výsledky
+a obdržíme výsledek původní úlohy.
