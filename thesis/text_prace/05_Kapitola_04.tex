@@ -70,6 +70,7 @@ $ M \mid x_1 - x_2 $. To je ovšem spor s předpokladem, který je ekvivalentní
 tomu, že $ M \nmid x_1 - x_2 $.
 \end{proof}
 
+<<<<<<< HEAD
 \begin{dus}\label{Chi_Iso}
 Mějme kladné číslo $ m $ s faktorizací $ m = p_1^{r_1} \cdots p_k^{r_k}$. Pak
 existuje isomorfismus okruhů
@@ -78,3 +79,59 @@ $ \Zbb / m \Zbb \cong \Zbb / p_1^{r_1} \Zbb \times \cdots \times \Zbb / p_k^{r_k
 \begin{proof}
 
 \end{proof}
+=======
+\begin{vet} \label{Chin_Rem_Iso}
+\end{vet}
+\begin{proof}
+Uvažme zobrazení 
+$ \varphi : \Zbb / m \Zbb \rightarrow \Zbb / p_1^{r_1} \Zbb \times \cdots \Zbb / p_k^{r_k} \Zbb $
+definované jako $ \varphi([x]_m) = ([x]_{p_1^{r_1}},\dots, [x]_{p_k^{r_k}}) $.
+Ukážeme, že takto definované zobrazení je izomorfismem okruhů.
+
+Mějme libovolný prvek 
+$ a = ([a_1]_{p_1^{r_1}},\dots, [a_k]_{p_k^{r_k}}) \in \Zbb / p_1^{r_1} \Zbb \times \cdots \Zbb / p_k^{r_k} \Zbb $.
+Pak podle věty \ref{Chin_Rem} můžeme nalézt takové $ x \in \Zbb $, že 
+%
+\begin{equation*}
+    \begin{aligned}
+        x &\equiv a_1 \pmod{p_1^{r_1}}              \\
+          &\mathrel{\makebox[\widthof{=}]{\vdots}}  \\
+        x &\equiv a_k \pmod{p_k^{r_k}}.           \\
+    \end{aligned}
+\end{equation*}
+%
+Pak ale $ \varphi([x]_m) = a $, z čehož plyne, že $ \varphi $ je surjektivní.
+
+Dále předpokládejme, že existují prvky $ x, y \in \Zbb / m \Zbb $ takové, že 
+$ x \not\equiv y \pmod{m} $ a navíc $ \varphi(x) = \varphi(y) $. To ovšem 
+znamená, že platí $ x \equiv y \pmod{p_i^{r_i}} $ pro všechna 
+$ i \in \{1,\dots,k\} $. Proto $ p_i^{r_i} \mid x - y $, ale díky 
+nesoudělnosti $ p_i^{r_i} $ platí také $ m \mid x - y $, což implikuje
+$ x \equiv y \pmod{m} $. To je ale spor s předpokladem. $ \varphi $ je proto 
+injekce a díky předchozímu odstavci také bijekce.
+
+Nakonec ještě ověříme, že se skutečně jedná o homomorfismus okruhů.
+Mějme $ x, y \in \Zbb / m \Zbb $ libovolné. Pak 
+%
+\begin{align*}
+    \varphi(x + y) &= ([x + y]_{p_1^{r_1}},\dots, [x + y]_{p_k^{r_k}})  \\
+                   &= ([x]_{p_1^{r_1}} + [y]_{p_1^{r_1}},\dots, [x]_{p_k^{r_k}} + [y]_{p_k^{r_k}})  \\
+                   &= ([x]_{p_1^{r_1}},\dots, [x]_{p_k^{r_k}}) + ([y]_{p_1^{r_1}},\dots, [y]_{p_k^{r_k}}) \\
+                   &= \varphi(x) + \varphi(y).
+\end{align*}
+%
+Platnost rovnosti $ \varphi(x \cdot y) = \varphi(x) \cdot \varphi(y) $ se ověří
+analogicky. Zobrazení $ \varphi $ tedy skutečně je izomorfismus okruhů a zkoumané
+prostory jsou proto izomorfní.
+\end{proof}
+
+Důsledek \ref{Chin_Rem_Iso} nám vlastně říká, že pokud chceme provádět sérii 
+výpočtů (sčítání, odčítání, násobení) nad celými čísly a jsme dopředu schopni 
+omezit výsledek nějakým číslem $ m $, tak to můžeme provést paralelně modulo
+prvočíselné faktory $ m $. Konkrétně nejprve faktorizujeme $ m $ na mocniny
+prvočísel. Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
+čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů. 
+Nyní můžeme paralelně aplikovat operace, které potřebujeme provést a konečně 
+pomocí konstrukce uvedené v důkazu věty \ref{Chin_Rem} spojíme částečné výsledky
+a obdržíme výsledek původní úlohy.
+>>>>>>> ba9359e11111ef00d69e4612b41853449eefd613
