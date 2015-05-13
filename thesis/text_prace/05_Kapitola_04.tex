@@ -14,7 +14,7 @@ To samozřejmě můžeme řešit specializovanými knihovnami, které
 reprezentují celé číslo jako třídu zaobalující pole celých čísel. Nicméně
 efektivita takového řešení už není ideální a navíc tento přístup zvyšuje
 paměťovou náročnost. Hodilo by se nám proto, kdybychom mohli celý výpočet
-rozložit na více částí, pro které už by nebylo problém dosáhnout výsledku pomocí
+rozložit na více částí, pro které už by nebylo problém spočítat výsledek pomocí
 standardní integerovské aritmetiky a následně všechny částečné vysledky spojit
 do hledaného Smithova normálního tvaru. Toho můžeme dosáhnout pomocí Čínské
 zbytkové věty.
@@ -127,3 +127,47 @@ prvočísel. Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin
 Nyní můžeme paralelně aplikovat operace, které potřebujeme provést a konečně
 pomocí konstrukce uvedené v důkazu věty \ref{Chin_Rem} spojíme částečné výsledky
 a obdržíme výsledek původní úlohy.
+
+
+\section{Výběr prvočísel}
+Snadno se nahlédne, že výše uvedený Hadamardův odhad můžeme aplikovat i na prvky
+matic ve Smithově normálním tvaru. Mějme libovolnou matici $ A $ jako na začátku
+této kapitoly a označme $ \beta = (m^{1/2} \Vert A \Vert )^m $. Naším cílem bude
+najít prvočísla $ p_1,\dots, p_k $ tak, aby $ \beta < p_1 \cdots p_k $. Zřejmě
+bychom mohli postupně brát prvočísla $ 2, 3, 5, 7, /dots $, dokud by uvedená
+podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
+druhou stranu chceme, aby tato prvočísla byla dostatečně malá tak, abychom
+si pro rozumně velké matice vystačili se standardní 32bitovou reprezentací
+celého čísla. Co znamená rozumně velká matice bude zřejmé z následujících řádků.
+
+Rozumný kompromis poskytuje následující lemma uvedené v \cite{triang} pod
+označením Lemma 14.
+
+\begin{lem} \label{num_prim}
+Buď $ x \geq 3 $ a $ l = 6 + \log \log x $. Pak existuje nejméně
+$ 2 \ceil{\ceil{\log_2{2 x}} / (l - 1)} $ prvočísel $ p $ takových, že
+$ 2^{l - 1} < p < 2^l $.
+\end{lem}
+
+Z toho plyne, že lze vybrat
+$ s = 2 \ceil{\ceil{\log_2{2 \beta }} / (l - 1)} $ prvočísel
+$ \{ p_1, \dots, p_s \} $, pro která bude platit $ p_1 \cdots p_s > \beta $ a
+navíc bude všechny možné reprezentovat $ l = 6 + \log \log \beta $ bitovým
+číslem. Předpokládejme, že $ \Vert A \Vert = 100 $. Pak můžeme numericky
+vypočítat, že například pro matice o rozměrech $ 10^4 \times 10^4 $ by
+nám stačila prvočísla mající nejvýše $ 11 $ bitů, což je pro naše potřeby naprosto
+postačující. Předpokládáme, že větší matice již budou nad naše výpočetní
+možnosti.
+
+\section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
+Mějme opět matici $ A $ tak jako na začátku a uvažme prvočísla
+$ \{ p_1, \dots, p_s \} $ z předchozí sekce. Článek \cite{triang} pak uvádí
+\footnote{Konkrétně se jedná o Theorem 16},
+že všechny operace algoritmu věty \ref{RST_algo} můžeme provést postupně
+modulo všechna prvočísla $ p_i $ a nakonec mezivýsledky spojit do hledaného
+redukovaného schodovitého tvaru matice $ A $. Autor článku \cite{triang} se
+také zabývá tím, jak vypočítat rank profile potřebný pro výpočet redukovaného
+schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se
+\footnote{Theorem 15},
+že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $.
+Výpočet ekvivalentní trojúhelníkové matice z matice $ A $ tedy není problém.
