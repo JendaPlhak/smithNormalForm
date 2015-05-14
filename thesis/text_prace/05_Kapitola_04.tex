@@ -140,20 +140,60 @@ druhou stranu chceme, aby tato prvočísla byla dostatečně malá tak, abychom
 si pro rozumně velké matice vystačili se standardní 32bitovou reprezentací
 celého čísla. Co znamená rozumně velká matice bude zřejmé z následujících řádků.
 
-Rozumný kompromis poskytuje následující lemma uvedené v \cite{triang} pod
-označením Lemma 14.
+Rozumný kompromis poskytuje \cite[Lemma 14]{triang}. Autor však tento výsledek
+uvádí bez důkazu s odkazem na publikaci, ve které se nám nepodařilo takovéto
+tvrzení vůbec najít, a to ani v nějaké obecnější podobě či jako pomocný výsledek
+nějakého důkazu. Abychom předešli nejasnostem, dokážeme toto tvrzení v mírně
+modifikované podobě pomocí následujícího tvrzení.
 
-\begin{lem} \label{num_prim}
-Buď $ x \geq 3 $ a $ l = 6 + \log \log x $. Pak existuje nejméně
-$ 2 \ceil{\ceil{\log_2{2 x}} / (l - 1)} $ prvočísel $ p $ takových, že
-$ 2^{l - 1} < p < 2^l $.
+
+\begin{lem}[{\cite[Corollary 3.8]{primes}}] \label{num_primes_src}
+Nechť $ \pi(a) = \sum\limits_{p \leq a}{1} $, kde $ p \in \mathbb{P} $. Pak
+platí $ 3a / (5 \ln{a}) < \pi(2a) - \pi(a) $ pro všechna $ a \geq 20 \frac{1}{2} $.
 \end{lem}
 
-Z toho plyne, že lze vybrat
-$ s = 2 \ceil{\ceil{\log_2{2 \beta }} / (l - 1)} $ prvočísel
-$ \{ p_1, \dots, p_s \} $, pro která bude platit $ p_1 \cdots p_s > \beta $ a
-navíc bude všechny možné reprezentovat $ l = 6 + \log \log \beta $ bitovým
-číslem. Předpokládejme, že $ \Vert A \Vert = 100 $. Pak můžeme numericky
+\begin{lem} \label{num_prim}
+Buď $ x \geq 2 $ a $ l = 6 + \log_2 \log_2 x $.
+Pak existuje nejméně $ \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ p $
+takových, že $ 2^{l - 1} < p < 2^l $.
+\end{lem}
+\begin{proof}
+Dosazením $ a = 2^{l - 1} $ do lemmatu \ref{num_primes_src} a postupnými úpravami
+dostáváme
+\begin{align*}
+    \pi(2^{l}) - \pi(2^{l - 1}) > \frac{3 \cdot 2^{l - 1}}{5 \ln{2^{l - 1}}}
+                                \geq \frac{2^{l}}{5 \log_2{2^{l - 1}}}
+                                = \frac{2^{l}}{5 (l - 1)}.
+\end{align*}
+Použití lemmatu \ref{num_primes_src} je skutečně korektní, neboť
+$ l \geq 6 $ z čehož plyne, že $ a \geq 32 $. Z definice funkce $ \pi(a) $ pak
+získáme naše tvrzení.
+\end{proof}
+\begin{dus}
+Buď $ \beta $ Hadamardův odhad na determinant tak, jako na začátku této sekce a
+nechť $ l = 6 + \log_2 \log_2 \beta $. Pak můžeme najít
+$ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ \{p_1, \dots, p_s\} $,
+která bude možno reprezentovat $ l $-bitovým celým číslem a navíc bude platit
+$ \beta < p_1 \cdots p_s $.
+\end{dus}
+\begin{proof}
+Uvažme prvočísla z lemmatu \ref{num_prim} a označme je $ \{p_1, \dots, p_s\} $.
+Tato prvočísla můžeme zdola odhadnout $ 2^{l - 1} < p_i $,
+z čehož plyne následující výpočet.
+\begin{align*}
+    p_1 \cdots p_s
+        > (2^{l - 1}) ^ s
+        \geq 2^{(l - 1) \frac{2^l}{5 (l - 1)}}
+        = 2^{\frac{2^{6 + \log_2 \log_2 \beta}}{5}}
+        = \beta^{\frac{2^6}{5}} > \beta
+\end{align*}
+Tím je důkaz hotov až na případ, kdy $ \beta \in \{0, 1\} $. Tyto možnosti ale
+nejsou příliš zajímavé neboť v prvním případě je Smithův normální tvar nulová
+matice a ve druhém pak skalár - jednička. V obou případech pak můžeme vzít
+libovolné prvočíslo, které jistě bude větší než determinant.
+\end{proof}
+
+Předpokládejme, že $ \Vert A \Vert = 100 $. Pak můžeme numericky
 vypočítat, že například pro matice o rozměrech $ 10^4 \times 10^4 $ by
 nám stačila prvočísla mající nejvýše $ 11 $ bitů, což je pro naše potřeby naprosto
 postačující. Předpokládáme, že větší matice již budou nad naše výpočetní
@@ -161,13 +201,12 @@ možnosti.
 
 \section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
 Mějme opět matici $ A $ tak jako na začátku a uvažme prvočísla
-$ \{ p_1, \dots, p_s \} $ z předchozí sekce. Článek \cite{triang} pak uvádí
-\footnote{Konkrétně se jedná o Theorem 16},
-že všechny operace algoritmu věty \ref{RST_algo} můžeme provést postupně
-modulo všechna prvočísla $ p_i $ a nakonec mezivýsledky spojit do hledaného
+$ \{ p_1, \dots, p_s \} $ z předchozí sekce. Článek \cite[Theorem 16]{triang}
+uvádí, že všechny operace algoritmu věty \ref{RST_algo} můžeme provést postupně
+modulo prvočísla $ p_i $ a nakonec mezivýsledky spojit do hledaného
 redukovaného schodovitého tvaru matice $ A $. Autor článku \cite{triang} se
 také zabývá tím, jak vypočítat rank profile potřebný pro výpočet redukovaného
-schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se
-\footnote{Theorem 15},
-že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $.
+schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se \cite[Theorem 15]{triang},
+že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $
+v okruzích $ \Zbb / p_i \Zbb $.
 Výpočet ekvivalentní trojúhelníkové matice z matice $ A $ tedy není problém.
