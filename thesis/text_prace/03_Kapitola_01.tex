@@ -2,9 +2,12 @@
 \setcounter{page}{1}
 \pagenumbering{arabic}
 
-V této kapitole se budeme zbývat definicí Smithova normálního tvaru (budeme značit \snf) celočíselných matic $\Zmat$, dokážeme jeho existenci pro libovolnou $A \in \Zmat$ a konečně uvedeme souvislost mezi \snf a konečně generovanými komutativními grupami.
+V této kapitole se budeme zabývat definicí Smithova normálního tvaru
+(budeme značit \snf{}) celočíselných matic $\Zmat$, dokážeme jeho existenci pro
+libovolnou $A \in \Zmat$ a nakonec uvedeme souvislost mezi \snf{} a konečně
+generovanými komutativními grupami.
 
-\begin{defi}Řekneme že matice A $ \in \Zmat $ je ve Smithově normálním tvaru jestliže
+\begin{defi}Řekneme, že matice A $ \in \Zmat $ je ve Smithově normálním tvaru, jestliže
 \begin{center}
 $ A =
     \begin{pmatrix}
@@ -18,7 +21,7 @@ $ A =
     \end{pmatrix}
 $
 \end{center}
-a platí $q_i | q_{i+1}$ kde $i \in \{1, \dots, k-1\}$. Čísla $q_i$ pak nazýváme
+a platí $q_i | q_{i+1}$, kde $i \in \{1, \dots, k-1\}$. Čísla $q_i$ pak nazýváme
 \textit{invariantními faktory}.
 \end{defi}
 
@@ -39,25 +42,25 @@ vypadají invertibilní celočíselné matice. To popisuje následující lemma.
 
 
 \begin{lem}
-    Buď $A \in \Zmat$. Pak je A invertiblní, právě tehdy když je čtvercová a
+    Buď $A \in \Zmat$. Pak je A invertibilní, právě tehdy když je čtvercová a
     $\textnormal{det}(A) = \pm1$.
 \end{lem}
 \begin{proof}
     Buď $A \in \Zmat$ invertibilní. Existuje tedy matice $A^{-1} \in \Zmat$
     taková, že $AA^{-1} = E$. Pak je ovšem $A^{-1}$ inverzí pro $A$ také nad
-    $\mathbb{Q}$. Proto $A$ musí být čtvercová, neboť každá invertiblní matice
+    $\mathbb{Q}$. Proto $A$ musí být čtvercová, neboť každá invertibilní matice
     nad $\mathbb{Q}$ je čtvercová a má nenulový determinant. Navíc platí
     \begin{center}
-        $\det(A) \cdot \det(A^{-1}) = \det(AA^{-1}) = \det(E) = 1$
+        $ \det(A) \cdot \det(A^{-1}) = \det(AA^{-1}) = \det(E) = 1 $,
     \end{center}
     a protože determinant celočíselné matice je z definice determinantu
-    také celočíselný, musí platit $det(A) = det(A^{-1}) = \pm1$ neboť v okruhu
-    $\mathbb{Z}$ máme pouze dvě jednotky a to právě $\pm1$.
+    také celočíselný, musí platit $det(A) = det(A^{-1}) = \pm1$, neboť v okruhu
+    $\mathbb{Z}$ máme pouze dvě jednotky, a to právě $\pm1$.
 
-    Buď naopak  $A \in \Zmat$ čtvercová s determinantem $\pm1$. Pak inverzní
+    Buď naopak $A \in \Zmat$ čtvercová s determinantem $\pm1$. Pak inverzní
     matici $A^{-1}$ můžeme spočítat z algebraických doplňků jako
     \begin{center}
-        $A^{-1} = \frac{1}{\operatorname{det}(A)} \cdot A_{\mathrm{adj}} = \pm A_{adj}$
+        $A^{-1} = \frac{1}{\operatorname{det}(A)} \cdot A_{\mathrm{adj}} = \pm A_{adj}$,
     \end{center}
     nicméně prvky matice $A_{adj}$ - algebraické doplňky - se vypočítají
     ze subdeterminantů (minorů) matice A a musí být proto celočíselné. Matice
@@ -65,17 +68,17 @@ vypadají invertibilní celočíselné matice. To popisuje následující lemma.
 \end{proof}
 
 Z tohoto lemmatu tedy plyne, že pokud chceme celočíselnou matici B převést do
-\snf pomocí invertibilních matic, musíme tak činit pouze prostřednictvím
+\snf{} pomocí invertibilních matic, musíme tak činit pouze prostřednictvím
 matic majících determinant $\pm1$. Nyní tedy můžeme přikročit k důkazu samotné
-věty o \snf.
+věty o \snf{}.
 
 \begin{proof}[Důkaz. (Věty o Smithově normálním tvaru)]
-Nejprve dokážeme existenci \snf. Pro tento účel budeme potřebovat Euklidův
+Nejprve dokážeme existenci \snf{}. Pro tento účel budeme potřebovat Euklidův
 algoritmus. Ten funguje následujícím způsobem.
 
 Pro libovolná $ a, b \in \mathbb{Z}$ taková, že $ |a| > |b| $ vydělíme číslo
 $ a $ číslem $ b $ se zbytkem. Tedy $ a = qb + c $. Pak ovšem platí, že
-$ gcd(a, b) = gcd(b, c) $ neboť
+$ gcd(a, b) = gcd(b, c) $, neboť
 
 \begin{center}
 $ gcd(a, b) = d \Rightarrow d \vert (a - qb) \Rightarrow d \vert c \Rightarrow d \vert gcd(b, c)$
@@ -86,14 +89,14 @@ $ gcd(b, c) = e \Rightarrow e \vert (qb + c) \Rightarrow e \vert a \Rightarrow e
 \end{center}
 Takto můžeme postupovat rekurzivně a po konečném počtu kroků bude $ c = 0 $ a
 $ b $ příslušné danému kroku bude právě hledaný největší společný dělitel.
-Poznamenejme, že užití Euklidova algoritmu je z výpočetního hlediska výhodně, neboť
+Poznamenejme, že užití Euklidova algoritmu je z výpočetního hlediska výhodné, neboť
 má logaritmickou složitost.
 
-Dále protože výsledné transformační matice $ P, Q $ musí být invertibilní nad $\mathbb{Z}$,
+Dále, protože výsledné transformační matice $ P, Q $ musí být invertibilní nad $\mathbb{Z}$,
 plyne z předchozího lemmatu, že jejich determinant musí být roven $ \pm 1 $.
-Evidentně tedy nemůžeme násobit řádek či sloupec matice jiným číslem než  $ \pm 1 $.
+Evidentně tedy nemůžeme násobit řádek či sloupec matice jiným číslem než $ \pm 1 $.
 Můžeme však prohodit libovolné dva řádky, protože to lze realizovat pomocí
-transformační matice,
+transformační matice
 
 \begin{center}
 $
@@ -105,11 +108,11 @@ $
                 &        & 1      &        & 0      &        &        \\
                 &        &        &        &        & \ddots &        \\
                 &        &        &        &        &        & 0      \\
-    \end{pmatrix}
+    \end{pmatrix},
 $
 \end{center}
 která má evidentně determinant roven $ -1 $. Analogicky můžeme prohazovat
-prohazovat libovolné dva sloupce. A konečně pomocí transformační matice
+ libovolné dva sloupce. A konečně pomocí transformační matice
 \begin{center}
 $
     \begin{pmatrix}
@@ -126,12 +129,12 @@ $
 můžeme k libovolnému řádku přičíst $ m $-násobek jiného řádku.
 
 Nyní budeme postupovat následujícím způsobem. Na pozici $ (1, 1) $ přesuneme libovolný
-nenulový prvek matice $ B $ (Pokud $ B = 0 $, pak je již ve \snf a žádné operace
+nenulový prvek matice $ B $ (pokud $ B = 0 $, pak je již ve \snf{} a žádné operace
 provádět nemusíme). Pak postupně pro každý prvek pod a napravo od prvku $ b_1^1 $
 aplikujeme Euklidův algoritmus (konkrétně jeho implementaci pomocí řádkových a
-sloupcových operací, která potřebuje pouze operace násobení řádku/sloupce číslem $ -1 $,
+sloupcových operací, která vyžaduje pouze operace násobení řádku/sloupce číslem $ -1 $,
 přičítání násobku řádku/sloupce k jinému a prohazování dvou řádků/sloupců),
-čímž na pozici $ (1, 1) $ vyrobíme největší společný prvků
+čímž na pozici $ (1, 1) $ vyrobíme největšího společného dělitele prvků
 v prvním sloupci a řádku. Tyto prvky můžeme tedy snadno vyeliminovat, čímž získáme
 matici ve tvaru
 
@@ -153,34 +156,34 @@ takový, že $ {b'}_{1}^{1} \vert b_1^1 $ a zároveň $ {b'}_{1}^{1} \vert b_j^i
 který jej již dělit bude. Poznamenejme, že tento prvek bude nutně menší než původní
 $ b_1^1 $, díky čemuž náš algoritmus skončí po konečném počtu kroků.
 
-Celkem máme algoritmus, který převede matici $B$ do výše uvedeného tvaru
+Celkem máme algoritmus, který převede matici $B$ do výše uvedeného tvaru,
 a navíc $ {b}_{1}^{1} \vert b_j^i $.
 Označme takto vzniklou matici $ C $ a nechť $ q_k = c_1^1 $.
 Nyní můžeme postupovat indukcí a aplikovat tento algoritmus
 na submatici, která vznikne vynecháním prvního sloupce a řádku matice $C$.
-Neboť $ q_k $ dělil všechny prvky matice $C$, bude dělit i prvek v levém
+A protože $ q_k $ dělil všechny prvky matice $C$, bude dělit i prvek v levém
 horním rohu submatice (označme jej $ q_{k+1} $) po aplikaci výše uvedeného algoritmu.
 Dostáváme, že $ q_k \vert q_{k+1}$, což jsme měli dokázat.
 
 Zbývá dokázat jednoznačnost. Označme
 \begin{center}
-$ gcd_{i \times i }(A) = gcd\{det(X) \vert X \textrm{ je submatice } A \textrm{ tvaru }i \times i\} $
+$ gcd_{i \times i }(A) = gcd\{det(X) \vert X \textrm{ je submatice } A \textrm{ tvaru }i \times i\} $.
 \end{center}
 
 Prvně ukážeme, že platí rovnost
 \begin{center}
-$ q_1 \hdots q_i = gcd_{i \times i }(A)$
+$ q_1 \hdots q_i = gcd_{i \times i }(A)$,
 \end{center}
 
-kde $ A $ je matice ve \snf. Pokud submatice $ X $ obsahuje $k$-tý řádek, ale
+kde $ A $ je matice ve \snf{}. Pokud submatice $ X $ obsahuje $k$-tý řádek, ale
 neobsahuje $k$-tý sloupec matice A, bude její determinant evidentně nulový,
 neboť $ A $ je diagonální a $ X $ tak bude obsahovat nulový řádek. Stačí tedy
-uvažovat submatice jejichž diagonála leží na hlavní diagonále matice $ A $. To
+uvažovat submatice, jejichž diagonála leží na hlavní diagonále matice $ A $. To
 znamená, že platí
 \begin{center}
 $ gcd_{i \times i }(A) = gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} $.
 \end{center}
-Navíc A je ve \snf, proto $ q_i | q_{i+1} $ z čehož plyne
+Navíc A je ve \snf{}, proto $ q_i | q_{i+1} $, z čehož plyne
 \begin{center}
 $ gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} = q_1 \hdots q_i $,
 \end{center}
@@ -206,14 +209,14 @@ $ gcd_{i \times i }(A') \vert gcd_{i \times i }(A) $.
 \end{center}
 Největší společný dělitel subdeterminantů se tedy nezmění.
 
-Předpokládejme nyní, že \snf není jednoznačný a existují matice $ A,C $ a $ P,Q,T,U$
+Předpokládejme nyní, že \snf{} není jednoznačný a existují matice $ A,C $ a $ P,Q,T,U$
 takové, že platí $ B = P \cdot A \cdot Q = T \cdot C \cdot U $, kde $ A,C $ jsou
-různé a ve \snf a $ P,Q,T,U$ jsou celočíselné invertibilní matice. Pak násobení
-invertibilními maticemi $ P,Q,T,U$ odpovídá postupnému provádění elemntárních
+různé a ve \snf{} a $ P,Q,T,U$ jsou celočíselné invertibilní matice. Pak násobení
+invertibilními maticemi $ P,Q,T,U$ odpovídá postupnému provádění elementárních
 řádkových a sloupcových úprav, o kterých jsme ovšem dokázali, že nemění největšího
-společného dělitele subdeterminantů. To speciálně znamená, že hlavní minory matic
-$ A,C $ ve Smithově normálním tvaru jsou si rovny a proto i invariatní faktory
-musí být stejně. To je spor s předpokladem. Smithův normální tvar je tedy jednoznačný.
+společného dělitele subdeterminantů. To speciální znamená, že hlavní minory matic
+$ A,C $ ve Smithově normálním tvaru jsou si rovny, a proto i invariantní faktory
+musí být stejné. To je ve sporu s předpokladem. Smithův normální tvar je tedy
+jednoznačný.
 
 \end{proof}
-
