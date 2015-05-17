@@ -1,19 +1,29 @@
 \chapter*{Úvod}
 \addcontentsline{toc}{chapter}{Úvod}
 
-Cílem této práce je seznámit čtenáře s efektivním algoritmem pro výpočet Smithova normálního tvaru celočíselných matic.
+Smithův normální tvar nalézá uplatnění například při výpočtu simpliciálních
+homologií \ref{Simplic_Homo}. Vzniká tak potřeba Smithův normální tvar efektivně
+algoritmicky počítat. Cílem této práce proto bude seznámit čtenáře s efektivním
+algoritmem pro výpočet Smithova normálního tvaru celočíselných matic.
 
-Pro potřeby tohoto textu musíme nejprve zavést některé pojmy, které
-nám umožní snazší výklad některých algoritmů.
+V první kapitole definujeme Smithův normální tvar a ukážeme, že pro každou
+celočíselnou matici takovýto tvar existuje a je jednoznačný. Vedlejším produktem
+tohoto důkazu bude také naivní algoritmus pro výpočet Smithova normálního tvaru.
+Ve druhé kapitole popíšeme, jakým způsobeme můžeme pro celočíselnou matici
+vypočítat ekvivalentní matici v redukovaném schodovitém tvaru. Třetí kapitola
+na tento výsledek naváže a poskytně popis algoritmu pro výpočet Smithova
+normálního tvaru z matic v redukovaném schodovitém tvaru. V kapitolách 4 a 5
+pak nastíníme možnosti paralelního výpočtu pomocí Čínské zbytkové věty a popíšeme
+experiemtnální implementaci algoritmu pro výpočet Smithova normálního tvaru v
+jazyce C++.
 
-\begin{defi}\label{hlavni_submatice}
-    Buď $ A $ matice $ n \times m $. \textit{Hlavní} $ k \times l $ submaticí matice $ A $
-    budeme rozumět submatici o rozměrech $ k \times l $, jejíž levý horní roh
-    je shodný s levým horním rohem matice $ A $.
-    \textit{Trailing} $ k \times l $ submaticí matice $ A $ budeme rozumět submatici o
-    rozměrech $ k \times l $, jejíž pravý dolní roh je shodný s pravým dolním
-    rohem matice $ A $.
-\end{defi}
+V první kapitole budeme vycházet zejména ze skipt \ref{vokr}. V kapitolách
+3 respektive 4 pak čerpáme z článků \ref{triang} respektive \ref{SNF_Arne}.
+
+Předpokládá se, že čtenář má základní znalosti z lineární algebry a teorie čísel.
+
+
+
 
 \cleardoublepage
 
