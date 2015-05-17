@@ -48,8 +48,8 @@ struct ArgTraits<Size> {
 int main(int argc, char const *argv[])
 {
     try {
-    srand(10);
-    // srand(time(NULL));
+    // srand(10);
+    srand(time(NULL));
 
     TCLAP::CmdLine cmd("SNF library tester", ' ', "1.0");
 

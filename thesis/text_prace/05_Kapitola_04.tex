@@ -193,6 +193,13 @@ matice a ve druhém pak skalár - jednička. V obou případech pak můžeme vz�
 libovolné prvočíslo, které jistě bude větší než determinant.
 \end{proof}
 
+\begin{pozn}
+Poznamenejme, že v praxi pro nějakou konkrétní úlohu můžeme mít k dispozici
+podstatně lepší odhad na determinant nebo na prvky v hledaném Smithově normálním
+tvaru. Uvedený postup pak bude fungovat úplně stejně, jen nahradíme $ \beta $
+daným odhadem a dále postupujeme identicky.
+\end{pozn}
+
 Předpokládejme, že $ \Vert A \Vert = 100 $. Pak můžeme numericky
 vypočítat, že například pro matice o rozměrech $ 10^4 \times 10^4 $ by
 nám stačila prvočísla mající nejvýše $ 11 $ bitů, což je pro naše potřeby naprosto
@@ -208,5 +215,28 @@ redukovaného schodovitého tvaru matice $ A $. Autor článku \cite{triang} se
 také zabývá tím, jak vypočítat rank profile potřebný pro výpočet redukovaného
 schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se \cite[Theorem 15]{triang},
 že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $
-v okruzích $ \Zbb / p_i \Zbb $.
-Výpočet ekvivalentní trojúhelníkové matice z matice $ A $ tedy není problém.
+v okruzích $ \Zbb / p_i \Zbb $. Výpočet ekvivalentní trojúhelníkové matice z
+matice $ A $ tedy není problém.
+
+Naneštěstí v článku \cite{SNF_Arne} se autor již touto problematikou nezabývá.
+Zamysleme se tedy, zda je paralelizace možná také pro algoritmus \ref{SNF_Triang}.
+Kroky algoritmu, ve kterých provádíme přičítání nebo odečítání násobku nějakého
+řádku či sloupce, využívají standardní algebraické operace z okruhu celých čísel,
+a proto použití izomorfismu $ \varphi $ pro výpočet užívající pouze těchto operací
+bude korektní.
+
+Ukážeme, že také výpočet a použití největšího společného dělitele je korektní.
+
+\begin{lem}
+Mějme izomorfismus
+$ \varphi : \Zbb / m \Zbb \rightarrow \Zbb / p_1^{r_1} \Zbb \times \cdots \Zbb / p_k^{r_k} \Zbb $
+z věty \ref{Chin_Rem_Iso} a uvažme prvky $ a, b \in \Zbb / m \Zbb $.
+Pak platí
+$ \gcd(a,b) = \varphi^{-1}(\gcd([a]_{p_1}, [b]_{p_1}), \dots, \gcd([a]_{p_k}, [b]_{p_k})) $.
+\end{lem}
+\begin{proof}
+\end{proof}
+Analogicky se nedostaneme do problémů v případě, kdy budeme
+na nějaké pozici matice vyrábět největšího společného dělitele,neboť
+Euklidův algoritmus je možné implementovat nad maticemi pomocí elementárních
+řádkových a sloupcových operací.
