@@ -99,7 +99,7 @@ CYCLE:;
     std::chrono::high_resolution_clock::time_point start, end;
     start = std::chrono::high_resolution_clock::now();
 
-    // float det = arma::det(arma::conv_to<arma::mat>::from(matrix));
+    float det = arma::det(arma::conv_to<arma::mat>::from(matrix));
 
     // arma::imat naive_result      = snf.calculate_naive(matrix);
     NTL::mat_ZZ storjohann_result = snf.calculate(matrix);
@@ -111,7 +111,7 @@ CYCLE:;
     // std::cout << naive_result << std::endl;
     P_ std::cout << "Storjohann method: " << std::endl;
     P_ std::cout << storjohann_result << std::endl;
-    // printf("Matrix determinant is: %f\n", det);
+    printf("Matrix determinant is: %f\n", det);
     printf("\nCalculation took %f s\n", duration.count() / 1000000.);
     P_ std::cout << "###################################################################\n";
 

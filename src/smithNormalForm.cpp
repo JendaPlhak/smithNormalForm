@@ -46,7 +46,7 @@ SNF::calculate(arma::imat matrix)
     std::shared_ptr<std::mutex> v_mut(new std::mutex);
 
     std::vector<std::thread> threads;
-    for (uint k = 0; k < 8; ++k) {
+    for (uint k = 0; k < 1; ++k) {
         threads.push_back(std::thread(worker, q_mut, v_mut,
                                                 std::ref(primes_queue),
                                                 matrix,
@@ -104,7 +104,7 @@ SNF::calculate_storjohann(IMat & matrix,
     I_ std::cout << "Result: \n" << matrix << std::endl;
 
     I_ std::cout << "Converting Hermite matrix to SNF...\n";
-    hermiteTriangToSNF(matrix);
+    hermiteTriangToSNF(matrix, p);
     matrix.transform(Modulo(p));
     I_ std::cout << "Result: \n" << matrix << std::endl;
 
@@ -116,7 +116,7 @@ SNF::calculate_storjohann(IMat & matrix,
     I_ std::cout << "Reducing final non-trivial square matrix to SNF...\n";
     D_ std::cout << "Input matrix: \n"
                  << matrix << std::endl;
-    reduceResultingSquareToSNF(matrix);
+    reduceResultingSquareToSNF(matrix, p);
     matrix.transform(Modulo(p));
     I_ std::cout << "Result: \n" << matrix << std::endl;
 

@@ -43,6 +43,17 @@ $
 \end{center}
 \end{pri}
 
+Při práci s maticemi se často budeme odkazovat na specifické submatice. Proto
+zavádíme následující definice.
+\begin{defi}\label{hlavni_submatice}
+    Buď $ A $ matice $ n \times m $. \textit{Hlavní} $ k \times l $ submaticí matice $ A $
+    budeme rozumět submatici o rozměrech $ k \times l $, jejíž levý horní roh
+    je shodný s levým horním rohem matice $ A $.
+    \textit{Trailing} $ k \times l $ submaticí matice $ A $ budeme rozumět submatici o
+    rozměrech $ k \times l $, jejíž pravý dolní roh je shodný s pravým dolním
+    rohem matice $ A $.
+\end{defi}
+
 Pro další práci budeme potřebovat malé lemma, které budeme využívat
 například při přičítání násobku řádku k jinému řádku. Tento výsledek uvedl
 v roce 1992 E. Bach \cite{Bach}. Nejprve však dokažme následující tvrzení:

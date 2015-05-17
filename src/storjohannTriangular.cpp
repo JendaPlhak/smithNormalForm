@@ -18,7 +18,7 @@ void eliminateExtraColumnsInFirstRow(SubMat);
 
 template <typename MatrixType>
 void
-hermiteTriangToSNF_Internal(MatrixType &&);
+hermiteTriangToSNF_Internal(MatrixType &&, int_t p);
 
 
 void
@@ -167,25 +167,28 @@ triangularReduction(SubMat T)
 
 //! Wrapper so that the templated function can be implemented in .cpp file
 void
-hermiteTriangToSNF(IMat & A)
+hermiteTriangToSNF(IMat & A, int_t p)
 {
-    hermiteTriangToSNF_Internal(A);
+    hermiteTriangToSNF_Internal(A, p);
 }
 
 template <typename MatrixType>
 void
-hermiteTriangToSNF_Internal(MatrixType && A)
+hermiteTriangToSNF_Internal(MatrixType && A, int_t p)
 {
     for (uint i = 1; i < A.n_rows; ++i) {
         // printf("i = %d, A.n_cols - 1 = %d\n", i, A.n_cols - 1);
         submatrixToSNF(A.submat(0, 0, i, A.n_cols - 1));
+        A.transform(PositiveModulo(p));
     }
 }
 
 void
 submatrixToSNF(SubMat T)
 {
+    std::cout << "Ensuring divisibility...\n";
     ensureDivisibility(T);
+    std::cout << "Result: \n" << T << std::endl;
     eliminateTrailingCol(T);
 
     // check invariant
@@ -228,14 +231,14 @@ ensureDivisibility(SubMat T)
 void
 eliminateTrailingCol(SubMat T)
 {
-    // std::cout << "Eliminating trailing column\n";
+    std::cout << "Eliminating trailing column\n";
     for (uint i = 0; i < T.n_rows - 1; ++i) {
-        // std::cout << "Processing row " << i << std::endl;
-        // std::cout << T.submat(i, i, T.n_rows - 1, T.n_cols - 1) << std::endl;
+        std::cout << "Processing row " << i << std::endl;
+        std::cout << T.submat(i, i, T.n_rows - 1, T.n_cols - 1) << std::endl;
         processRow(T.submat(i, i, T.n_rows - 1, T.n_cols - 1));
     }
-    // std::cout << "Resulting sub-matrix is: \n";
-    // std::cout << T << std::endl;
+    std::cout << "Resulting sub-matrix is: \n";
+    std::cout << T << std::endl;
 }
 
 //! process first row of given view and convert it to form required by Lemma 9
@@ -251,17 +254,17 @@ processRow(SubMat T)
     t_col[0] = 0;
     for (uint i = 1; i < k; ++i) {
         int_t q = PositiveModulo::mod(t * t_col[i] / s1, diag[i]);
-        // std::cout << "    q = " << q << std::endl;
-        // printf("Before mod:\n");
-        // std::cout << T << std::endl;
+        std::cout << "    q = " << q << std::endl;
+        printf("Before mod:\n");
+        std::cout << T << std::endl;
         if (k < T.n_cols) {
             SubRow sub_row = T.row(i).subvec(k, T.n_cols - 1);
             sub_row -= q * T.row(0).subvec(k, T.n_cols - 1);
         }
-        // std::cout << "    t[i] = " << t_col[i] << ", diag[i] = " << diag[i]
-                  // << ", s1 = " << s1 << std::endl;
-        // printf("After mod:\n");
-        // std::cout << T << std::endl;
+        std::cout << "    t[i] = " << t_col[i] << ", diag[i] = " << diag[i]
+                  << ", s1 = " << s1 << std::endl;
+        printf("After mod:\n");
+        std::cout << T << std::endl;
         t_col[i] = t_col[i] * diag[0] / s1;
         if (k <= T.n_cols) {
             if (k - 1 == i) {
@@ -273,7 +276,6 @@ processRow(SubMat T)
                 auto sub_row = T.row(i).subvec(k - 1, T.n_cols - 1);
                 sub_row.transform(PositiveModulo(diag[i]));
             }
-
         }
     }
     diag[0] = s1;
@@ -347,7 +349,7 @@ eliminateExtraColumnsInFirstRow(SubMat T)
 }
 
 void
-reduceResultingSquareToSNF(IMat & T)
+reduceResultingSquareToSNF(IMat & T, int_t p)
 {
     if (0 == T.n_rows || 0 == T.n_cols) {
         return;
@@ -355,7 +357,7 @@ reduceResultingSquareToSNF(IMat & T)
     // transpose the nontrivial matrix
     T.submat(0, 0, T.n_rows - 1, T.n_rows - 1).transpose();
     makeHermiteNormalForm(T);
-    hermiteTriangToSNF_Internal(T.submat(0, 0, T.n_rows - 1, T.n_rows - 1));
+    hermiteTriangToSNF_Internal(T.submat(0, 0, T.n_rows - 1, T.n_rows - 1), p);
 
     D_ std::cout << T << std::endl;
     P_ checkSNF(T.submat(0, 0, T.n_rows - 1, T.n_cols - 1));

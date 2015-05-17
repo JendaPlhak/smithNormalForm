@@ -306,6 +306,12 @@ public:
         m_submat = m_submat.t();
     }
 
+    template <typename OperatorT>
+    inline void
+    transform(const OperatorT & o) {
+        m_submat.transform(o);
+    }
+
     inline SubMat
     submat(uint row_begin, uint col_begin, uint row_end, uint col_end) {
         return SubMat(m_submat.submat(col_begin, row_begin, col_end, row_end), p);

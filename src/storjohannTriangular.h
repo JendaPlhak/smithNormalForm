@@ -14,9 +14,9 @@ public:
 };
 
 void makeHermiteNormalForm(IMat& A);
-void hermiteTriangToSNF(IMat & A);
+void hermiteTriangToSNF(IMat & A, int_t p);
 void eliminateExtraColumns(IMat & T);
-void reduceResultingSquareToSNF(IMat & T);
+void reduceResultingSquareToSNF(IMat & T, int_t p);
 
 /**
  * Strips all trailing zero columns off the matrix T
