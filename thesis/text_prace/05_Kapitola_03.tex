@@ -1,6 +1,6 @@
 \chapter{Výpočet Smithova normálního tvaru trojúhelníkových matic}
 
-V této sekci navážeme na předchozí kapitolu a uvedeme co to je Hermitův normální
+V této sekci navážeme na předchozí kapitolu a uvedeme, co to je Hermitův normální
 tvar a jaký je jeho vztah k redukovanému schodovitému tvaru.
 Těchto výsledků pak využijeme pro vytvoření algoritmu, který vypočítá
 Smithův normální tvar právě z Hermitova normálního tvaru.
@@ -26,7 +26,7 @@ Při popisu algoritmů a výsledků v této kapitole budeme vycházet zejména z
     Pak $ H $ je v Hermitově normálním tvaru, právě když splňuje následující
     podmínky:
     \begin{Cond}
-        \item Pro každé $ j \in \{1,\dots, n\}$ platí $ h_j > 0 $ a zároveň
+        \item pro každé $ j \in \{1,\dots, n\}$ platí $ h_j > 0 $ a zároveň
         \item $ 0 \leq h_{ij} < h_j $ pro všechna $ 1 \leq i < j \leq n $.
     \end{Cond}
 \end{defi}
@@ -40,13 +40,13 @@ V článku \cite{SNF_Arne} autor dále rozvádí, jakým způsobem je možné vy
 Hermitův normální tvar z horní trojúhelníkové matice, jejíž prvky jsou omezeny
 determinantem. Tím se však v tomto textu nemusíme zabývat, neboť lze snadno
 nahlédnout, že máme-li matici v redukovaném schodovitém tvaru a vhodným způsobem
-přeskupíme její sloupce, dostaneme matici jejíž hlavní čtvercová submatice bude
+přeskupíme její sloupce, dostaneme matici, jejíž hlavní čtvercová submatice bude
 splňovat podmínky Hermitova normálního tvaru.
 
 \section{Sloupcová eliminace}
 
 Buď $ T $ $ k \times m $ matice mající hodnost $ k $, jejíž prvních $ k - 1 $
-sloupců je ve Smithově normálním tvaru. Matici $ T $ můžeme schématicky zapsat
+sloupců je ve Smithově normálním tvaru. Matici $ T $ můžeme schematicky zapsat
 následujícím způsobem:
 
 \begin{align} \label{T_matrix}
@@ -78,7 +78,7 @@ a sloupcových operací převede hlavní $ k \times k $ submatici $ T $ do
 Smithova normálního tvaru.
 \end{vet}
 
-Pro lepší čitelnost rozdělíme důkaz této věty do několika lemmat, které na konci
+Pro lepší čitelnost rozdělíme důkaz této věty do několika lemmat, která na konci
 této kapitoly spojíme v kompletní důkaz.
 
 \begin{lem} \label{Sloup_elim_GCD}
@@ -130,7 +130,7 @@ Nyní počítejme:
                                 &= \gcd(a_i, t_{i}, a_{i+1}, t_{i+1}) \\
                                 &= \gcd(a_i, t_{i}, t_{i+1},\dots,t_{k}),
 \end{align*}
-přičemž předposlední rovnost plyne z toho, že $ a_i \mid a_{i+1} $ a
+přičemž předposlední rovnost plyne z toho, že $ a_i \mid a_{i+1} $, a
 poslední dostaneme z indukčního předpokladu. Rovnost \ref{gcd_eq_induction} je
 tedy splněna.
 
@@ -150,7 +150,7 @@ podmínky, ale navíc bude platit
 \end{Cond}
 \end{lem}
 \begin{proof}
-Našim cílem je transformovat matici $ T $ na ekvivalentní matici
+Naším cílem je transformovat matici $ T $ na ekvivalentní matici
 \begin{align*}
 T' =
     \left(
@@ -196,18 +196,18 @@ TV =
     \right)
 .
 \end{align*}
-Prvek v prvním řádku a $ k $-tém sloupci bude skutečně nulový neboť
+Prvek v prvním řádku a $ k $-tém sloupci bude skutečně nulový, neboť
 $ a_1(-\frac{t_1}{s_1}) + t_1 \frac{a_1}{s_1} = 0 $. Z podmínky (c4) navíc plyne,
 že $ s_1 \mid t_i $ pro $ i = 1,\dots, k $ neboť $ s_1 = \gcd(a_1, t_1) $.
 Díky tomu můžeme vyeliminovat všechny prvky pod diagonálou v prvním sloupci.
-To že $ s_1 \mid t_i $ nám navíc zajišťuje splnění podmínky (c5), čímž je lemma
+To, že $ s_1 \mid t_i $, nám navíc zajišťuje splnění podmínky (c5), čímž je lemma
 dokázáno.
 \end{proof}
 
 Nyní můžeme přistoupit k samotnému důkazu věty \ref{Sloup_elim}.
 \begin{proof}[Důkaz věty o sloupcové eliminaci]
-Buď $ T $ matice $ k \times m $, která splňuje podmínky uvedné v předpokladech
-věty. Pokud $ k = 1 $, pak se naše submatice sestává z jediného prvku. Proto
+Buď $ T $ matice $ k \times m $, která splňuje podmínky uvedené v předpokladech
+věty. Pokud $ k = 1 $, pak naše submatice sestává z jediného prvku. Proto
 stačí případným vynásobením řádku číslem $ -1 $ zajistit $ 0 \leq T_{1,1} $
 a matice bude ve Smithově normálním tvaru.
 
@@ -215,8 +215,8 @@ Nechť je $ k > 1 $. Na matici $ T $ nejdříve aplikujeme algoritmus lemmatu
 \ref{Sloup_elim_GCD}. Tím zajistíme splnění předpokladů pro postupnou aplikaci
 algoritmu lemmatu \ref{Sloup_elim_SNF}. Algoritmus budeme aplikovat na čtvercové
 submatice $ i \times i $, pro $ i = k,k-1,\dots, 2 $, které leží na diagonále
-původní matice $ T $ a pravý dolní roh se překývá s prvkem $ T_{k,k} $
-(v angličitně je nazýváme trailing matrices).
+původní matice $ T $, a pravý dolní roh se překrývá s prvkem $ T_{k,k} $
+(v angličtině je nazýváme trailing matrices).
 
 Takto zajistíme úpravu matice $ T $ do vhodného tvaru a nakonec zbývá jen
 vhodným způsobem pronásobit $ k $-tý řádek $ -1 $ tak, aby platilo
@@ -228,7 +228,7 @@ ve Smithově normálním tvaru, čímž je věta dokázána.
 
 \section{Vynulování extra sloupců}
 Iterativní aplikací algoritmu z předchozí sekce můžeme získat matici ve tvaru
-(toto ještě formálně dokážeme v následující sekci)
+(toto ještě formálně dokážeme v následující části)
 \begin{align} \label{extra_cols}
 T =
     \left(
@@ -244,17 +244,17 @@ T =
 Cílem této sekce bude dokázat následující tvrzení.
 \begin{vet} \label{Zero_extra}
 Buď $ T $ matice o rozměrech $ k \times m $, kterou lze zapsat stejně jako
-v rovnosti \ref{extra_cols} a nechť submatice tvořena prvními $ k $ sloupci má
+v rovnosti \ref{extra_cols}, a nechť submatice tvořená prvními $ k $ sloupci má
 plnou hodnost a je navíc ve Smithově normálním tvaru.
 Pak existuje deterministický algoritmus, který pomocí ekvivalentních řádkových
-a sloupcových operací převede $ T $ na ekvivalentní matici $ T' $ jejíž
+a sloupcových operací převede $ T $ na ekvivalentní matici $ T' $, jejíž
 hlavní $ k \times k $ submatice bude dolní trojúhelníková a posledních $ m - k $
 sloupců bude nulových.
 \end{vet}
 \begin{proof}
 Nechť $ s_1 = \gcd(a_1, b_{1,j}) $. Pomocí rozšířeného Euklidova algoritmu
 můžeme najít dvojici koeficientů $ s, t $ takovou, že
-$ s a_1 + t b_{1,j} = s_1 $. Vezměme za $ V $ identická matici a doplňme do ní
+$ s a_1 + t b_{1,j} = s_1 $. Vezměme za $ V $ identickou matici a doplňme do ní
 $ V_{1,1} = s $, $ V_{j,1} = t $, $ V_{1,j} = -b_{1,j} / s_1 $ a
 $ V_{j,j} = a_1 / s_1 $. Pak z Laplaceova rozvoje a díky Bezoutově rovnosti
 dostaneme $ \det(V) = 1 $. Aplikací matice $ V $ na $ T $ dostaneme
@@ -270,12 +270,12 @@ TV =
     \right).
 \end{align*}
 
-Prvek v prvním řádku, $ j $-tém sloupci bude skutečně nulový neboť
+Prvek v prvním řádku, $ j $-tém sloupci bude skutečně nulový, neboť
 $ a_1 (-b_{1,j} / s_1) +  b_{1,j} (a_1 / s_1) = 0 $. Tento algoritmus můžeme
 aplikovat postupně pro $ j = 1,\dots,m-k $. Uvědomme si, že prvky v prvním řádku
 pod diagonálou se budou postupně měnit, avšak to nebude mít žádný vliv na
 eliminaci prvků v prvním řádku. Stejně tak se budou měnit prvky pod prvním řádkem
-v matici $ (b_{i,j}) $, avšak opět to na výslednou eliminaci nebude mít žádný
+v matici $ (b_{i,j}) $, to však opět na výslednou eliminaci nebude mít žádný
 dopad. Výsledná matice $ T' $ tak bude mít tvar
 \begin{align*}
 T' =
@@ -339,7 +339,7 @@ regulární matice mající prvních $ r - 1 $ sloupců ve Smithově normálním
 $ T_2 $ je matice o rozměrech $ r \times (m - r) $ a konečně matice $ B $ je
 rovna trailing $ (n - r) \times (m - r) $ submatici matice $ A $. Opět můžeme
 předpokládat, že transformace, které jsme doposud provedli, neměly
-žádný vliv na trailing submatice neboť pro $ r = 1 $ se žádné úpravy neprovedou.
+žádný vliv na trailing submatice, neboť pro $ r = 1 $ se žádné úpravy neprovedou.
 Na začátku $ r $-tého kroku tedy skutečně můžeme předpokládat, že matice $ B $
 má uvedené vlastnosti.
 
@@ -366,9 +366,9 @@ T =
 Všechny řádkové operace tak budou omezeny pouze na prvních $ r $ řádků. Všechny
 sloupcové operace se sloupci, které zasahují do matice $ B $,
 se navíc budou omezovat na přičtení nějakého násobku sloupce z $ T_1 $. Avšak
-submatice pod $ T_1 $ je nulová a proto zůstane matice $ B $ nezměněna.
+submatice pod $ T_1 $ je nulová, a proto zůstane matice $ B $ nezměněna.
 
-Konečně vstupní matice $ T $ je zřejmě korektním vstupnem pro algoritmus
+Konečně vstupní matice $ T $ je zřejmě korektním vstupem pro algoritmus
 věty \ref{Sloup_elim}, výsledná matice tak bude splňovat všechny naše požadavky
 a indukční krok je hotov.
 
@@ -396,19 +396,19 @@ matici $ A' $ na ekvivalentní matici tvaru
 kde $ R $ je $ n \times n $ regulární dolní trojúhelníková matice a $ O $ je
 nulová matice.
 
-Mějme transformační unimodulární matice $ P, Q $, které převádí matici $ R $
+Mějme transformační unimodulární matice $ P, Q $, které převádějí matici $ R $
 do Smithova normálního tvaru $ S $. Tedy $ P R Q = S $. Můžeme ovšem počítat
 $ P R Q = S = S^T = (P R Q)^T = Q^T R^T P^T $. Z toho ovšem plyne, že
 transponovaná matice $ R^T $ bude mít stejný Smithův normální tvar jako původní
 matice $ R $. Proto můžeme aplikovat postup z první fáze na matici $ R^T $,
-čímž získáme Smithův normální tvar matice $ R $ a tedy i Smithův normální tvar
+čímž získáme Smithův normální tvar matice $ R $, a tedy i Smithův normální tvar
 matice $ A $.
 \end{proof}
 
 
 \section{Algoritmus pro výpočet Smithova normálního tvaru}
 Mějme libovolnou celočíselnou matici $ A $ o rozměrech $ n \times m $. Na matici
-$ A $ můžeme nejprve aplikovat algoritmus z věty \ref{RST_algo}), který ji
+$ A $ můžeme nejprve aplikovat algoritmus z věty \ref{RST_algo}, který ji
 převede do redukovaného schodovitého tvaru. Výslednou matici označme $ B $.
 
 Pro další výpočty stačí uvažovat jen prvních $ k \leq n $ nenulových řádků
