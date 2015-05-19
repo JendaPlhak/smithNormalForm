@@ -1,13 +1,13 @@
 \chapter{Triangularizace celočíselných matic}
 
-V této kapitole se budeme zabývat popisem algoritmu pro výpočet redukovaného
+V této kapitole se zaměříme na popis algoritmu pro výpočet redukovaného
 schodovitého tvaru celočíselných matic. Tento algoritmus představil Arne Storjohann
 v článku nazvaném ,,\textit{A fast+practial+deterministic algorithm for
 triangularizing integer matrices}'' \cite{triang}. Definujme nejdříve tvar matice,
-jehož vytvoření bude našim cílem.
+jehož vytvoření bude naším cílem.
 
 \begin{defi}\label{RREF}
-    Řekneme že matice $ A \in \Zmat $ je v redukovaném schodovitém tvaru (\rst) jestliže
+    Řekneme, že matice $ A \in \Zmat $ je v redukovaném schodovitém tvaru (\rst{}), jestliže
     splňuje následující podmínky:
     \begin{Cond}
         \item Buď $ r $ hodnost matice A. Pak prvních $ r $ řádků je nenulových
@@ -23,13 +23,13 @@ jehož vytvoření bude našim cílem.
 Poznamenejme, že první a druhá podmínka nám zaručují schodovitý tvar matice $ A $.
 Tento však zjevně není jednoznačný. Proto je nutné přidat ještě podmínky
 (\textit{c3}) a (\textit{c4}). (\textit{c3}) zajišťuje, že členy nad pivoty budou
-kladné a (\textit{c4}) říká, že prvky nad pivoty budou pivoty omezeny. Tyto
+kladné, a (\textit{c4}) říká, že prvky nad pivoty budou pivoty omezeny. Tyto
 podmínky pak určují tvar matice $ A $ jednoznačně vzhledem k elementárním
 operacím.
 \end{pozn}
 
 \begin{pri}
-Pro ilustraci uvádíme následující matici v \rst:
+Pro ilustraci uvádíme následující matici v \rst{}:
 \begin{center}
 $
     \begin{pmatrix}
@@ -61,13 +61,13 @@ v roce 1992 E. Bach \cite{Bach}. Nejprve však dokažme následující tvrzení:
 \begin{lem} \label{factorization}
     Mějme kladná celá čísla $ g > 1 $ a $ N $ taková, že $ g \mid N $. Pak
     existuje algoritmus, který najde kladná celá čísla $ X, Y $ taková, že
-    $ N = XY $, $ \gcd(X, Y) = 1 $, $ \gcd(g, Y) = 1 $ a navíc požadujeme, aby
+    $ N = XY $, $ \gcd(X, Y) = 1 $, $ \gcd(g, Y) = 1 $, a navíc požadujeme, aby
     pro libovolné prvočíslo $ p \in \mathbb{P} $ platilo
     $ p \mid X \Rightarrow p \mid g $.
 \end{lem}
 \begin{pozn}
 Pro lepší pochopení tohoto lemmatu poznamenejme, že jde vlastně jen o vhodné
-rozdělení prvočísel, které tvoří $ N $, do proměnných $ X $, $ Y $ tak, abychom
+rozdělení prvočísel, která tvoří $ N $, do proměnných $ X $, $ Y $ tak, abychom
 jich do $ X $ přesunuli pouze nezbytně mnoho.
 \end{pozn}
 \begin{proof}
@@ -98,7 +98,7 @@ jich do $ X $ přesunuli pouze nezbytně mnoho.
 
     Nakonec ještě ukážeme platnost požadované implikace. Ta bude po prvním kroku
     algoritmu platit triviálně. V každé další iteraci pak budeme do $ X $
-    přidávat pouze mocniny prvočísel, která se v $ X $ už nachází, což na platnost
+    přidávat pouze mocniny prvočísel, která se v $ X $ už nacházejí, což na platnost
     implikace nebude mít žádný vliv.
 \end{proof}
 \begin{pozn}
@@ -142,7 +142,7 @@ možnost. Z $ \gcd(a,N) \neq 1 $ plyne, že $ g $ ve svém rozkladu obsahuje
 alespoň jedno prvočíslo dělící $ N $, je tedy korektní aplikovat lemma
 \ref{factorization} na čísla $ N $ a $ g $. Výsledná čísla $ X, Y $ budou
 nesoudělná a koeficient $ c $ můžeme najít pomocí Čínské zbytkové věty. Ukážeme,
-že $ c $, získané z uvedené soustavy kongruencí pro $ X $ a $ Y $, bude skutečně
+že $ c $ získané z uvedené soustavy kongruencí pro $ X $ a $ Y $ bude skutečně
 splňovat požadavky lemmatu.
 
 Zřejmě platí, že $ \gcd(a+cb, N) = 1 \Leftrightarrow a + cb $ není dělitelné žádným
@@ -163,8 +163,8 @@ Díky výše uvedeným ekvivalencím můžeme rozlišit dva případy.
 
 (\textit{i}) $ p \nmid a \Leftrightarrow p \mid Y $.
 Z předpokladu pak plyne, že $ a + cb \equiv 0 \pmod{p} $. Avšak z toho, že
-$ p \mid Y $ a z požadavků, které klademe na $ c $ dostaneme
-$ a + cb \equiv a \equiv 0 \pmod{p} $. To ovšem implikuje  $ p \mid a $, což
+$ p \mid Y $, a z požadavků, které klademe na $ c $, dostaneme
+$ a + cb \equiv a \equiv 0 \pmod{p} $. To ovšem implikuje $ p \mid a $, což
 je spor.
 
 (\textit{ii}) $ p \mid a \Leftrightarrow p \mid X $.
@@ -193,7 +193,7 @@ V následujících podkapitolách nejdříve popíšeme několik klíčových pr
 budou upravovat vstupní matici $ A $ pomocí unimodulárních (mající determinant
 roven $\pm 1$, tedy invertibilních) matic.
 Tyto procedury postupně propojíme a v poslední podkapitole pak obdržíme samotný
-algoritmus pro výpočet \rst.
+algoritmus pro výpočet \rst{}.
 
 
 
@@ -201,7 +201,7 @@ algoritmus pro výpočet \rst.
 
 \section{GCD redukce}
 Jak jsme viděli již v důkazu věty o Smithově normálním tvaru, častou operací,
-kterou s maticí při převodu do \snf provádíme, je eliminace všech prvků
+kterou s maticí při převodu do \snf{} provádíme, je eliminace všech prvků
 nacházejících se pod nějakým námi zvoleným pivotem. Takováto eliminace je poměrně
 náročná, neboť pro každý prvek musíme vytvářet největší společný dělitel s pivotem.
 Bylo by proto výhodné, kdybychom mohli nějakým způsobem upravit prvky ve sloupci tak,
@@ -267,9 +267,9 @@ a navíc $ CB $ bude splňovat následující podmínky:
 \end{vet}
 
 \begin{proof}
-Bez újmy na obecnosti můžeme předpokládat, že $ k > 0 $. Pokud by k bylo nulové,
-můžeme zřejmě za $ C $ zvolit identitu, které splní naše požadavky.
-Dále můžeme předpokládat, že hlavní submatice je regulární a tedy platí
+Bez újmy na obecnosti můžeme předpokládat, že $ k > 0 $. Pokud by $ k $ bylo nulové,
+můžeme zřejmě za $ C $ zvolit identitu, která splní naše požadavky.
+Dále můžeme předpokládat, že hlavní submatice je regulární, a tedy platí
 $ N \bar{a}_0 - \bar{N} a_0 \neq 0 $. Pokud by tomu tak nebylo, přičteme k druhému
 řádku nějaký řádek $ 2 < s \leq k + 2 $, pro který platí
 $ N \bar{b}_s - \bar{N} b_s \neq 0 $.
@@ -321,7 +321,7 @@ po dělení číslem $ N $ proto budou nesoudělné.
 Pomocí algoritmu, který jsme použili v důkazu lemmatu \ref{bach}, můžeme najít
 kladné číslo $ t $ takové, že bude platit
 \begin{equation}\label{t_search}
-    gcd(\tilde{a}_{l-1} + t \tilde{b}_{l}, N) = 1
+    gcd(\tilde{a}_{l-1} + t \tilde{b}_{l}, N) = 1,
 \end{equation}
 a volbou $ c_l \leftarrow t $ zajistíme splnění podmínky (1). Skutečně:
 \begin{align*}
@@ -333,7 +333,7 @@ a volbou $ c_l \leftarrow t $ zajistíme splnění podmínky (1). Skutečně:
                 &= gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l}), N) \\
                 &= gcd(g, N) \\
                 &= gcd(a_{l-1}, b_l, N) \\
-                &= gcd(N, a_0, b_1, b_2, \dots, b_l) \\
+                &= gcd(N, a_0, b_1, b_2, \dots, b_l), \\
 \end{align*}
 přičemž poslední rovnost plyne z indukčního předpokladu.
 
@@ -358,12 +358,12 @@ rozlišit dva případy.
 případě nemůže existovat žádné $ x $, které by mohlo podmínku (2) pokazit.
 
 (\textit{ii}) $ N \bar{b}_l - \bar{N} b_l \neq 0 $.
-To implikuje, že prvek x je určen jednoznačně a můžeme jej vyjádřit jako
+To implikuje, že prvek $ x $ je určen jednoznačně a můžeme jej vyjádřit jako
 \begin{equation}\label{frac}
     x = -\frac{N \bar{a}_{l-1} - \bar{N} a_{l-1}} {N \bar{b}_l - \bar{N} b_l}
-      \neq 0
+      \neq 0.
 \end{equation}
-Pokud nám tedy v kroku \ref{t_search} výjde $ c_l $ různé od $ x $, je vše v pořádku.
+Pokud nám tedy v kroku \ref{t_search} vyjde $ c_l $ různé od $ x $, je vše v pořádku.
 Pokud ovšem $ c_l = t = x $, nebyla by podmínka (2) splněna.
 To ale můžeme snadno napravit. Předpokládejme tedy, že $ 0 < x = t $.
 Nechť $ \bar{t} $ je nejmenší nezáporné číslo, pro které platí
@@ -381,7 +381,7 @@ jsme to již provedli výše pro $ c_l = t $.
 
 V této části si ukážeme, jak využít výsledků předcházející věty \ref{gcd_red} k
 eliminaci prvků ve sloupečku. Mějme tedy $ n \times 2 $
-vstupní matici $ B $, kteroužto můžeme zapsat následujícím způsobem:
+vstupní matici $ B $, kterou můžeme zapsat následujícím způsobem:
 \begin{align} \label{B_col}
 B =
     \begin{pmatrix}
@@ -399,7 +399,7 @@ B =
 kde $ k \geq 0 $, $ N > 0 $ a trailing $ (k+2) \times 2 $ submatice má plnou
 hodnost.
 
-Našim cílem bude nalézt $ n \times n $ unimodulární matice
+Naším cílem bude nalézt $ n \times n $ unimodulární matice
 \begin{align} \label{Q_C}
 C =
     \begin{pmatrix}
@@ -445,7 +445,7 @@ a budou splněny podmínky následující věty.
 Mějme matici $ B \in Mat_{n \times 2}\mathbb{Z} $, kterou můžeme zapsat jako v
 \ref{B_col} s tím, že $ k \geq 0$, $ N > 0 $ a trailing $ (k+2) \times 2 $
 submatice má plnou hodnost. Pak existuje algoritmus \textbf{ColumnReduction}($B, k$),
-který na vstupu vezme $ B $ a $ k $, a jako výstup vrátí $ n \times n $
+který na vstupu vezme $ B $ a $ k $ a jako výstup vrátí $ n \times n $
 matice $ C $ a $ Q $, které lze vyjádřit jako v \ref{Q_C}. Navíc bude platit, že
 součin $ QCB $ lze psát jako \ref{QCB} a bude splňovat následující podmínky:
 
@@ -536,7 +536,7 @@ Q =
     \end{pmatrix}
 ,
 \end{align*}
-která, jak plyne z předchozího, bude také unimodulární. Aplikací $ Q $ na matici
+která, jak plyne z výše uvedeného, bude také unimodulární. Aplikací $ Q $ na matici
 $ CB $ dostáváme
 \begin{align*}
 QCB =
@@ -551,7 +551,7 @@ QCB =
         b_k    & \bar{b}_k \\
     \end{pmatrix}
 \end{align*}
-a platí $ t_1 \mid b_i$ kde $ i = 1, \dots, k $. Můžeme tedy snadno vyeliminovat
+a platí $ t_1 \mid b_i$, kde $ i = 1, \dots, k $. Můžeme tedy snadno vyeliminovat
 prvky pod $ t_1 $. Následně snadno provedeme redukci prvků nad $ t_1 $ a
 konečně i prvků nad a pod $ t_2 $. To lze provést pomocí elementárních řádkových
 operací, které můžeme odpovídajícím způsobem zapsat do matice $ Q $. Takto
@@ -602,7 +602,7 @@ algoritmu, která již rank profile nevyžaduje. Nyní přistupme k samotné def
 
 \begin{algorithm} \label{RST_algorithm}
 {
-    \textbf{Algoritmus:} Výpočet redukovaného schodovitého tvaru
+    \textbf{Algoritmus:} Výpočet redukovaného schodovitého tvaru.
 }
 
 \KwData{
@@ -694,7 +694,7 @@ matice v redukovaném schodovitém tvaru. Navíc bude platit:
 \end{Cond}
 \end{lem}
 \begin{proof}
-Důkaz provedeme indukcí. V inicálním stavu algoritmu $ i = 0 $ jsou požadavky lemmatu
+Důkaz provedeme indukcí. V iniciálním stavu algoritmu $ i = 0 $ jsou požadavky lemmatu
 triviálně splněny, neboť $ Q^{(0)} = C^{(0)} = I_n $. Předpokládejme tedy, že
 lemma platí pro $ i = k - 1 < r $, pro nějaké $ k $ kladné.
 Dokážeme, že pak lemma platí také pro $ i = k $.
@@ -721,7 +721,7 @@ A také (2) submatice složená z posledních $ k' + 2 $ řádků matice $ B_k $
 bude mít plnou hodnost. To dostaneme z toho, že $ B_k $ je složená ze sloupců
 $ j_k $ a $ j_{k+1} $ matice $ T^{(k - 1)} $ a navíc všechny prvky nalevo od
 $ j_k $-tého sloupce v řádcích $k, k+1, \dots, m $ matice $ T^{(k - 1)} $ jsou nulové
-(skutečně, jedná se o prvky, které se nachází pod blokem $ R_{k-1} $ z vyjádření
+(skutečně, jedná se o prvky, které se nacházejí pod blokem $ R_{k-1} $ z vyjádření
 \ref{block_form}).
 
 Vlastnosti (1) a (2) nám zaručují, že submatice $ B_k $ je validním vstupem pro
@@ -733,9 +733,9 @@ $ { C^{(k)} \leftarrow \tilde{C} C^{(k - 1)} } $
 strukturu zachycenou v rovnosti \ref{block_form}.
 
 Nyní ukážeme, že rovnost \ref{block_form} je splněna pro $ i = k $
-na konci $ k $-tého cyklu našeho algoritmu. To znamená ověřit rovnost
+na konci $ k $-tého cyklu našeho algoritmu. Musíme tedy ověřit rovnost
 $ T^{(k)} = Q^{(k)} C^{(k)} A $. Poznamenejme, že matici $ T^{(k)} $ vypočítáme
-jakožto $ T^{(k)} \leftarrow \tilde{Q} \tilde{C} T^{(k - 1)} $ a navíc
+jakožto $ T^{(k)} \leftarrow \tilde{Q} \tilde{C} T^{(k - 1)} $, a navíc
 z indukčního předpokladu plyne, že platí $ T^{(k - 1)} = Q^{(k - 1)} C^{(k - 1)} A $.
 To všechno nám dohromady dává následující rovnosti:
 
@@ -752,13 +752,13 @@ Nakonec uveďme, že díky struktuře součinu matic $ \tilde{Q} \tilde{C} B_k $
 nám garantuje věta \ref{col_red}, a díky tomu, že submatice tvořená řádky
 $ k, k+1, \dots, m $ a sloupci $ j_k, j_k + 1, \dots, j_{k+1} - 1 $ má hodnost
 $ 1 $ (plyne z definice rank profile a indukčního předpokladu), bude možné matici
-$ T^{(k)} = \tilde{Q} \tilde{C} T^{(k - 1)} $ schématicky zapsat jako v rovnosti
+$ T^{(k)} = \tilde{Q} \tilde{C} T^{(k - 1)} $ schematicky zapsat jako v rovnosti
 \ref{block_form} a navíc bude splňovat požadavky našeho lemmatu.
 \end{proof}
 
 RST algoritmus \ref{RST_algorithm} bere na vstupu libovolnou matici $ A' $ o
 rozměrech $ n \times m $, která však musí byt vložena do $ (n + 2) \times (m + 2) $
-matice $ A $ tak, jak je znázorňu je \ref{input_A}. Nyní ukážeme, že toto není
+matice $ A $ tak, jak je znázorňuje \ref{input_A}. Nyní ukážeme, že toto není
 nikterak omezující, protože výstupní matice
 ($ Q^{(r - 1)} $, $ C^{(r - 1)} $, $ T^{(r - 1)} $) mohou být zachyceny
 následujícím schématem:
