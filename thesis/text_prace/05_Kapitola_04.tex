@@ -2,16 +2,16 @@
 
 Buď $ A $ celočíselná matice $ n \times m $ a předpokládejme, že $ n < m $. Pak
 z Hadamardovy nerovnosti (pro bližší infromace čtenáře odkazujeme na publikaci
-\cite{Hadamard}) plyne, že $ \det(A) \leq (m^{1/2} \Vert A \Vert )^m $, kde
-$ \Vert A \Vert $ značí nejmenší celé číslo takové, že
-$ \vert a^i_j \vert \leq \Vert A \Vert $. Z článku \cite{Had_tight} plyne, že
+\cite{Hadamard}) plyne, že pro libovolný minor $ h $ matice $ A $
+platí $ h \leq (m^{1/2} \Vert A \Vert )^m $, kde
+$ \Vert A \Vert = max \{ |a^i_j| \} $. Z článku \cite{Had_tight} plyne, že
 Hadamardův odhad je poněkud pesimistický a v případě náhodných matic vychází
-determinant v průměru poněkud lépe, přesto však tento odhad dává tušit, že
+determinant v průměru menší, přesto však tento odhad dává tušit, že
 se v případě počítačové implementace algoritmu pro výpočet Smithova normálního
 tvaru můžeme poměrně rychle dostat do problémů s kapacitou celočíselných typů.
 
-To samozřejmě můžeme řešit specializovanými knihovnami, které
-reprezentují celé číslo jako třídu zaobalující pole celých čísel. Nicméně
+Tento problém můžeme řešit knihovnami pro reprezentaci celých čísel libovolné
+bitové délky. Nicméně
 efektivita takového řešení už není ideální a navíc tento přístup zvyšuje
 paměťovou náročnost. Hodilo by se nám proto, kdybychom mohli celý výpočet
 rozložit na více částí, pro které už by nebylo problém spočítat výsledek pomocí
@@ -44,7 +44,7 @@ $ M = m_1 m_2 \cdots m_k $. Pak zřejmě pro každé $ i \in \{1,\dots,k\} $
 platí $ \gcd(m_i, M / m_i) = 1 $, protože $ m_i $ jsou po dvou nesoudělná.
 Díky tomu můžeme pomocí rozšířeného Euklidova algoritmu najít celá čísla
 $ s_i, t_i $ taková, že $ s_i m_i + t_i \frac{M}{m_i} = 1 $. Nyní označme
-$ d_i = t_i \frac{M}{m_i} $. Z toho plyne rovnost $ s_i m_i + d_i = 1 $ a navíc
+$ d_i = t_i \frac{M}{m_i} $. Z toho plyne rovnost $ s_i m_i + d_i = 1 $ a
 \begin{align*}
 d_i \equiv
 \left\{
@@ -121,8 +121,9 @@ prostory jsou proto izomorfní.
 Důsledek \ref{Chin_Rem_Iso} nám vlastně říká, že pokud chceme provádět sérii
 výpočtů (sčítání, odčítání, násobení) nad celými čísly a jsme dopředu schopni
 omezit výsledek nějakým číslem $ m $, tak to můžeme provést paralelně modulo
-prvočíselné faktory $ m $. Konkrétně nejprve faktorizujeme $ m $ na mocniny
-prvočísel. Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
+prvočíselné faktory $ m $. V praxi $ m $ obvykle získáme tak, že postupně
+přidáváme prvočísla dokud jejich součin není dostatečně velký.
+Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
 čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů.
 Nyní můžeme paralelně aplikovat operace, které potřebujeme provést a konečně
 pomocí konstrukce uvedené v důkazu věty \ref{Chin_Rem} spojíme částečné výsledky
@@ -134,7 +135,7 @@ Snadno se nahlédne, že výše uvedený Hadamardův odhad můžeme aplikovat i 
 matic ve Smithově normálním tvaru. Mějme libovolnou matici $ A $ jako na začátku
 této kapitoly a označme $ \beta = (m^{1/2} \Vert A \Vert )^m $. Naším cílem bude
 najít prvočísla $ p_1,\dots, p_k $ tak, aby $ \beta < p_1 \cdots p_k $. Zřejmě
-bychom mohli postupně brát prvočísla $ 2, 3, 5, 7, /dots $, dokud by uvedená
+bychom mohli postupně brát prvočísla $ 2, 3, 5, 7 \dots $, dokud by uvedená
 podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
 druhou stranu chceme, aby tato prvočísla byla dostatečně malá tak, abychom
 si pro rozumně velké matice vystačili se standardní 32bitovou reprezentací
@@ -148,7 +149,7 @@ modifikované podobě pomocí následujícího tvrzení.
 
 
 \begin{lem}[{\cite[Corollary 3.8]{primes}}] \label{num_primes_src}
-Nechť $ \pi(a) = \sum\limits_{p \leq a}{1} $, kde $ p \in \mathbb{P} $. Pak
+Nechť $ \pi(a) = \left\vert \{ p \in \mathbb{P} \vert p \leq a \} \right\vert $. Pak
 platí $ 3a / (5 \ln{a}) < \pi(2a) - \pi(a) $ pro všechna $ a \geq 20 \frac{1}{2} $.
 \end{lem}
 
@@ -170,10 +171,10 @@ $ l \geq 6 $ z čehož plyne, že $ a \geq 32 $. Z definice funkce $ \pi(a) $ pa
 získáme naše tvrzení.
 \end{proof}
 \begin{dus}
-Buď $ \beta $ Hadamardův odhad na determinant tak, jako na začátku této sekce a
-nechť $ l = 6 + \log_2 \log_2 \beta $. Pak můžeme najít
+Buď $ \beta = (m^{1/2} \Vert A \Vert )^m $ Hadamardův odhad na determinant tak,
+jako na začátku této sekce a nechť $ l = 6 + \log_2 \log_2 \beta $. Pak můžeme najít
 $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ \{p_1, \dots, p_s\} $,
-která bude možno reprezentovat $ l $-bitovým celým číslem a navíc bude platit
+která je možno reprezentovat $ l $-bitovým celým číslem a navíc bude platit
 $ \beta < p_1 \cdots p_s $.
 \end{dus}
 \begin{proof}
@@ -200,43 +201,49 @@ tvaru. Uvedený postup pak bude fungovat úplně stejně, jen nahradíme $ \beta
 daným odhadem a dále postupujeme identicky.
 \end{pozn}
 
-Předpokládejme, že $ \Vert A \Vert = 100 $. Pak můžeme numericky
-vypočítat, že například pro matice o rozměrech $ 10^4 \times 10^4 $ by
-nám stačila prvočísla mající nejvýše $ 11 $ bitů, což je pro naše potřeby naprosto
-postačující. Předpokládáme, že větší matice již budou nad naše výpočetní
+Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozměrech
+$ 10^4 \times 10^4 $. Pak nám budou pro výpočet stačit prvočísla jejiž bitová
+délka bude $ l = 6 + \log_2(10^4 \log_2(10^2 \Vert A \Vert)) $. Konkrétně
+pokud dosadíme $ \Vert A \Vert = 2^{31} $, zjistíme, že by nám stačila prvočísla
+mající nejvýše $ 26 $ bitů, což je pro naše potřeby naprosto
+postačující. Předpokládáme, že matice větších rozměrů již budou nad naše výpočetní
 možnosti.
 
 \section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
 Mějme opět matici $ A $ tak jako na začátku a uvažme prvočísla
 $ \{ p_1, \dots, p_s \} $ z předchozí sekce. Článek \cite[Theorem 16]{triang}
-uvádí, že všechny operace algoritmu věty \ref{RST_algo} můžeme provést postupně
-modulo prvočísla $ p_i $ a nakonec mezivýsledky spojit do hledaného
-redukovaného schodovitého tvaru matice $ A $. Autor článku \cite{triang} se
+uvádí, že operace algoritmu z věty \ref{RST_algo} můžeme provádět paralelně
+v okruzích $ \Zbb / p_i \Zbb $. Avšak autor také uvádí, že aby byl algoritmus
+korektní, musíme v algoritmu lemmatu \ref{RST_algo_lemma} postupovat poněkud
+opatrněji. S pracovní matici $ B_k $, která označuje právě zpracováváný sloupec,
+bychom měli vždy pracovat pouze ve standardní reprezentaci. To znamená, že při
+inicializaci matice $ B_k $ musíme pomocí věty \ref{Chin_Rem} zobrazit příslušné
+prvky matic v okruzích $ \Zbb / p_i \Zbb $ do okruhu $ \Zbb / m \Zbb $.
+
+V praxi to pak znamená, že ve chvíli, kdy algoritmus potřebuje vypočítat nějaký
+koeficient (například pomocí rošířeného Euklidova algoritmu), musíme prvky
+potřebné pro výpočet daného koeficientu převést z modulárního systému do standardní
+reprezentace pomocí Čínské zbytkové věty, vypočítat koeficient nad okruhem celých
+čísel a pak pomocí tohoto koeficientu provést kýženou operaci nad maticemi v
+okruzích $ \Zbb / p_i \Zbb $.
+
+Autor článku \cite{triang} se
 také zabývá tím, jak vypočítat rank profile potřebný pro výpočet redukovaného
 schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se \cite[Theorem 15]{triang},
 že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $
 v okruzích $ \Zbb / p_i \Zbb $. Výpočet ekvivalentní trojúhelníkové matice z
 matice $ A $ tedy není problém.
 
-Naneštěstí v článku \cite{SNF_Arne} se autor již touto problematikou nezabývá.
-Zamysleme se tedy, zda je paralelizace možná také pro algoritmus \ref{SNF_Triang}.
-Kroky algoritmu, ve kterých provádíme přičítání nebo odečítání násobku nějakého
-řádku či sloupce, využívají standardní algebraické operace z okruhu celých čísel,
-a proto použití izomorfismu $ \varphi $ pro výpočet užívající pouze těchto operací
-bude korektní.
+Naneštěstí v článku \cite{SNF_Arne} se autor již problematikou počítání v
+reziduálním systému nezabývá. To však můžeme napravit. Výpočet povedeme podobným
+způsobem jako v případě výše uvedené paralelizace algoritmu pro výpočet RST.
+Nejprve musíme identifikovat všechny místa algoritmu z věty \ref{SNF_Triang},
+která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_GCD}
+se jedná koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
+\ref{Sloup_elim_SNF} pak používá rozšířený Euklidův algoritmus pro výpočet čísel
+$ s, t $ a $ s_1 $. Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu
+\ref{extra_cols}. Na těchto třech místech proto musí dojít k synchornizaci výpočtu,
+převodu příslušných prvků do standardní reprezentace, výpočtu potřebných
+koeficientů a pak teprve může algoritmus pokračovat ve výpočtu v modulárních
+systémech se získanými koeficienty.
 
-Ukážeme, že také výpočet a použití největšího společného dělitele je korektní.
-
-\begin{lem}
-Mějme izomorfismus
-$ \varphi : \Zbb / m \Zbb \rightarrow \Zbb / p_1^{r_1} \Zbb \times \cdots \Zbb / p_k^{r_k} \Zbb $
-z věty \ref{Chin_Rem_Iso} a uvažme prvky $ a, b \in \Zbb / m \Zbb $.
-Pak platí
-$ \gcd(a,b) = \varphi^{-1}(\gcd([a]_{p_1}, [b]_{p_1}), \dots, \gcd([a]_{p_k}, [b]_{p_k})) $.
-\end{lem}
-\begin{proof}
-\end{proof}
-Analogicky se nedostaneme do problémů v případě, kdy budeme
-na nějaké pozici matice vyrábět největšího společného dělitele,neboť
-Euklidův algoritmus je možné implementovat nad maticemi pomocí elementárních
-řádkových a sloupcových operací.
