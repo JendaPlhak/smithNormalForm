@@ -213,7 +213,7 @@ možnosti.
 Mějme opět matici $ A $ tak jako na začátku a uvažme prvočísla
 $ \{ p_1, \dots, p_s \} $ z předchozí sekce. Článek \cite[Theorem 16]{triang}
 uvádí, že operace algoritmu z věty \ref{RST_algo} můžeme provádět paralelně
-v okruzích $ \Zbb / p_i \Zbb $. Avšak autor také uvádí, že aby byl algoritmus
+v okruzích $ \Zbb / p_i \Zbb $. Avšak autor také podotýká, že aby byl algoritmus
 korektní, musíme v algoritmu lemmatu \ref{RST_algo_lemma} postupovat poněkud
 opatrněji. S pracovní matici $ B_k $, která označuje právě zpracováváný sloupec,
 bychom měli vždy pracovat pouze ve standardní reprezentaci. To znamená, že při
@@ -237,7 +237,7 @@ matice $ A $ tedy není problém.
 Naneštěstí v článku \cite{SNF_Arne} se autor již problematikou počítání v
 reziduálním systému nezabývá. To však můžeme napravit. Výpočet povedeme podobným
 způsobem jako v případě výše uvedené paralelizace algoritmu pro výpočet RST.
-Nejprve musíme identifikovat všechny místa algoritmu z věty \ref{SNF_Triang},
+Nejprve musíme identifikovat všechna místa algoritmu z věty \ref{SNF_Triang},
 která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_GCD}
 se jedná koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
 \ref{Sloup_elim_SNF} pak používá rozšířený Euklidův algoritmus pro výpočet čísel
@@ -247,3 +247,11 @@ převodu příslušných prvků do standardní reprezentace, výpočtu potřebn�
 koeficientů a pak teprve může algoritmus pokračovat ve výpočtu v modulárních
 systémech se získanými koeficienty.
 
+Celkem tedy dostáváme algoritmus pro výpočet Smithova normálního tvaru, který
+je schopen provádět většinu výpočtů ve standardní 32bitové aritmetice. Výpočet
+mezi body konvergence navíc můžeme provádět paralelně ve více vláknech.
+V místě kde je potřeba udělat nějaké rozhodnutí (vypočítat koeficient),
+je nutné pracovat s datovými typy pro reprezentaci libovolně velkého celého
+čísla. V jednom okamžiku však takových čísel budeme potřebovat jen velmi málo
+(obvykle se jedná pouze o vstupy do rozšířeného Euklidova algoritmu), a proto
+tyto výpočty nebudou nijak významně zvyšovat paměťovou náročnost.
