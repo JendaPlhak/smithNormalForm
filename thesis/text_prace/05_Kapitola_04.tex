@@ -1,7 +1,7 @@
 \chapter{Paralelizace}
 
 Buď $ A $ celočíselná matice $ n \times m $ a předpokládejme, že $ n < m $. Pak
-z Hadamardovy nerovnosti (pro bližší infromace čtenáře odkazujeme na publikaci
+z Hadamardovy nerovnosti (pro bližší informace čtenáře odkazujeme na publikaci
 \cite{Hadamard}) plyne, že pro libovolný minor $ h $ matice $ A $
 platí $ h \leq (m^{1/2} \Vert A \Vert )^m $, kde
 $ \Vert A \Vert = max \{ |a^i_j| \} $. Z článku \cite{Had_tight} plyne, že
@@ -15,7 +15,7 @@ bitové délky. Nicméně
 efektivita takového řešení už není ideální a navíc tento přístup zvyšuje
 paměťovou náročnost. Hodilo by se nám proto, kdybychom mohli celý výpočet
 rozložit na více částí, pro které už by nebylo problém spočítat výsledek pomocí
-standardní integerovské aritmetiky a následně všechny částečné vysledky spojit
+standardní integerovské(správný termín???) aritmetiky a následně všechny částečné výsledky spojit
 do hledaného Smithova normálního tvaru. Toho můžeme dosáhnout pomocí Čínské
 zbytkové věty.
 
@@ -56,7 +56,7 @@ d_i \equiv
 \end{align*}
 Skutečně, pokud $ j = i $, tak dostáváme
 $ 1 \equiv s_i m_i + d_i \equiv d_i \pmod{m_i} $. Pokud naopak $ j \neq i $, pak
-zřejmě $ m_j \mid d_i $ a proto bude $ d_i $ kongruentní s nulou modulo $ m_j $.
+zřejmě $ m_j \mid d_i $, a proto bude $ d_i $ kongruentní s nulou modulo $ m_j $.
 
 Položme $ x = \sum\limits_{i = 1}^{k} a_i d_i $. Pak díky výše uvedené
 vlastnosti $ d_i $ bude $ x $ řešením soustavy \eqref{congrs}.
@@ -73,7 +73,7 @@ tomu, že $ M \nmid x_1 - x_2 $.
 \begin{dus} \label{Chin_Rem_Iso}
 Mějme kladné číslo $ m $ s faktorizací $ m = p_1^{r_1} \cdots p_k^{r_k}$. Pak
 existuje izomorfismus okruhů
-$ \Zbb / m \Zbb \cong \Zbb / p_1^{r_1} \Zbb \times \cdots \times \Zbb / p_k^{r_k} \Zbb $
+$ \Zbb / m \Zbb \cong \Zbb / p_1^{r_1} \Zbb \times \cdots \times \Zbb / p_k^{r_k} \Zbb $.
 \end{dus}
 \begin{proof}
 Uvažme zobrazení
@@ -121,11 +121,11 @@ prostory jsou proto izomorfní.
 Důsledek \ref{Chin_Rem_Iso} nám vlastně říká, že pokud chceme provádět sérii
 výpočtů (sčítání, odčítání, násobení) nad celými čísly a jsme dopředu schopni
 omezit výsledek nějakým číslem $ m $, tak to můžeme provést paralelně modulo
-prvočíselné faktory $ m $. V praxi $ m $ obvykle získáme tak, že postupně
-přidáváme prvočísla dokud jejich součin není dostatečně velký.
+prvočíselné(nemá být ve tvaru prvočíselnými???) faktory $ m $. V praxi $ m $ obvykle získáme tak, že postupně
+přidáváme prvočísla, dokud jejich součin není dostatečně velký.
 Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
 čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů.
-Nyní můžeme paralelně aplikovat operace, které potřebujeme provést a konečně
+Nyní můžeme paralelně aplikovat operace, které potřebujeme provést, a konečně
 pomocí konstrukce uvedené v důkazu věty \ref{Chin_Rem} spojíme částečné výsledky
 a obdržíme výsledek původní úlohy.
 
@@ -137,9 +137,9 @@ této kapitoly a označme $ \beta = (m^{1/2} \Vert A \Vert )^m $. Naším cílem
 najít prvočísla $ p_1,\dots, p_k $ tak, aby $ \beta < p_1 \cdots p_k $. Zřejmě
 bychom mohli postupně brát prvočísla $ 2, 3, 5, 7 \dots $, dokud by uvedená
 podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
-druhou stranu chceme, aby tato prvočísla byla dostatečně malá tak, abychom
+druhou stranu chceme, aby tato prvočísla byla dostatečně malá, abychom
 si pro rozumně velké matice vystačili se standardní 32bitovou reprezentací
-celého čísla. Co znamená rozumně velká matice bude zřejmé z následujících řádků.
+celého čísla. Co znamená rozumně velká matice, bude zřejmé z následujících řádků.
 
 Rozumný kompromis poskytuje \cite[Lemma 14]{triang}. Autor však tento výsledek
 uvádí bez důkazu s odkazem na publikaci, ve které se nám nepodařilo takovéto
@@ -167,14 +167,14 @@ dostáváme
                                 = \frac{2^{l}}{5 (l - 1)}.
 \end{align*}
 Použití lemmatu \ref{num_primes_src} je skutečně korektní, neboť
-$ l \geq 6 $ z čehož plyne, že $ a \geq 32 $. Z definice funkce $ \pi(a) $ pak
+$ l \geq 6 $, z čehož plyne, že $ a \geq 32 $. Z definice funkce $ \pi(a) $ pak
 získáme naše tvrzení.
 \end{proof}
 \begin{dus}
-Buď $ \beta = (m^{1/2} \Vert A \Vert )^m $ Hadamardův odhad na determinant tak,
+Buď $ \beta = (m^{1/2} \Vert A \Vert )^m $ Hadamardův odhad na determinant tak
 jako na začátku této sekce a nechť $ l = 6 + \log_2 \log_2 \beta $. Pak můžeme najít
 $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ \{p_1, \dots, p_s\} $,
-která je možno reprezentovat $ l $-bitovým celým číslem a navíc bude platit
+která je možno reprezentovat $ l $-bitovým celým číslem, a navíc bude platit
 $ \beta < p_1 \cdots p_s $.
 \end{dus}
 \begin{proof}
@@ -189,7 +189,7 @@ z čehož plyne následující výpočet.
         = \beta^{\frac{2^6}{5}} > \beta
 \end{align*}
 Tím je důkaz hotov až na případ, kdy $ \beta \in \{0, 1\} $. Tyto možnosti ale
-nejsou příliš zajímavé neboť v prvním případě je Smithův normální tvar nulová
+nejsou příliš zajímavé, neboť v prvním případě je Smithův normální tvar nulová
 matice a ve druhém pak skalár - jednička. V obou případech pak můžeme vzít
 libovolné prvočíslo, které jistě bude větší než determinant.
 \end{proof}
@@ -202,7 +202,7 @@ daným odhadem a dále postupujeme identicky.
 \end{pozn}
 
 Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozměrech
-$ 10^4 \times 10^4 $. Pak nám budou pro výpočet stačit prvočísla jejiž bitová
+$ 10^4 \times 10^4 $. Pak nám budou pro výpočet stačit prvočísla, jejichž bitová
 délka bude $ l = 6 + \log_2(10^4 \log_2(10^2 \Vert A \Vert)) $. Pokud dosadíme
 například $ \Vert A \Vert = 2^{31} $, zjistíme, že by nám stačila prvočísla
 mající nejvýše $ 26 $ bitů, což je pro naše potřeby naprosto
@@ -215,13 +215,13 @@ $ \{ p_1, \dots, p_s \} $ z předchozí sekce. Článek \cite[Theorem 16]{triang
 uvádí, že operace algoritmu z věty \ref{RST_algo} můžeme provádět paralelně
 v okruzích $ \Zbb / p_i \Zbb $. Avšak autor také podotýká, že aby byl algoritmus
 korektní, musíme v algoritmu lemmatu \ref{RST_algo_lemma} postupovat poněkud
-opatrněji. S pracovní matici $ B_k $, která označuje právě zpracováváný sloupec,
+opatrněji. S pracovní maticí $ B_k $, která označuje právě zpracovávaný sloupec,
 bychom měli vždy pracovat pouze ve standardní reprezentaci. To znamená, že při
 inicializaci matice $ B_k $ musíme pomocí věty \ref{Chin_Rem} zobrazit příslušné
 prvky matic v okruzích $ \Zbb / p_i \Zbb $ do okruhu $ \Zbb / m \Zbb $.
 
 V praxi to pak znamená, že ve chvíli, kdy algoritmus potřebuje vypočítat nějaký
-koeficient (například pomocí rošířeného Euklidova algoritmu), musíme prvky
+koeficient (například pomocí rozšířeného Euklidova algoritmu), musíme prvky
 potřebné pro výpočet daného koeficientu převést z modulárního systému do standardní
 reprezentace pomocí Čínské zbytkové věty, vypočítat koeficient nad okruhem celých
 čísel a pak pomocí tohoto koeficientu provést kýženou operaci nad maticemi v
@@ -239,10 +239,10 @@ reziduálním systému nezabývá. To však můžeme napravit. Výpočet povedem
 způsobem jako v případě výše uvedené paralelizace algoritmu pro výpočet RST.
 Nejprve musíme identifikovat všechna místa algoritmu z věty \ref{SNF_Triang},
 která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_GCD}
-se jedná koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
+se jedná o koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
 \ref{Sloup_elim_SNF} pak používá rozšířený Euklidův algoritmus pro výpočet čísel
 $ s, t $ a $ s_1 $. Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu
-\ref{extra_cols}. Na těchto třech místech proto musí dojít k synchornizaci výpočtu,
+\ref{extra_cols}. Na těchto třech místech proto musí dojít k synchronizaci výpočtu,
 převodu příslušných prvků do standardní reprezentace, výpočtu potřebných
 koeficientů a pak teprve může algoritmus pokračovat ve výpočtu v modulárních
 systémech se získanými koeficienty.
@@ -250,7 +250,7 @@ systémech se získanými koeficienty.
 Celkem tedy dostáváme algoritmus pro výpočet Smithova normálního tvaru, který
 je schopen provádět většinu výpočtů ve standardní 32bitové aritmetice. Výpočet
 mezi body konvergence navíc můžeme provádět paralelně ve více vláknech.
-V místě kde je potřeba udělat nějaké rozhodnutí (vypočítat koeficient),
+V místě, kde je potřeba udělat nějaké rozhodnutí (vypočítat koeficient),
 je nutné pracovat s datovými typy pro reprezentaci libovolně velkého celého
 čísla. V jednom okamžiku však takových čísel budeme potřebovat jen velmi málo
 (obvykle se jedná pouze o vstupy do rozšířeného Euklidova algoritmu), a proto
