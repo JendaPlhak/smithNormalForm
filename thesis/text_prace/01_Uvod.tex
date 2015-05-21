@@ -1,33 +1,34 @@
 \chapter*{Úvod}
 \addcontentsline{toc}{chapter}{Úvod}
 
-Smithův normální tvar nalézá uplatnění například při výpočtu simpliciálních
-homologií \cite{Simplic_Homo}. Vzniká tak potřeba Smithův normální tvar efektivně
-algoritmicky počítat. Cílem této práce proto bude seznámit čtenáře s efektivním
+Smithův normální tvar celočíselných matic nalézá uplatnění například při řešení
+soustav celočíselných rovnic nebo při počítání simpliciálních homologií \cite{Simplic_Homo}.
+ílem této práce proto bude seznámit čtenáře s efektivním
 algoritmem pro výpočet Smithova normálního tvaru celočíselných matic.
 
 V první kapitole definujeme Smithův normální tvar a ukážeme, že pro každou
 celočíselnou matici takovýto tvar existuje a je jednoznačný. Vedlejším produktem
-tohoto důkazu bude také naivní algoritmus pro výpočet Smithova normálního tvaru.
+tohoto důkazu bude také naivní algoritmus.
 Tento naivní přístup však nebude poskytovat žádná omezení na velikosti prvků
-pracovních matic. Z toho důvodu uvedeme také druhý algoritmus, který
+matic vznikajících během výpočtu. Z toho důvodu uvedeme také druhý algoritmus, který
 bude možné pomocí Čínské zbytkové věty paralelizovat a poskytneme záruky na
-bitovou délku prvků pracovních matic. Popis tohoto algoritmu bude nápní kapitol
-2, 3 a 4.
+bitovou délku prvků všech matic vyskytujících se v algoritmu.
+Popis tohoto algoritmu bude náplní kapitol 2, 3 a 4.
 
 Ve druhé kapitole popíšeme, jakým způsobeme můžeme pro celočíselnou matici
 vypočítat ekvivalentní matici v redukovaném schodovitém tvaru. Třetí kapitola
 na tento výsledek naváže a poskytne popis algoritmu pro výpočet Smithova
-normálního tvaru z matic v redukovaném schodovitém tvaru. Ve čtvrté kapitole
+normálního tvaru z matice v redukovaném schodovitém tvaru. Ve čtvrté kapitole
 nastíníme možnosti paralelního výpočtu pomocí Čínské zbytkové věty a rozebereme
-jakým způsobem můžeme omezit bitovou délku prvků pracovních matic.
-Nakonec v páté kapitole popíšeme experiemtnální implementaci algoritmu pro
+jakým způsobem můžeme omezit bitovou délku prvků matic v průběhu výpočtu.
+Nakonec v páté kapitole popíšeme implementaci algoritmu pro
 výpočet Smithova normálního tvaru v jazyce C++.
 
 V první kapitole budeme vycházet zejména ze skipt \cite{vokr}. V kapitolách
 3 respektive 4 pak čerpáme z článků \cite{triang} respektive \cite{SNF_Arne}.
 
-Předpokládá se, že čtenář má základní znalosti z lineární algebry a teorie čísel.
+Předpokládá se, že čtenář má základní znalosti z lineární algebry a
+elementární teorie čísel.
 
 \cleardoublepage
 

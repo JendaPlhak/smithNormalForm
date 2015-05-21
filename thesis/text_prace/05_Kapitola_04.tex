@@ -15,14 +15,14 @@ bitové délky. Nicméně
 efektivita takového řešení už není ideální a navíc tento přístup zvyšuje
 paměťovou náročnost. Hodilo by se nám proto, kdybychom mohli celý výpočet
 rozložit na více částí, pro které už by nebylo problém spočítat výsledek pomocí
-standardní integerovské aritmetiky a následně všechny částečné vysledky spojit
+standardní 32-bitové aritmetiky a následně všechny částečné vysledky spojit
 do hledaného Smithova normálního tvaru. Toho můžeme dosáhnout pomocí Čínské
 zbytkové věty.
 
 
 \begin{vet}[Čínská zbytková věta] \label{Chin_Rem}
 Mějme kladná celá čísla $ m_1,\dots,m_k $, která jsou po dvou nesoudělná. Pak
-pro libovolnou posloupnost celých čísel $ a_1,\dots,a_k $ existuje nějaké celé
+pro libovolnou posloupnost celých čísel $ a_1,\dots,a_k $ existuje celé
 číslo $ x $, které je řešením následující soustavy kongruencí.
 
 \begin{equation}
@@ -35,16 +35,16 @@ pro libovolnou posloupnost celých čísel $ a_1,\dots,a_k $ existuje nějaké c
 \end{equation}
 %
 Navíc pro libovolná dvě řešení $ x_1, x_2 $ uvedené soustavy platí
-$ x_1 \equiv x_2 \pmod{m_1 m_2 \cdots m_k} $.
+$ x_1 \equiv x_2 \pmod{m_1 m_2 \cdots m_k} $  .
 \end{vet}
 
 \begin{proof}
 Zaměřme svou pozornost nejprve na existenci řešení. Označme
-$ M = m_1 m_2 \cdots m_k $. Pak zřejmě pro každé $ i \in \{1,\dots,k\} $
-platí $ \gcd(m_i, M / m_i) = 1 $, protože $ m_i $ jsou po dvou nesoudělná.
+$ m = m_1 m_2 \cdots m_k $. Pak zřejmě pro každé $ i \in \{1,\dots,k\} $
+platí $ \gcd(m_i, m / m_i) = 1 $, protože $ m_i $ jsou po dvou nesoudělná.
 Díky tomu můžeme pomocí rozšířeného Euklidova algoritmu najít celá čísla
-$ s_i, t_i $ taková, že $ s_i m_i + t_i \frac{M}{m_i} = 1 $. Nyní označme
-$ d_i = t_i \frac{M}{m_i} $. Z toho plyne rovnost $ s_i m_i + d_i = 1 $ a
+$ s_i, t_i $ taková, že $ s_i m_i + t_i \frac{m}{m_i} = 1 $. Nyní označme
+$ d_i = t_i \frac{m}{m_i} $. Z toho plyne rovnost $ s_i m_i + d_i = 1 $ a
 \begin{align*}
 d_i \equiv
 \left\{
@@ -61,13 +61,12 @@ zřejmě $ m_j \mid d_i $ a proto bude $ d_i $ kongruentní s nulou modulo $ m_j
 Položme $ x = \sum\limits_{i = 1}^{k} a_i d_i $. Pak díky výše uvedené
 vlastnosti $ d_i $ bude $ x $ řešením soustavy \eqref{congrs}.
 
-Nechť pro nějaká dvě řešení soustavy \eqref{congrs} platí
-$ x_1 \not\equiv x_2 \pmod{m_1 m_2 \cdots m_k} $. Pak ale
-$ x_1 \equiv x_2 \pmod{m_i} \Rightarrow m_i \mid x_1 - x_2 $. Protože $ m_i $
-jsou po dvou nesoudělná, tak z předchozí implikace dále plyne, že
-$ x_1 - x_2 $ bude dělitelné také součinem všech $ m_i $. Tedy
-$ M \mid x_1 - x_2 $. To je ovšem spor s předpokladem, který je ekvivalentní
-tomu, že $ M \nmid x_1 - x_2 $.
+Nechť $ x_1, x_2 \in \Zbb $ jsou dvě libovolná řešení soustavy \eqref{congrs}.
+Pak ale $ x_1 \equiv x_2 \pmod{m_i} $, což implikuje $ m_i \mid x_1 - x_2 $.
+Protože $ m_i $ jsou po dvou nesoudělná, tak z předchozí implikace dále plyne, že
+$ x_1 - x_2 $ bude dělitelné také součinem všech $ m_i $, tedy
+$ m \mid x_1 - x_2 $. To je ale ekvivalentní tomu, že
+$ x_1 \equiv x_2 \pmod{m} $ a důkaz je hotov.
 \end{proof}
 
 \begin{dus} \label{Chin_Rem_Iso}
@@ -95,13 +94,10 @@ Pak podle věty \ref{Chin_Rem} můžeme nalézt takové $ x \in \Zbb $, že
 %
 Pak ale $ \varphi([x]_m) = a $, z čehož plyne, že $ \varphi $ je surjektivní.
 
-Dále předpokládejme, že existují prvky $ x, y \in \Zbb / m \Zbb $ takové, že
-$ x \not\equiv y \pmod{m} $ a navíc $ \varphi(x) = \varphi(y) $. To ovšem
-znamená, že platí $ x \equiv y \pmod{p_i^{r_i}} $ pro všechna
-$ i \in \{1,\dots,k\} $. Proto $ p_i^{r_i} \mid x - y $, ale díky
-nesoudělnosti $ p_i^{r_i} $ platí také $ m \mid x - y $, což implikuje
-$ x \equiv y \pmod{m} $. To je ale spor s předpokladem. $ \varphi $ je proto
-injekce a díky předchozímu odstavci také bijekce.
+Mějme $ x, y \in \Zbb / m \Zbb $ libolná a předpokládejme
+$ \varphi(x) = \varphi(y) $. Pak ale z věty \ref{Chin_Rem} plyne, že
+$ x \equiv y \pmod{m} $. $ \varphi $ je proto injekce a díky předchozímu
+odstavci také bijekce.
 
 Nakonec ještě ověříme, že se skutečně jedná o homomorfismus okruhů.
 Mějme $ x, y \in \Zbb / m \Zbb $ libovolné. Pak
@@ -118,11 +114,12 @@ analogicky. Zobrazení $ \varphi $ je tedy skutečně izomorfismus okruhů a zko
 prostory jsou proto izomorfní.
 \end{proof}
 
-Důsledek \ref{Chin_Rem_Iso} nám vlastně říká, že pokud chceme provádět sérii
-výpočtů (sčítání, odčítání, násobení) nad celými čísly a jsme dopředu schopni
-omezit výsledek nějakým číslem $ m $, tak to můžeme provést paralelně modulo
-prvočíselné faktory $ m $. V praxi $ m $ obvykle získáme tak, že postupně
-přidáváme prvočísla dokud jejich součin není dostatečně velký.
+Předpokládejme, že chceme provádět sérii výpočtů (sčítání, odčítání,
+násobení) nad celými čísly a jsme dopředu schopni omezit výsledek nějakým číslem
+$ m $. Pak tyto výpočty můžeme ekvivalentně provádět v okruhu $ \Zbb / m \Zbb $.
+Avšak z důsledku \ref{Chin_Rem_Iso} plyne, že stejně tak můžeme výpočty provést
+paralelně modulo prvočíselné faktory $ m $. V praxi $ m $ obvykle získáme tak,
+že postupně přidáváme prvočísla dokud jejich součin není dostatečně velký.
 Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
 čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů.
 Nyní můžeme paralelně aplikovat operace, které potřebujeme provést a konečně
@@ -138,7 +135,7 @@ najít prvočísla $ p_1,\dots, p_k $ tak, aby $ \beta < p_1 \cdots p_k $. Zřej
 bychom mohli postupně brát prvočísla $ 2, 3, 5, 7 \dots $, dokud by uvedená
 podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
 druhou stranu chceme, aby tato prvočísla byla dostatečně malá tak, abychom
-si pro rozumně velké matice vystačili se standardní 32bitovou reprezentací
+si pro rozumně velké matice vystačili se standardní 32-bitovou reprezentací
 celého čísla. Co znamená rozumně velká matice bude zřejmé z následujících řádků.
 
 Rozumný kompromis poskytuje \cite[Lemma 14]{triang}. Autor však tento výsledek
@@ -231,15 +228,16 @@ Autor článku \cite{triang} se
 také zabývá tím, jak vypočítat rank profile potřebný pro výpočet redukovaného
 schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se \cite[Theorem 15]{triang},
 že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $
-v okruzích $ \Zbb / p_i \Zbb $. Výpočet ekvivalentní trojúhelníkové matice z
-matice $ A $ tedy není problém.
+tak, že pracujeme v okruzích $ \Zbb / p_i \Zbb $.
+Výpočet ekvivalentní trojúhelníkové matice z matice $ A $ tedy není problém.
 
 Naneštěstí v článku \cite{SNF_Arne} se autor již problematikou počítání v
-reziduálním systému nezabývá. To však můžeme napravit. Výpočet povedeme podobným
+reziduálním systému nezabývá. To však můžeme na
+pravit. Výpočet povedeme podobným
 způsobem jako v případě výše uvedené paralelizace algoritmu pro výpočet RST.
 Nejprve musíme identifikovat všechna místa algoritmu z věty \ref{SNF_Triang},
 která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_GCD}
-se jedná koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
+se jedná o koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
 \ref{Sloup_elim_SNF} pak používá rozšířený Euklidův algoritmus pro výpočet čísel
 $ s, t $ a $ s_1 $. Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu
 \ref{extra_cols}. Na těchto třech místech proto musí dojít k synchornizaci výpočtu,
@@ -248,8 +246,9 @@ koeficientů a pak teprve může algoritmus pokračovat ve výpočtu v modulárn
 systémech se získanými koeficienty.
 
 Celkem tedy dostáváme algoritmus pro výpočet Smithova normálního tvaru, který
-je schopen provádět většinu výpočtů ve standardní 32bitové aritmetice. Výpočet
-mezi body konvergence navíc můžeme provádět paralelně ve více vláknech.
+je schopen provádět většinu výpočtů ve standardní 32-bitové aritmetice. Navíc části
+algoritmu, které nevyžadují výpočet zmíněných koeficientů, můžeme provádet
+paralelně a využít tak plný potenciál dnešních vícejádrových procesorů.
 V místě kde je potřeba udělat nějaké rozhodnutí (vypočítat koeficient),
 je nutné pracovat s datovými typy pro reprezentaci libovolně velkého celého
 čísla. V jednom okamžiku však takových čísel budeme potřebovat jen velmi málo
