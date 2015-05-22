@@ -100,7 +100,7 @@ $ x \equiv y \pmod{m} $. $ \varphi $ je proto injekce a díky předchozímu
 odstavci také bijekce.
 
 Nakonec ještě ověříme, že se skutečně jedná o homomorfismus okruhů.
-Mějme $ x, y \in \Zbb / m \Zbb $ libovolné. Pak
+Mějme $ x, y \in \Zbb / m \Zbb $ libovolné. Pa
 %
 \begin{align*}
     \varphi(x + y) &= ([x + y]_{p_1^{r_1}},\dots, [x + y]_{p_k^{r_k}})  \\
@@ -115,7 +115,7 @@ prostory jsou proto izomorfní.
 \end{proof}
 
 Předpokládejme, že chceme provádět sérii výpočtů (sčítání, odčítání,
-násobení) nad celými čísly a jsme dopředu schopni omezit výsledek nějakým číslem
+násobení) nad celými čísly a jsme dopředu schopni omezit všechny mezivýsledky nějakým číslem
 $ m $. Pak tyto výpočty můžeme ekvivalentně provádět v okruhu $ \Zbb / m \Zbb $.
 Avšak z důsledku \ref{Chin_Rem_Iso} plyne, že stejně tak můžeme výpočty provést
 paralelně modulo prvočíselné faktory $ m $. V praxi $ m $ obvykle získáme tak,
@@ -128,9 +128,8 @@ a obdržíme výsledek původní úlohy.
 
 
 \section{Výběr prvočísel}
-Snadno se nahlédne, že výše uvedený Hadamardův odhad můžeme aplikovat i na prvky
-matic ve Smithově normálním tvaru. Mějme libovolnou matici $ A $ jako na začátku
-této kapitoly a označme $ \beta = (m^{1/2} \Vert A \Vert )^m $. Naším cílem bude
+Předpokládejme, že máme k dispozici odhad $ \beta $, který omezuje všechny
+prvky matic vznikajících v průběhu výpočtu Smithova normálního tvaru. Naším cílem bude
 najít prvočísla $ p_1,\dots, p_k $ tak, aby $ \beta < p_1 \cdots p_k $. Zřejmě
 bychom mohli postupně brát prvočísla $ 2, 3, 5, 7 \dots $, dokud by uvedená
 podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
@@ -205,6 +204,61 @@ například $ \Vert A \Vert = 2^{31} $, zjistíme, že by nám stačila prvočí
 mající nejvýše $ 26 $ bitů, což je pro naše potřeby naprosto
 postačující. Předpokládáme, že matice větších rozměrů již budou nad naše výpočetní
 možnosti.
+
+
+
+\section{Omezení velikosti mezivýsledků}
+Abychom mohli aplikovat předchozí výsledky na algoritmy pro výpočet Smithova
+normálního tvaru, musíme být schopni omezit prvky všech matic, se kterými
+budeme v průběhu výpočtu pracovat. Z článku \cite{triang} vyplývá, že pokud
+vhodným způsobem modifikujeme algoritmy ze druhé kapitoly, pak jsme schopni
+garantovat, že mezivýsledky budou omezeny výrazem
+$ \beta = 2[\Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} ] + 1 $
+\cite[Theorem 16]{triang}.
+Ačkoliv tento výraz vypadá poněkud komplikovaně, tak odhad
+asymptoticky odpovídá Hadamardovu odhadu na determinant a můžeme psát
+$ \log{\beta} = \mathcal{O}(r \log{(r \Vert A \Vert)}) $.
+Poznamenejme, že zmíněné modifikace spočívají vesměs v tom, že pomocí nějakého
+význačného prvku redukujeme ostatní prvky v řádku nebo sloupečku.
+
+V článku \cite{SNF_Arne} se autor touto problematikou bohužel nezabývá. Pokusíme
+se proto pro procedury ze třetí kapitoly podat odhad vlastní. Budeme však muset
+mírně upravit požadavky na vstupní matice. Tyto požadavky jsou obsahem následující
+definice.
+
+\begin{defi}
+    Řekneme, že matice $ A \in \Zmat $ je diagonálně dominantní, jestliže
+    splňuje následující podmínky:
+    \begin{Cond}
+        \item Hlavní $ n \times n $ submatice je horní trojúhelníková, má plnou
+            hodnost a prvky na diagonále jsou kladné.
+        \item Pro každé $ 1 \leq i \leq n $ a $ i < j \leq m $ platí $ A[i, i] > A[i, j] \geq 0 $.
+    \end{Cond}
+\end{defi}
+
+\begin{lem}
+Existuje algoritmus, který převede libovolnou matici v redukovaném schodovitém
+tvaru na ekvivalentní matici, která bude diagonálně dominantní.
+\end{lem}
+
+\begin{lem}
+Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_GCD}.
+Pak můžeme algoritmus lemmatu \ref{Sloup_elim_GCD} modifikovat tak, že všechny
+mezivýsledky budou omezeny výrazem $ TODO $ a výsledná matice bude diagonálně
+dominantní.
+\end{lem}
+\begin{proof}
+Jediná operace inkriminovaného algoritmu, která zvětšuje prvky matice $ T $ je
+přičtení $ c $-násobku řádku: $ \operatorname{row}(T, i) \pluseq c \operatorname{row}(T, i + 1) $.
+Z Bachova lemmatu \ref{bach} plyne, že $ 0 \leq c < a_i $. To pak společně s
+tím, že $ T $ je diagonálně dominantní, implikuje $ a_i a_{i+1} > T[i, j] $ pro
+$ j = 1, \dots, m $. Z toho už snadno plyne uvedené omezení. Navíc pak pomocí prvku
+$ a_i $ můžeme zredukovat všechny prvky napravo, čímž získáme diagonálně dominantní
+matici. Korektnost algoritmu zůstane zachována, neboť platí
+$ \gcd(a_i, t_{i} + ct_{i+1}) = \gcd(a_i, t_{i} + ct_{i+1} + k a_i) $,
+kde $ k $ je libovolné celé číslo.
+\end{proof}
+
 
 \section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
 Mějme opět matici $ A $ tak jako na začátku a uvažme prvočísla
