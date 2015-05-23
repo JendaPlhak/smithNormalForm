@@ -259,6 +259,111 @@ $ \gcd(a_i, t_{i} + ct_{i+1}) = \gcd(a_i, t_{i} + ct_{i+1} + k a_i) $,
 kde $ k $ je libovolné celé číslo.
 \end{proof}
 
+\begin{lem} \label{bez_bound}
+Nehcť $ a, b \in \Zbb $. Pak existují koeficienty
+$ s, t $, $ s a + t b = \gcd(a, b) $ takové, že platí $ |s| \leq |b| $ a
+$ |t| \leq |a| $.
+\end{lem}
+Bez újmy na obecnosti můžeme předpokládat, že $ \gcd(a, b) = 1 $ a $ 1 < a < b $.
+Nechť $ s, t $ jsou koeficienty získané aplikací rozšířeného Euklidova algoritmu
+na dvojici $ a, b $. Pak platí $ a p + b t = 1 $. Zavedeme substituci
+$ s \leftarrow s - k b $ a $ t \leftarrow t + k a $, kde $ k $ je celé číslo takové, že
+$ |t + k a| \leq a $. Nové koeficienty $ s,t $ budou splňovat stejnou rovnost
+jako ty původní, ale navíc bude platit $ |t| \leq a $. Z toho plynou následující
+nerovnosti.
+\begin{equation*}
+    a |s| = | 1 - bt | \leq 1 + |bt| \leq 1 + |ab| < a(1 + b)
+\end{equation*}
+Z toho pak plyne, že $ |s| < 1 + b $ a $ |s| \leq b $.
+\begin{pozn}
+Dá se ukázat, že koeficienty z rozšířeného Euklidova algoritmu budou mít přesně
+vlastnosti, které požaduje lemma \ref{bez_bound}.
+\end{pozn}
+
+
+\begin{lem}
+Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_SNF}.
+Pak můžeme algoritmus lemmatu \ref{Sloup_elim_SNF} modifikovat tak, že všechny
+mezivýsledky budou omezeny výrazem $ TODO $ a výsledná matice bude navíc
+diagonálně dominantní.
+\end{lem}
+\begin{proof}
+V algoritmu lemmatu \ref{Sloup_elim_SNF} zvětšujeme velikost prvků matice $ T $
+pouze při jejím vynásobením maticí $ V $. Vynásobení bude mít vliv pouze na
+prvky hlavní submatice $ k \times k $. Výslednou submatici můžeme zapsat ve tvaru
+
+\begin{align*}
+    \left(
+    \begin{array}{ccccc}
+        s_1        &     &        &         &                 \\
+        tt_2       & a_2 &        &         & t_2 a_1/s_1     \\
+        \vdots     &     & \ddots &         & \vdots          \\
+        tt_{k - 1} &     &        & a_{k-1} & t_{k-1} a_1/s_1 \\
+        tt_k       &     &        &         & t_k a_1/s_1     \\
+    \end{array}
+    \right)
+.
+\end{align*}
+
+Prvek na pozici $ [1,1] $ se ze zřejmých důvodů určitě nezvětší. Pokud za $ s, t $
+zvolíme koeficienty z lemmatu \ref{bez_bound}, tak bude platit $ |t| \leq |a_1| $.
+Pro prvky $ t t_i $ z prvního sloupečku matice $ TV $ proto bude platit
+$ |t t_i| \leq |a_1 a_i| $, protože vstupní matice $ T $ je diagonálně dominantní.
+Pro prvek máme $ |t t_k| \leq |a_1 t_k| $.
+
+A konečně pro prvky $ k $-tého sloupčeku dostáváme odhady
+$ |t_i a_1 / s_1| \leq |a_1 a_i| $ a $ |t_k a_1 / s_1| \leq |a_1 t_k| $.
+
+Po eliminaci prvků pod diagonálou v prvním sloupečku zbývá zajistit, že
+výsledná matice bude diagonálně dominantní. To provedeme redukcí
+prvků napravo od diagonály diagonálními prvky. Ověříme, zda budou splněny
+podmínky kladené lemmatem \ref{Sloup_elim_SNF} na výslednou matici.
+Na splnění podmínek (c1) a (c2) nemá naše modifikace algoritmu žádný vliv.
+Podmínka (c3) bude splněna díky stejné argumentaci jako v případě lemmatu
+\ref{bez_bound}.
+
+Z lemmatu \ref{Sloup_elim_SNF} plyne, že $ s_1 \vert (t_i a_1/s_1) $ pro
+$ i = 2, \dots, k $. Avšak z podmínky (c2) dostáváme, že také $ s_1 \vert a_i $.
+Proto $ s_1 \vert (t_i a_1/s_1 + k a_i) $ a podmínka (c4) je splněna. (c5) bude splněna
+triviálně.
+\end{proof}
+
+\begin{lem}
+Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{extra_cols}.
+Pak můžeme algoritmus věty \ref{extra_cols} modifikovat tak, že všechny
+mezivýsledky budou omezeny výrazem $ TODO $ a navíc transpozice výsledné matice
+bude diagonálně dominantní.
+\end{lem}
+\begin{proof}
+V každé iteraci algoritmu věty \ref{extra_cols} můžeme podle lemmatu
+\ref{bez_bound} zvolit koeficienty $ s, t $ tak, že $ |s| \leq |b_{1,j}| \leq |a_1|$
+a $ |t| \leq |a_1| $. Po aplikaci transformační matice $ V $ dostáváme matici ve
+tvaru
+\begin{align*}
+TV =
+    \left(
+    \begin{array}{cccc|ccccccc}
+        s_1      &     &        &     & b_{1,1} & \hdots & b_{1,j-1} &                   & b_{1,j+1} & \hdots & b_{1,m-k} \\
+        tb_{2,j} & a_2 &        &     & b_{2,1} & \hdots & b_{2,j-1} & b_{2,j} a_1 / s_1 & b_{2,j+1} & \hdots & b_{2,m-k} \\
+        \vdots   &     & \ddots &     & \vdots  &        & \vdots    & \vdots            & \vdots    &        & \vdots    \\
+        tb_{k,j} &     &        & a_k & b_{k,1} & \hdots & b_{k,j-1} & b_{k,j} a_1 / s_1 & b_{k,j+1} & \hdots & b_{k,m-k} \\
+    \end{array}
+    \right).
+\end{align*}
+Díky tomu, že matice $ T $ je diagonálně dominantní, platí nerovnost
+$ |tb_{i,j}| \leq |a_1 a_i| $ pro $ i = 2,\dots,k $. Také zřejmě platí
+$ | b_{i,j} a_1 / s_1 | \leq |a_1 a_i|$. Následně můžeme všechny prvky redukovat
+modulo příslušný diagonální prvek.
+
+Tento eliminační proces můžeme provést pro všechny prvky $ b_{1, j} $ se stejnými
+odhady na pracovní prvky. Jen odhad na prvky v prvním sloupci musíme mírně upravit.
+Označme prvky prvního sloupce v průběhu výpočtu $ t_i $. Pak po každé iteraci
+eliminačního procesu bude zřejmě platit $ |t_i| \leq |a_i| $. V každém kroku
+algoritmu tak bude platit $ |t_i| \leq |a_i| + |a_1 a_i| $, neboť při eliminaci
+prvku $ b_{1,j} $ přiřazujeme $ t_i = t_i + tb_{i,j} $. Nakonec ještě poznamenejme
+\end{proof}
+
+
 
 \section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
 Mějme opět matici $ A $ tak jako na začátku a uvažme prvočísla

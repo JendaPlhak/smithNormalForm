@@ -71,7 +71,6 @@ a navíc splňuje následující podmínky:
 \begin{Cond}[series=Sloup_elim_CONDS]
     \item hlavní $ k \times k $ submatice má plnou hodnost,
     \item prvních $ k - 1 $ sloupců je ve Smithově normálním tvaru,
-    \item prvky $ t_i $, $ i \in \{1,\dots, k-1\} $, jsou redukovány modulo $ t_k $.
 \end{Cond}
 Pak existuje deterministický algoritmus, který pomocí ekvivalentních řádkových
 a sloupcových operací převede hlavní $ k \times k $ submatici $ T $ do
@@ -100,7 +99,7 @@ aktuálně zpracovávaný řádek. Je zřejmé, že pro $ r = k $, bude platit
 Můžeme tedy předpokládat, že pro nějaké $ i $, $ 1 \leq i < k $, splňuje
 matice $ T $ rovnost \ref{gcd_eq_induction} pro všechna $ r = k, k-1,\dots, i + 1 $.
 Nyní ukážeme, jakým způsobem aplikovat ekvivalentní řádkové a sloupcové operace
-na matici $ T $ tak, aby výsledná matice splňovala podmínky (c1)-(c4) a platila
+na matici $ T $ tak, aby výsledná matice splňovala podmínky (c1)-(c3) a platila
 rovnost \ref{gcd_eq_induction} pro $ r = k, k-1,\dots, i $.
 
 Buď $ 0 \leq c < a_i $ řešením rovnosti
@@ -141,7 +140,7 @@ matice sestavená z prvních $ k - 1 $ sloupců matice $ T' $ zůstane nezměně
 
 \begin{lem} \label{Sloup_elim_SNF}
 Buď $ T $ matice splňující stejné podmínky jako v požadavcích lemmatu \ref{Sloup_elim_GCD}
-a nechť je navíc splněna podmínka (c4). Pak existuje deterministický
+a nechť je navíc splněna podmínka (c3). Pak existuje deterministický
 algoritmus, který převede matici $ T $ na ekvivalentní matici splňující stejné
 podmínky, ale navíc bude platit
 \begin{Cond}[resume=Sloup_elim_CONDS]
@@ -164,8 +163,7 @@ T' =
     \right),
 \end{align*}
 kde $ s_1 = \gcd(a_1, t_1) $. Nechť je trojice $ (s, t, s_1) $ řešením Bezoutovy
-rovnosti $ s a_1 + t t_1 = s_1 $. Koeficienty $ (s, t, s_1) $ můžeme nalézt
-například pomocí rozšířeného Euklidova algoritmu.
+rovnosti $ s a_1 + t t_1 = s_1 $, kterou získáme pomocí rozšířeného Euklidova algoritmu.
 Pomocí těchto čísel definujme $ m \times m $ matici $ V $ jakožto
 \begin{align*}
 V =
@@ -197,10 +195,10 @@ TV =
 .
 \end{align*}
 Prvek v prvním řádku a $ k $-tém sloupci bude skutečně nulový, neboť
-$ a_1(-\frac{t_1}{s_1}) + t_1 \frac{a_1}{s_1} = 0 $. Z podmínky (c4) navíc plyne,
+$ a_1(-\frac{t_1}{s_1}) + t_1 \frac{a_1}{s_1} = 0 $. Z podmínky (c3) navíc plyne,
 že $ s_1 \mid t_i $ pro $ i = 1,\dots, k $ neboť $ s_1 = \gcd(a_1, t_1) $.
 Díky tomu můžeme vyeliminovat všechny prvky pod diagonálou v prvním sloupci.
-To, že $ s_1 \mid t_i $, nám navíc zajišťuje splnění podmínky (c5), čímž je lemma
+To, že $ s_1 \mid t_i $, nám navíc zajišťuje splnění podmínky (c4), čímž je lemma
 dokázáno.
 \end{proof}
 
@@ -213,10 +211,8 @@ a matice bude ve Smithově normálním tvaru.
 
 Nechť je $ k > 1 $. Na matici $ T $ nejdříve aplikujeme algoritmus lemmatu
 \ref{Sloup_elim_GCD}. Tím zajistíme splnění předpokladů pro postupnou aplikaci
-algoritmu lemmatu \ref{Sloup_elim_SNF}. Algoritmus budeme aplikovat na čtvercové
-submatice $ i \times i $, pro $ i = k,k-1,\dots, 2 $, které leží na diagonále
-původní matice $ T $, a pravý dolní roh se překrývá s prvkem $ T_{k,k} $
-(v angličtině je nazýváme trailing matrices).
+algoritmu lemmatu \ref{Sloup_elim_SNF}. Algoritmus budeme aplikovat na $ i \times i $
+trailing submatice původní matice $ T $ pro $ i = k,k-1,\dots, 2 $.
 
 Takto zajistíme úpravu matice $ T $ do vhodného tvaru a nakonec zbývá jen
 vhodným způsobem pronásobit $ k $-tý řádek $ -1 $ tak, aby platilo
@@ -254,7 +250,7 @@ sloupců bude nulových.
 \begin{proof}
 Nechť $ s_1 = \gcd(a_1, b_{1,j}) $. Pomocí rozšířeného Euklidova algoritmu
 můžeme najít dvojici koeficientů $ s, t $ takovou, že
-$ s a_1 + t b_{1,j} = s_1 $. Vezměme za $ V $ identickou matici a doplňme do ní
+$ s a_1 + t b_{1,j} = s_1 $. Vezměme za $ V $ jednotkovou matici a doplňme do ní
 $ V_{1,1} = s $, $ V_{j,1} = t $, $ V_{1,j} = -b_{1,j} / s_1 $ a
 $ V_{j,j} = a_1 / s_1 $. Pak z Laplaceova rozvoje a díky Bezoutově rovnosti
 dostaneme $ \det(V) = 1 $. Aplikací matice $ V $ na $ T $ dostaneme
