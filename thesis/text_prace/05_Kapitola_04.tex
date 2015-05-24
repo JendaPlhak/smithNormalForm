@@ -236,34 +236,13 @@ definice.
     \end{Cond}
 \end{defi}
 
-\begin{lem}
-Existuje algoritmus, který převede libovolnou matici v redukovaném schodovitém
-tvaru na ekvivalentní matici, která bude diagonálně dominantní.
-\end{lem}
-
-\begin{lem}
-Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_GCD}.
-Pak můžeme algoritmus lemmatu \ref{Sloup_elim_GCD} modifikovat tak, že všechny
-mezivýsledky budou omezeny výrazem $ TODO $ a výsledná matice bude diagonálně
-dominantní.
-\end{lem}
-\begin{proof}
-Jediná operace inkriminovaného algoritmu, která zvětšuje prvky matice $ T $ je
-přičtení $ c $-násobku řádku: $ \operatorname{row}(T, i) \pluseq c \operatorname{row}(T, i + 1) $.
-Z Bachova lemmatu \ref{bach} plyne, že $ 0 \leq c < a_i $. To pak společně s
-tím, že $ T $ je diagonálně dominantní, implikuje $ a_i a_{i+1} > T[i, j] $ pro
-$ j = 1, \dots, m $. Z toho už snadno plyne uvedené omezení. Navíc pak pomocí prvku
-$ a_i $ můžeme zredukovat všechny prvky napravo, čímž získáme diagonálně dominantní
-matici. Korektnost algoritmu zůstane zachována, neboť platí
-$ \gcd(a_i, t_{i} + ct_{i+1}) = \gcd(a_i, t_{i} + ct_{i+1} + k a_i) $,
-kde $ k $ je libovolné celé číslo.
-\end{proof}
-
+Pro další práci s ohady budeme ještě potřebovat následující lemma.
 \begin{lem} \label{bez_bound}
-Nehcť $ a, b \in \Zbb $. Pak existují koeficienty
-$ s, t $, $ s a + t b = \gcd(a, b) $ takové, že platí $ |s| \leq |b| $ a
+Nechť $ a, b \in \Zbb $. Pak existují koeficienty
+$ s, t $, $ \gcd(a, b) = s a + t b $ takové, že platí $ |s| \leq |b| $ a
 $ |t| \leq |a| $.
 \end{lem}
+\begin{proof}
 Bez újmy na obecnosti můžeme předpokládat, že $ \gcd(a, b) = 1 $ a $ 1 < a < b $.
 Nechť $ s, t $ jsou koeficienty získané aplikací rozšířeného Euklidova algoritmu
 na dvojici $ a, b $. Pak platí $ a p + b t = 1 $. Zavedeme substituci
@@ -275,17 +254,54 @@ nerovnosti.
     a |s| = | 1 - bt | \leq 1 + |bt| \leq 1 + |ab| < a(1 + b)
 \end{equation*}
 Z toho pak plyne, že $ |s| < 1 + b $ a $ |s| \leq b $.
+\end{proof}
 \begin{pozn}
 Dá se ukázat, že koeficienty z rozšířeného Euklidova algoritmu budou mít přesně
 vlastnosti, které požaduje lemma \ref{bez_bound}.
 \end{pozn}
 
 
+
 \begin{lem}
+Existuje algoritmus, který převede libovolnou matici v redukovaném schodovitém
+tvaru na ekvivalentní matici, která bude diagonálně dominantní.
+\end{lem}
+
+
+
+\begin{lem} \label{Sloup_elim_GCD_modified}
+Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_GCD}.
+Pak můžeme algoritmus lemmatu \ref{Sloup_elim_GCD} modifikovat tak, že všechny
+mezivýsledky budou omezeny výrazem $ a_{k - 2} a_{k - 1} $ 
+a výsledná matice bude diagonálně dominantní.
+\end{lem}
+\begin{proof}
+Jediná operace inkriminovaného algoritmu, která zvětšuje prvky matice $ T $ je
+je v $ i $-té iteraci přičtení $ c $-násobku řádku: 
+$ \operatorname{row}(T, i) \pluseq c \operatorname{row}(T, i + 1) $.
+
+Z Bachova lemmatu \ref{bach} plyne, že $ 0 \leq c < a_i $. To pak společně s
+tím, že $ T $ je diagonálně dominantní, implikuje $ a_i a_{i+1} > T[i, j] $ pro
+$ j = 1, \dots, m $. Z toho plyne, že všechny mezivýsledky můžeme omezit výrazem
+$ \max\limits_{1 \leq i < k - 1}\{ a_i a_{i+1} \} $. Avšak z vlastností Smithova
+normální tvaru plyne, že maximum bude rovno $ a_{k - 2} a_{k - 1} $.
+
+Navíc pak pomocí prvku
+$ a_i $ můžeme zredukovat všechny prvky napravo, čímž získáme diagonálně dominantní
+matici. Korektnost algoritmu zůstane zachována, neboť platí
+$ \gcd(a_i, t_{i} + ct_{i+1}) = \gcd(a_i, t_{i} + ct_{i+1} + k a_i) $,
+kde $ k $ je libovolné celé číslo.
+\end{proof}
+
+
+
+
+\begin{lem}\label{Sloup_elim_SNF_modified}
 Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_SNF}.
 Pak můžeme algoritmus lemmatu \ref{Sloup_elim_SNF} modifikovat tak, že všechny
-mezivýsledky budou omezeny výrazem $ TODO $ a výsledná matice bude navíc
-diagonálně dominantní.
+mezivýsledky budou omezeny výrazem 
+$ \max\{ |t_k a_1|, a_1 a_{k - 1} \}  $ 
+a výsledná matice bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
 V algoritmu lemmatu \ref{Sloup_elim_SNF} zvětšujeme velikost prvků matice $ T $
@@ -306,13 +322,16 @@ prvky hlavní submatice $ k \times k $. Výslednou submatici můžeme zapsat ve 
 \end{align*}
 
 Prvek na pozici $ [1,1] $ se ze zřejmých důvodů určitě nezvětší. Pokud za $ s, t $
-zvolíme koeficienty z lemmatu \ref{bez_bound}, tak bude platit $ |t| \leq |a_1| $.
+zvolíme koeficienty z lemmatu \ref{bez_bound}, tak bude platit $ |t| \leq a_1 $.
 Pro prvky $ t t_i $ z prvního sloupečku matice $ TV $ proto bude platit
-$ |t t_i| \leq |a_1 a_i| $, protože vstupní matice $ T $ je diagonálně dominantní.
+$ |t t_i| \leq a_1 a_i $, protože vstupní matice $ T $ je diagonálně dominantní.
 Pro prvek máme $ |t t_k| \leq |a_1 t_k| $.
 
 A konečně pro prvky $ k $-tého sloupčeku dostáváme odhady
-$ |t_i a_1 / s_1| \leq |a_1 a_i| $ a $ |t_k a_1 / s_1| \leq |a_1 t_k| $.
+\begin{align*}
+|t_i a_1 / s_1| \leq a_1 a_i \leq \max\limits_{1 < i < k }\{ a_1 a_{i} \} = a_1 a_{k - 1}
+\end{align*}
+a $ |t_k a_1 / s_1| \leq |a_1 t_k| $.
 
 Po eliminaci prvků pod diagonálou v prvním sloupečku zbývá zajistit, že
 výsledná matice bude diagonálně dominantní. To provedeme redukcí
@@ -328,16 +347,43 @@ Proto $ s_1 \vert (t_i a_1/s_1 + k a_i) $ a podmínka (c4) je splněna. (c5) bud
 triviálně.
 \end{proof}
 
-\begin{lem}
-Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{extra_cols}.
-Pak můžeme algoritmus věty \ref{extra_cols} modifikovat tak, že všechny
-mezivýsledky budou omezeny výrazem $ TODO $ a navíc transpozice výsledné matice
-bude diagonálně dominantní.
+
+\begin{lem} \label{Sloup_elim_modified}
+Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{Sloup_elim}.
+Pak můžeme algoritmus věty \ref{Sloup_elim} modifikovat tak, že všechny
+mezivýsledky budou omezeny výrazem $ a_1 \cdots a_{k - 1} |t_k|$ 
+a výsledná matice bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
-V každé iteraci algoritmu věty \ref{extra_cols} můžeme podle lemmatu
-\ref{bez_bound} zvolit koeficienty $ s, t $ tak, že $ |s| \leq |b_{1,j}| \leq |a_1|$
-a $ |t| \leq |a_1| $. Po aplikaci transformační matice $ V $ dostáváme matici ve
+Pro modifikaci algoritmu věty \ref{Sloup_elim} můžeme použít algoritmy z lemmat
+\ref{Sloup_elim_GCD_modified} a \ref{Sloup_elim_SNF_modified}. Jejich výstupem
+je vždy diagonálně dominantní matice, takže jejich použití je korektní.
+
+Lemma \ref{Sloup_elim_GCD_modified} dává odhad $ a_{k - 2} a_{k - 1} $. 
+Následně budeme iterativně aplikovat lemma \ref{Sloup_elim_SNF_modified}.
+Pro $ i $-tou iteraci máme odhad $ \max\{ |T[k,k] a_i|, a_i a_{k - 1} \} $,
+kde $ T[k,k] $ je prvek na pozici $ [k, k] $, který se bude v průběhu výpočtu
+měnit. Poznamenejme, že na začátku výpočtu platí $ T[k,k] = t_k $. V $ i $-té 
+iteraci přiřazujeme $ T[k,k] = T[k,k] a_i / s_i $, kde $ s_i $ odpovídá prvku
+v příslušné iteraci, který jsme v lemmatu \ref{Sloup_elim_SNF} značili $ s_1 $.
+V nejhorším případě bude $ s_i = 1 $ pro $ i = 1, \dots, k - 1 $. V každé iteraci 
+proto bude platit $ |T[k,k] a_i| \leq |t_k| a_1 \cdots a_{k - 1} $. 
+
+Největší z uvedených odhadů bude zřejmě odhad $ |t_k| a_1 \cdots a_{k - 1} $,
+čímž je tvrzení dokázáno.
+\end{proof}
+
+
+\begin{lem} \label{Zero_extra_modified}
+Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{Zero_extra}.
+Pak můžeme algoritmus věty \ref{Zero_extra} modifikovat tak, že všechny
+mezivýsledky budou omezeny výrazem $ a_k + a_{k - 1} a_k $ 
+a navíc transpozice výsledné matice bude diagonálně dominantní.
+\end{lem}
+\begin{proof}
+V každé iteraci algoritmu věty \ref{Zero_extra} můžeme podle lemmatu
+\ref{bez_bound} zvolit koeficienty $ s, t $ tak, že $ |s| \leq |b_{1,j}| \leq a_1$
+a $ |t| \leq a_1 $. Po aplikaci transformační matice $ V $ dostáváme matici ve
 tvaru
 \begin{align*}
 TV =
@@ -350,18 +396,83 @@ TV =
     \end{array}
     \right).
 \end{align*}
+Jediné prvky, které se můžou transformací zvětšit jsou ty pod diagonálou v 
+prvním sloupci a prvky $ b_{i,j} $ pro $ i = 2,\dots,k $.
+
 Díky tomu, že matice $ T $ je diagonálně dominantní, platí nerovnost
-$ |tb_{i,j}| \leq |a_1 a_i| $ pro $ i = 2,\dots,k $. Také zřejmě platí
-$ | b_{i,j} a_1 / s_1 | \leq |a_1 a_i|$. Následně můžeme všechny prvky redukovat
+$ |tb_{i,j}| \leq a_1 a_i $ pro $ i = 2,\dots,k $. Také zřejmě platí
+$ | b_{i,j} a_1 / s_1 | \leq a_1 a_i $. Následně můžeme všechny prvky redukovat
 modulo příslušný diagonální prvek.
 
 Tento eliminační proces můžeme provést pro všechny prvky $ b_{1, j} $ se stejnými
 odhady na pracovní prvky. Jen odhad na prvky v prvním sloupci musíme mírně upravit.
 Označme prvky prvního sloupce v průběhu výpočtu $ t_i $. Pak po každé iteraci
 eliminačního procesu bude zřejmě platit $ |t_i| \leq |a_i| $. V každém kroku
-algoritmu tak bude platit $ |t_i| \leq |a_i| + |a_1 a_i| $, neboť při eliminaci
-prvku $ b_{1,j} $ přiřazujeme $ t_i = t_i + tb_{i,j} $. Nakonec ještě poznamenejme
+algoritmu tak bude platit $ |t_i| \leq a_i + a_1 a_i $, neboť při eliminaci
+prvku $ b_{1,j} $ přiřazujeme $ t_i = t_i + tb_{i,j} $.
+
+Celkem jsme tedy schopni eliminovat všechny prvky $ b_{1,j} $ tak, že  
+mezivýsledky budou omezeny výrazem $ \max\{ a_i + a_1 a_i \} $, kde 
+$ i = 2,\dots,k $. Nakonec ještě redukujeme prvky pod diagonálou modulo 
+diagonální prvek ve stejném sloupečku.
+
+Stejný postup můžeme aplikovat rekurzivně na trailing
+$ (k - i + 1) \times (m - i + 1) $ submatici pro $ i = 2,\dots, k $. Tímto 
+způsobem dostaneme matici požadovaného tvaru. Velikost mezivýsledků bude 
+díky předchozímu omezena výrazem 
+$ \max\limits_{1 \leq q < i \leq k}\{ a_i + a_q a_i \} = a_k + a_{k - 1} a_k $.
+Uvedená rovnost plyne z vlastností Smithova normálního tvaru. 
+
+Díky tomu, že jsme sloupce v hlavní $ k \times k $ matici průběžně redukovali
+modulo diagonální prvek, bude transpozice výsledné matice diagonálně dominantní.
 \end{proof}
+
+\begin{vet}
+Buď $ A $ diagonálně dominantní matice splňující požadavky věty \ref{SNF_Triang}.
+Označme diagonální prvky matice $ A $ postupně $ a_1, a_2, \dots, a_n $.
+Pak můžeme algoritmus věty \ref{SNF_Triang} modifikovat tak, že všechny
+mezivýsledky budou omezeny výrazem $ 2 a_1 a_2 \cdots a_n $.
+\end{vet}
+\begin{proof}
+Nejprve modifikuje první fázi algoritmu věty \ref{Sloup_elim} o sloupcové 
+eliminaci. Z lemmatu \ref{Sloup_elim_modified} plyne, že stávající proceduru 
+můžeme nahradit její vylepšenou verzí, která dává záruky na velikost prvků. 
+Snadno se nahlédne, že  algoritmus z \ref{Sloup_elim_modified} nemění absolutní 
+hodnotu součinu  diagonálních prvků vstupní matice. Z toho důvodu budou 
+mezivýsledky v  každém kroku $ r \in \{1, \dots, n \} $ omezeny součinem 
+$ |a_1 \cdots a_r| $.
+Výsledkem bude ekvivalentní matice
+\begin{align*}
+A' =
+    \left(
+    \begin{array}{c|c}
+        S' & B
+    \end{array}
+    \right)
+.
+\end{align*}
+Z lemmatu \ref{Sloup_elim_modified} plyne, že matice $ A' $ bude diagonálně
+dominantní.
+
+Ve druhé fázi použijeme algoritmus z lemmatu \ref{Zero_extra_modified}
+k eliminaci prvků v submatici $ B $. Nechť $ s_i $ značí diagonální prvky matice 
+$ S' $. Pak lemma \ref{Zero_extra_modified} garantuje, že všechny mezivýsledky 
+budou omezeny součtem $ s_n + s_{n - 1} s_n $. Avšak z toho, že 
+$ |a_1 \cdots a_n| = s_1 \cdots s_n $, plyne 
+$ s_n + s_{n - 1} s_n \leq 2 s_{n - 1} s_n \leq 2 |a_1 \cdots a_n| $.
+
+Navíc transpozice výsledné $ n \times n $ hlavní submatice bude diagonálně 
+dominantní. Díky tomu na ni opět můžeme iterativně aplikovat modifikovaný 
+algoritmus sloupcové eliminace s odhadem $ |a_1 \cdots a_n| $.
+
+Maximum odhadů ze všech tří částí je rovno $ 2 |a_1 \cdots a_n| $, což jsme měli
+dokázat.
+\end{proof}
+
+
+
+
+
 
 
 
