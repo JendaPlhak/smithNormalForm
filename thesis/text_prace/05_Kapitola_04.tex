@@ -269,6 +269,32 @@ vlastnosti, které požaduje lemma \ref{bez_bound}.
 Existuje algoritmus, který převede libovolnou matici v redukovaném schodovitém
 tvaru na ekvivalentní matici, která bude diagonálně dominantní.
 \end{lem}
+\begin{proof}
+Mějme matici $ A $ v redukovaném schodovitém tvaru o rozměrech $ n \times m $. 
+Pak můžeme přeskupit sloupce tak, aby hlavní $ n \times n $ submatice měla plnou
+hodnost a byla horní trojúhelníková. Pak můžeme uvážit následující funkci.\\
+%
+    \begin{algorithm}[htp]
+        \SetAlgoLined\DontPrintSemicolon
+        \SetKwFunction{fun}{Compute\_DDT}
+        \SetKwProg{myproc}{Function}{}{}
+        \myproc{\fun{
+                        Matice $ A $ o rozměrech $ k \times m $ jejíž hlavní 
+                        $ k \times k $ submatice je regulární a horní trojúhelníková}} 
+        {
+            Redukuj prvky v $ k $-tém řádku pomocí $ k $-tého sloupce.\;
+            \uIf{$ k > 1 $} {
+                $ \tilde{A} \leftarrow $ submatice matice $ A $ tvořená prvními 
+                $ k - 1 $ řádky.\;
+                \fun{$ \tilde{A} $}\;
+            }
+            \KwRet\
+        }
+    \end{algorithm} 
+
+Každý její běh bude jistě konečný a postupně převede všechny submatice tvořené 
+posledními $ i $ řádky do diagonálně dominantního tvaru.
+\end{proof}
 
 
 
