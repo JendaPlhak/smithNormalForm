@@ -219,7 +219,7 @@ garantovat, že mezivýsledky budou omezeny výrazem
 $ \beta = 2[\Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} ] + 1 $
 \cite[Theorem 16]{triang}.
 Ačkoliv tento výraz vypadá poněkud komplikovaně, tak odhad
-asymptoticky odpovídá Hadamardovu odhadu na determinant a můžeme psát
+asymptoticky odpovídá logaritmu Hadamardova odhadu na determinant a můžeme psát
 $ \log{\beta} = \mathcal{O}(r \log{(r \Vert A \Vert)}) $.
 Poznamenejme, že zmíněné modifikace spočívají vesměs v tom, že pomocí nějakého
 význačného prvku redukujeme ostatní prvky v řádku nebo sloupci.
@@ -276,7 +276,8 @@ tvaru na ekvivalentní matici, která bude diagonálně dominantní.
 Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_GCD}.
 Pak můžeme algoritmus lemmatu \ref{Sloup_elim_GCD} modifikovat tak, že všechny
 mezivýsledky budou omezeny výrazem 
-$ a_{k - 1} + \max \{ a_{k - 2} a_{k - 1}, a_{k - 1} t_k \} $ 
+$ a_{k - 1} + \max \{ a_{k - 2} a_{k - 1}, a_{k - 1} t_k \} $ pro $ k > 2 $,
+$ a_{k - 1} + a_{k - 1} t_k $ pro $ k = 2 $
 a výsledná matice bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
@@ -291,11 +292,13 @@ $ j = 1, \dots, m $. Pro $ i = k - 1 $ bude platit $ a_{k-1} + a_{k - 1} t_k > T
 
 Z toho plyne, že všechny mezivýsledky můžeme omezit maximem výrazů
 $ \max\limits_{1 \leq i < k - 1}\{ a_i + a_i a_{i+1} \} = a_{k - 2} ( 1 + a_{k - 1} )$ 
-a $ a_{k - 1} ( 1 + t_k )$. Následující nerovnost pak dává hledané omezení.
+a $ a_{k - 1} ( 1 + t_k )$, pokud $ k > 2 $. Následující nerovnost pak dává 
+hledané omezení.
 \begin{align*}
     \max \{ a_{k - 2} ( 1 + a_{k - 1}),  a_{k - 1} ( 1 + t_k ) \} 
         \leq  a_{k - 1} + \max \{ a_{k - 2} a_{k - 1}, a_{k - 1} t_k \}
 \end{align*}
+Pro $ k = 2 $ dostáváme omezení $ a_{k - 1} + a_{k - 1} t_k $.
 
 Navíc pak pomocí prvku
 $ a_i $ můžeme zredukovat všechny prvky napravo, čímž získáme diagonálně dominantní
@@ -311,7 +314,8 @@ kde $ k $ je libovolné celé číslo.
 Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_SNF}.
 Pak můžeme algoritmus lemmatu \ref{Sloup_elim_SNF} modifikovat tak, že všechny
 mezivýsledky budou omezeny výrazem 
-$ \max\{ a_1^2 t_k, 3 a_1 a_{k - 1} \}  $ 
+$ \max\{ a_1^2 t_k, 3 a_1 a_{k - 1} \} $ pro $ k > 2 $, 
+$ a_1^2 t_k $ pro $ k = 2 $
 a výsledná matice bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
@@ -334,7 +338,8 @@ prvky hlavní submatice $ k \times k $. Výslednou submatici můžeme zapsat ve 
 
 Prvek na pozici $ [1,1] $ se ze zřejmých důvodů určitě nezvětší. Pokud za $ s, t $
 zvolíme koeficienty z lemmatu \ref{bez_bound}, tak bude platit $ |t| \leq a_1 $.
-Pro prvky $ t t_i $ z prvního sloupce matice $ TV $ proto bude platit
+Odhady nejprve stanovíme pro případ, kdy $ k > 2 $.
+Pro prvky $ t t_i $ z prvního sloupce matice $ TV $ bude platit
 $ |t t_i| \leq a_1 a_i $, protože vstupní matice $ T $ je diagonálně dominantní.
 V posledním řádku bude platit $ |t t_k| \leq a_1 t_k $.
 
@@ -372,6 +377,12 @@ sloupcem, z čehož vyplývá odhad na řádky $ i \in \{ 2, \dots, k - 1 \} $:
         \leq 3 a_1 a_{k - 1}.
 \end{align*}
 
+Nakonec vezmeme maximum ze všech průběžných odhadů a obdržíme
+\begin{align*}
+    \max\{ a_1^2 t_k, 3 a_1 a_{k - 1} \},
+\end{align*}
+pro $ k > 2 $ a pokud $ k = 2 $, tak většina odhadů vypadne a dostaneme výraz
+$ a_1^2 t_k $.
 
 Zbývá zajistit, že výsledná matice bude diagonálně dominantní. K tomu stačí 
 redukovat prvky v řádcích $ 1, \dots, k - 1 $ diagonálními prvky. Ověříme, zda 
@@ -385,48 +396,66 @@ $ i = 2, \dots, k $. Avšak z podmínky (c2) dostáváme, že také $ s_1 \vert 
 Proto $ s_1 \vert (t_i a_1/s_1 + k a_i) $ a podmínka (c4) je splněna. (c5) bude 
 splněna triviálně.
 
-Nakonec vezmeme maximum ze všech průběžných odhadů a obdržíme
-\begin{align*}
-    \max\{ a_1^2 t_k, 3 a_1 a_{k - 1} \}.
-\end{align*}
 \end{proof}
+
+\begin{pozn}
+Všimněme si, že pokud pro předchozí lemma \ref{Sloup_elim_SNF_modified} platí
+$ k > 2 $, tak můžeme odhad upravit na $ \max\{ a_1 a_2 t_k, 3 a_1 a_{k - 1} \} $.
+To je pro naše potřeby výhodnější, neboť tento výraz je shora omezen součinem 
+prvků na diagonále. Bohužel si nejsme vědomi způsobu, kterým by bylo možné 
+vytvořit podobný odhad pro $ k = 2 $ a nezvýšit tím výpočetní náročnost
+algoritmu.
+\end{pozn}
 
 
 
 \begin{lem} \label{Sloup_elim_modified}
 Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{Sloup_elim}.
 Pak můžeme algoritmus věty \ref{Sloup_elim} modifikovat tak, že všechny
-mezivýsledky budou omezeny výrazem $ a_1 \cdots a_{k - 1} |t_k|$ 
-a výsledná matice bude diagonálně dominantní.
+mezivýsledky budou omezeny výrazem $ 3 a_1 \cdots a_{k - 2} a_{k - 1}^2 t_k $ 
+pro $ k > 2 $, $ a_1^2 t_k $ pro $ k = 2 $ a výsledná matice bude diagonálně 
+dominantní.
 \end{lem}
 \begin{proof}
 Pro modifikaci algoritmu věty \ref{Sloup_elim} můžeme použít algoritmy z lemmat
 \ref{Sloup_elim_GCD_modified} a \ref{Sloup_elim_SNF_modified}. Jejich výstupem
 je vždy diagonálně dominantní matice, takže jejich použití je korektní.
 
+Dále budeme předpokládat, že $ k > 2 $.
 Lemma \ref{Sloup_elim_GCD_modified} dává odhad $ a_{k - 2} a_{k - 1} $. 
 Následně budeme iterativně aplikovat lemma \ref{Sloup_elim_SNF_modified}.
-Pro $ i $-tou iteraci máme odhad $ \max\{ |T[k,k] a_i|, a_i a_{k - 1} \} $,
-kde $ T[k,k] $ je prvek na pozici $ [k, k] $, který se bude v průběhu výpočtu
-měnit. Poznamenejme, že na začátku výpočtu platí $ T[k,k] = t_k $. V $ i $-té 
-iteraci přiřazujeme $ T[k,k] = T[k,k] a_i / s_i $, kde $ s_i $ odpovídá prvku
-v příslušné iteraci, který jsme v lemmatu \ref{Sloup_elim_SNF} značili $ s_1 $.
-V nejhorším případě bude $ s_i = 1 $ pro $ i = 1, \dots, k - 1 $. V každé iteraci 
-proto bude platit $ |T[k,k] a_i| \leq |t_k| a_1 \cdots a_{k - 1} $. 
+Nechť $ T_{k,k}^{(i)} $ značí prvek na pozici $ [k, k] $ v $ i $-té iteraci, 
+přičemž iniciálně bude platit $ T_{k,k}^{(0)} = t_k $. V $ i $-té 
+iteraci přiřazujeme $ T_{k,k}^{(i)} = T_{k,k}^{(i - 1)} a_i / s_i $, 
+kde $ s_i $ odpovídá prvku v příslušné iteraci, který jsme v lemmatu 
+\ref{Sloup_elim_SNF} značili $ s_1 $.
+V nejhorším případě bude $ s_i = 1 $ pro $ i = 1, \dots, i $. Proto platí 
+$ T_{k,k}^{(i)} \leq t_k a_1 \cdots a_i $. 
 
-Největší z uvedených odhadů bude zřejmě odhad $ |t_k| a_1 \cdots a_{k - 1} $,
-čímž je tvrzení dokázáno.
+Pro $ i $-tou iteraci tak máme odhad 
+\begin{align*}
+\max\{ a_i^2 T_{k,k}^{(i - 1)}, 3 a_{k - 2} a_{k - 1} \} 
+    & \leq \max\{ a_i^2 t_k a_1 \cdots a_{i - 1} , 3 a_{k - 2} a_{k - 1} \} \\
+    & \leq \max\{ a_1 \cdots a_{k - 2} a_{k - 1}^2 t_k, 3 a_{k - 2} a_{k - 1} \} \\
+    & \leq 3 a_1 \cdots a_{k - 2} a_{k - 1}^2 t_k
+\end{align*}
+
+Největší z uvedených odhadů bude zřejmě odhad $ 3 a_1 \cdots a_{k - 1} t_k $.
+Pro situaci $ k = 2 $ bude situace o něco jednodušší a analogicky můžeme dokázat
+odhad $ a_1^2 t_k $.
 \end{proof}
 
 
 \begin{lem} \label{Zero_extra_modified}
-Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{Zero_extra}.
+Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{Zero_extra} 
+a nechť $ k > 1 $.
 Pak můžeme algoritmus věty \ref{Zero_extra} modifikovat tak, že všechny
 mezivýsledky budou omezeny výrazem $ a_k + a_{k - 1} a_k $ 
 a navíc transpozice výsledné matice bude diagonálně dominantní.
+Pro $ k = 1 $ je tvrzení triviální a mezivýsledky budou omezeny prvkem $ a_1 $.
 \end{lem}
 \begin{proof}
-V každé iteraci algoritmu věty \ref{Zero_extra} můžeme podle lemmatu
+Nechť $ k > 1 $. V každé iteraci algoritmu věty \ref{Zero_extra} můžeme podle lemmatu
 \ref{bez_bound} zvolit koeficienty $ s, t $ tak, že $ |s| \leq |b_{1,j}| \leq a_1$
 a $ |t| \leq a_1 $. Po aplikaci transformační matice $ V $ dostáváme matici ve
 tvaru
@@ -477,16 +506,18 @@ Buď $ A $ diagonálně dominantní matice splňující požadavky věty \ref{SN
 Označme diagonální prvky matice $ A $ postupně $ a_1, a_2, \dots, a_n $.
 Pak můžeme algoritmus věty \ref{SNF_Triang} pro výpočet Smithova normálního 
 tvaru z trojúhelníkové matice modifikovat tak, že všechny mezivýsledky budou 
-omezeny výrazem $ 2 |a_1 a_2 \cdots a_n| $.
+omezeny výrazem $ 3 a_1 \cdots a_{n - 1}^2 a_n $ pro $ n > 1 $ a $ a_1 $ 
+pro $ n = 1 $.
 \end{vet}
 \begin{proof}
-Nejprve modifikuje první fázi algoritmu věty \ref{Sloup_elim} o sloupcové 
+Nechť $ n > 1 $.
+Nejprve modifikujeme první fázi algoritmu věty \ref{Sloup_elim} o sloupcové 
 eliminaci. Z lemmatu \ref{Sloup_elim_modified} plyne, že stávající proceduru 
 můžeme nahradit její vylepšenou verzí, která dává záruky na velikost prvků. 
 Snadno se nahlédne, že  algoritmus z \ref{Sloup_elim_modified} nemění absolutní 
 hodnotu součinu  diagonálních prvků vstupní matice. Z toho důvodu budou 
 mezivýsledky v  každém kroku $ r \in \{1, \dots, n \} $ omezeny součinem 
-$ |a_1 \cdots a_r| $.
+$ 3 a_1 \cdots a_{n - 1}^2 a_n $.
 Výsledkem bude ekvivalentní matice
 \begin{align*}
 A' =
@@ -505,14 +536,17 @@ k eliminaci prvků v submatici $ B $. Nechť $ s_i $ značí diagonální prvky 
 $ S' $. Pak lemma \ref{Zero_extra_modified} garantuje, že všechny mezivýsledky 
 budou omezeny součtem $ s_n + s_{n - 1} s_n $. Avšak z toho, že 
 $ |a_1 \cdots a_n| = s_1 \cdots s_n $, plyne 
-$ s_n + s_{n - 1} s_n \leq 2 s_{n - 1} s_n \leq 2 |a_1 \cdots a_n| $.
+$ s_n + s_{n - 1} s_n \leq 2 s_{n - 1} s_n \leq 2 3 a_1 \cdots a_{n - 1}^2 a_n $.
 
 Navíc transpozice výsledné $ n \times n $ hlavní submatice bude diagonálně 
 dominantní. Díky tomu na ni opět můžeme iterativně aplikovat modifikovaný 
-algoritmus sloupcové eliminace s odhadem $ |a_1 \cdots a_n| $.
+algoritmus sloupcové eliminace s odhadem $ 3 a_1 \cdots a_{n - 1}^2 a_n $.
+Maximum odhadů ze všech tří částí je rovno $ 3 a_1 \cdots a_{n - 1}^2 a_n $, 
+což jsme měli dokázat.
 
-Maximum odhadů ze všech tří částí je rovno $ 2 |a_1 \cdots a_n| $, což jsme měli
-dokázat.
+Pokud by platilo $ n = 1 $, tak by bylo nutné aplikovat pouze lemma 
+\ref{Zero_extra_modified}, které v tomto případě dává odhad na mezivýsledky
+$ a_1 $.
 \end{proof}
 
 
@@ -556,7 +590,7 @@ která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_G
 se jedná o koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
 \ref{Sloup_elim_SNF} pak používá rozšířený Euklidův algoritmus pro výpočet čísel
 $ s, t $ a $ s_1 $. Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu
-\ref{extra_cols}. Na těchto třech místech proto musí dojít k synchronizaci výpočtu,
+\ref{extra_cols}. Na těchto třech místech proto musí dojít k
 převodu příslušných prvků do standardní reprezentace, výpočtu potřebných
 koeficientů a pak teprve může algoritmus pokračovat ve výpočtu v modulárních
 systémech se získanými koeficienty.
