@@ -25,10 +25,10 @@ Při popisu algoritmů a výsledků v této kapitole budeme vycházet zejména z
     \end{align}
     Pak $ H $ je v Hermitově normálním tvaru, právě když splňuje následující
     podmínky:
-    \begin{Cond}
+    \begin{CondNum}
         \item pro každé $ j \in \{1,\dots, n\}$ platí $ h_j > 0 $ a zároveň
         \item $ 0 \leq h_{ij} < h_j $ pro všechna $ 1 \leq i < j \leq n $.
-    \end{Cond}
+    \end{CondNum}
 \end{defi}
 \begin{pozn}
     Matice splňující požadavky předchozí definice jsou tedy horní trojúhelníkové
@@ -66,7 +66,7 @@ T =
 Cílem této sekce bude dokázat následující tvrzení.
 
 \begin{vet}[Sloupcová eliminace] \label{Sloup_elim}
-Nechť $ T $ je matice, kterou lze zapsat stejně jako v rovnosti \ref{T_matrix}
+Nechť $ T $ je matice, kterou lze zapsat způsobem znázorněným ve \eqref{T_matrix}
 a navíc splňuje následující podmínky:
 \begin{Cond}[series=Sloup_elim_CONDS]
     \item hlavní $ k \times k $ submatice má plnou hodnost,
@@ -79,6 +79,9 @@ Smithova normálního tvaru.
 
 Pro lepší čitelnost rozdělíme důkaz této věty do několika lemmat, která na konci
 této kapitoly spojíme v kompletní důkaz.
+
+
+
 
 \begin{lem} \label{Sloup_elim_GCD}
 Buď $ T $ matice splňující stejné podmínky jako v předpokladech věty
@@ -137,6 +140,8 @@ Nyní stačí jen redukovat prvky v $ i $-tém řádku napravo od $ a_i $. Díky
 že $ a_i \mid a_{i+1} $, bude $ i + 1 $ prvek $ ca_{i+1} $ vynulován a
 matice sestavená z prvních $ k - 1 $ sloupců matice $ T' $ zůstane nezměněna.
 \end{proof}
+
+
 
 \begin{lem} \label{Sloup_elim_SNF}
 Buď $ T $ matice splňující stejné podmínky jako v požadavcích lemmatu \ref{Sloup_elim_GCD}
@@ -304,6 +309,7 @@ a důkaz je hotov.
 \end{proof}
 
 
+
 \section{Výpočet \snf{} trojúhelníkových matic}
 
 \begin{vet} \label{SNF_Triang}
@@ -418,10 +424,6 @@ Takto upravená matice bude korektním vstupem pro algoritmus věty
 \ref{SNF_Triang}. Tímto algoritmem pak můžeme spočítat výsledný Smithův normální
 tvar.
 
-\begin{pozn}
-Na různých místech předchozího textu si pozorný čtenář mohl povšimnout zdánlivě
-nepotřebných požadavků na redukování prvků matice například pivotem či nějakým
-jiným význačným prvkem. Důvodem je snaha o omezení velikosti čísel, se kterými
-musíme pracovat. Konkrétní výsledky a odhady je možné nalézt v článcích
-\cite{triang} a \cite{SNF_Arne}.
-\end{pozn}
+Na uvedené výsledky navážeme v další kapitole a popíšeme způsob, jakým počítat
+Smithův normální tvar ve standardní 32-bitové aritmetice a zdůvodníme, proč 
+je nutné se touto problematikou vůbec zabývat.
