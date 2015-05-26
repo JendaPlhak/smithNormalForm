@@ -219,7 +219,7 @@ mírně upravit požadavky na vstupní matice. Tyto požadavky jsou obsahem nás
 definice.
 
 \begin{defi}
-    Řekneme, že matice $ A \in \Zmat $ je \emph{diagonálně dominantní}, jestliže
+    Řekneme, že matice $ A \in \Zmats $ je \emph{diagonálně dominantní}, jestliže
     splňuje následující podmínky:
     \begin{Cond}
         \item Hlavní $ n \times n $ submatice je horní trojúhelníková, má plnou
@@ -678,15 +678,20 @@ schopni nalézt sdostatek.
 Výpočet povedeme podobným způsobem jako v případě výše uvedené paralelizace 
 algoritmu pro výpočet RST. 
 Nejprve musíme identifikovat všechna místa algoritmu z věty \ref{SNF_Triang},
-která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_GCD}
-se jedná o koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
-\ref{Sloup_elim_SNF} pak používá rozšířený Euklidův algoritmus pro výpočet čísel
-$ s, t $ a $ s_1 $. Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu
-\ref{extra_cols}. Rozšíření těchto algoritmů pak na různých místech provádí 
-redukci modulo nějaký prvek. Na těchto místech proto musí dojít k
-převodu příslušných prvků do standardní reprezentace, výpočtu potřebných
-koeficientů a pak teprve může algoritmus pokračovat ve výpočtu v modulárních
-systémech se získanými koeficienty.
+která si nevystačí s algebraickými operacemi (sčítání, odečítání, násobení). 
+Jedná se o výpočty koeficientů pro řádkové/sloupcové operace
+pomocí Bezoutova lemmatu nebo Bachova lemmatu (ty totiž používají
+uspořádání $\Zbb$, které nelze promítnout do $\Zbb / p_1 \Zbb \times
+\cdots \times \Zbb / p_s \Zbb$), případně výpočtu koeficientu pro redukci.
+
+V lemmatu \ref{Sloup_elim_GCD} se jedná o koeficient $ c $, který počítáme 
+pomocí Bachova lemmatu. Lemma \ref{Sloup_elim_SNF} pak používá rozšířený 
+Euklidův algoritmus pro výpočet čísel $ s, t $ a $ s_1 $. Analogický výpočet 
+koeficientů $ s, t $ najdeme v lemmatu \ref{extra_cols}. Rozšíření těchto 
+algoritmů pak na různých místech provádí redukci modulo nějaký prvek. Na těchto 
+místech proto musí dojít k převodu příslušných prvků do standardní reprezentace, 
+výpočtu potřebných koeficientů a pak teprve může algoritmus pokračovat ve 
+výpočtu v modulárních systémech se získanými koeficienty.
 
 \begin{pri}
 Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozměrech

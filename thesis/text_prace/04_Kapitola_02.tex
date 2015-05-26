@@ -7,15 +7,15 @@ triangularizing integer matrices}'' \cite{triang}. Definujme nejdříve tvar mat
 jehož vytvoření bude naším cílem.
 
 \begin{defi}\label{RREF}
-    Řekneme, že matice $ A \in \Zmat $ je v \emph{redukovaném schodovitém tvaru}
+    Řekneme, že matice $ A \in \Zmats $ je v \emph{redukovaném schodovitém tvaru}
     (\rst{}), jestliže splňuje následující podmínky:
     \begin{Cond}
         \item Buď $ r $ hodnost matice A. Pak prvních $ r $ řádků je nenulových
         a zbylých $ n - r $ řádků je nulových.
-        \item Pro každé $ 1 \leq i \leq r $ buď $A[i, j_i]$ první nenulový prvek v
+        \item Pro každé $ 1 \leq i \leq r $ buď $ A_{i, j_i} $ první nenulový prvek v
         $ i $-tém řádku. Pak $ j_1 < j_2 < \cdots < j_r $.
-        \item Pro každé $ 1 \leq i \leq r $ platí $ A[i, j_i] > 0 $.
-        \item Pro každé $ 1 \leq k < i \leq r $ platí $ A[i, j_i] > A[k, j_i] \geq 0 $.
+        \item Pro každé $ 1 \leq i \leq r $ platí $ A_{i, j_i} > 0 $.
+        \item Pro každé $ 1 \leq k < i \leq r $ platí $ A_{i, j_i} > A_{k, j_i} \geq 0 $.
     \end{Cond}
 \end{defi}
 Pro lepší práci s uvedenou definicí definujeme ještě pivot matice.
@@ -693,8 +693,8 @@ psát jako v \ref{block_form}, kde $ R_i $ je $ (i - 1) \times (j_{i + 1} - 2) $
 matice v redukovaném schodovitém tvaru. Navíc bude platit:
 \begin{Cond}
     \item $ Q^{(i)} $ a $ C^{(i)} $ jsou unimodulární a
-    \item \label{RST_2} prvek $ T^{(i)}[i+1, j_{i+1}] $, který budeme značit $ N_{i + 1} $, bude
-    nenulový a navíc bude platit $ 0 \leq T^{(i)}[l, j_{i+1}] < N_{i+1} $ pro
+    \item \label{RST_2} prvek $ T^{(i)}_{i+1, j_{i+1}} $, který budeme značit $ N_{i + 1} $, bude
+    nenulový a navíc bude platit $ 0 \leq T^{(i)}_{l, j_{i+1}} < N_{i+1} $ pro
     $ l = 1, \dots, i, i+1, \dots, m $.
 \end{Cond}
 \end{lem}
@@ -721,7 +721,7 @@ B_k =
 \end{align*}
 kde $ k' = n - k - 1 $. Z indukčního předpokladu plyne, že submatice $ B_k $ má
 následující dvě vlastnosti.
-(1) $ N_k > 0 $, což plyne z podmínky \ref{RST_2} a toho, že $ N_k = T^{(k - 1)}[k, j_k] $.
+(1) $ N_k > 0 $, což plyne z podmínky \ref{RST_2} a toho, že $ N_k = T^{(k - 1)}_{k, j_k} $.
 A také (2) submatice složená z posledních $ k' + 2 $ řádků matice $ B_k $
 bude mít plnou hodnost. To dostaneme z toho, že $ B_k $ je složená ze sloupců
 $ j_k $ a $ j_{k+1} $ matice $ T^{(k - 1)} $ a navíc všechny prvky nalevo od
