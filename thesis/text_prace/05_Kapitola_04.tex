@@ -11,9 +11,8 @@ se v případě počítačové implementace algoritmu pro výpočet Smithova nor
 tvaru můžeme poměrně rychle dostat do problémů s kapacitou celočíselných typů.
 
 Tento problém můžeme řešit knihovnami pro reprezentaci celých čísel libovolné
-bitové délky. Nicméně
-efektivita takového řešení už není ideální a navíc tento přístup zvyšuje
-paměťovou náročnost. Hodilo by se nám proto, kdybychom mohli celý výpočet
+bitové délky. Nicméně efektivita takového řešení už není ideální. 
+Hodilo by se nám proto, kdybychom mohli celý výpočet
 rozložit na více částí, pro které už by nebylo problém spočítat výsledek pomocí
 standardní 32-bitové aritmetiky a následně všechny částečné výsledky spojit
 do hledaného Smithova normálního tvaru. Toho můžeme dosáhnout pomocí Čínské
@@ -40,11 +39,11 @@ $ x_1 \equiv x_2 \pmod{m_1 m_2 \cdots m_k} $  .
 
 \begin{proof}
 Zaměřme svou pozornost nejprve na existenci řešení. Označme
-$ \chi = m_1 m_2 \cdots m_k $. Pak zřejmě pro každé $ i \in \{1,\dots,k\} $
-platí $ \gcd(m_i, \chi / m_i) = 1 $, protože $ m_i $ jsou po dvou nesoudělná.
+$ \mu = m_1 m_2 \cdots m_k $. Pak zřejmě pro každé $ i \in \{1,\dots,k\} $
+platí $ \gcd(m_i, \mu / m_i) = 1 $, protože $ m_i $ jsou po dvou nesoudělná.
 Díky tomu můžeme pomocí rozšířeného Euklidova algoritmu najít celá čísla
-$ s_i, t_i $ taková, že $ s_i m_i + t_i \frac{\chi}{m_i} = 1 $. Nyní označme
-$ d_i = t_i \frac{\chi}{m_i} $. Z toho plyne rovnost $ s_i m_i + d_i = 1 $ a
+$ s_i, t_i $ taková, že $ s_i m_i + t_i \frac{\mu}{m_i} = 1 $. Nyní označme
+$ d_i = t_i \frac{\mu}{m_i} $. Z toho plyne rovnost $ s_i m_i + d_i = 1 $ a
 \begin{align*}
 d_i \equiv
 \left\{
@@ -65,18 +64,18 @@ Nechť $ x_1, x_2 \in \Zbb $ jsou dvě libovolná řešení soustavy \eqref{cong
 Pak ale $ x_1 \equiv x_2 \pmod{m_i} $, což implikuje $ m_i \mid x_1 - x_2 $.
 Protože $ m_i $ jsou po dvou nesoudělná, tak z předchozí implikace dále plyne, že
 $ x_1 - x_2 $ bude dělitelné také součinem všech $ m_i $, tedy
-$ \chi \mid x_1 - x_2 $. To je ale ekvivalentní tomu, že
-$ x_1 \equiv x_2 \pmod{\chi} $ a důkaz je hotov.
+$ \mu \mid x_1 - x_2 $. To je ale ekvivalentní tomu, že
+$ x_1 \equiv x_2 \pmod{\mu} $ a důkaz je hotov.
 \end{proof}
 
 \begin{dus} \label{Chin_Rem_Iso}
-Mějme kladné číslo $ \chi $ s faktorizací $ \chi = p_1^{r_1} \cdots p_k^{r_k}$. Pak
+Mějme kladné číslo $ \mu $ s faktorizací $ \mu = p_1^{r_1} \cdots p_k^{r_k}$. Pak
 existuje izomorfismus okruhů
-$ \Zbb / \chi \Zbb \cong \Zbb / p_1^{r_1} \Zbb \times \cdots \times \Zbb / p_k^{r_k} \Zbb $.
+$ \Zbb / \mu \Zbb \cong \Zbb / p_1^{r_1} \Zbb \times \cdots \times \Zbb / p_k^{r_k} \Zbb $.
 \end{dus}
 \begin{proof}
 Uvažme zobrazení
-$ \varphi : \Zbb / \chi \Zbb \rightarrow \Zbb / p_1^{r_1} \Zbb \times \cdots \Zbb / p_k^{r_k} \Zbb $
+$ \varphi : \Zbb / \mu \Zbb \rightarrow \Zbb / p_1^{r_1} \Zbb \times \cdots \Zbb / p_k^{r_k} \Zbb $
 definované jako $ \varphi([x]_m) = ([x]_{p_1^{r_1}},\dots, [x]_{p_k^{r_k}}) $.
 Ukážeme, že takto definované zobrazení je izomorfismem okruhů.
 
@@ -94,13 +93,13 @@ Pak podle věty \ref{Chin_Rem} můžeme nalézt takové $ x \in \Zbb $, že
 %
 Pak ale $ \varphi([x]_m) = a $, z čehož plyne, že $ \varphi $ je surjektivní.
 
-Mějme $ x, y \in \Zbb / \chi \Zbb $ libolná a předpokládejme
+Mějme $ x, y \in \Zbb / \mu \Zbb $ libolná a předpokládejme
 $ \varphi(x) = \varphi(y) $. Pak ale z věty \ref{Chin_Rem} plyne, že
-$ x \equiv y \pmod{\chi} $. $ \varphi $ je proto injekce a díky předchozímu
+$ x \equiv y \pmod{\mu} $. $ \varphi $ je proto injekce a díky předchozímu
 odstavci také bijekce.
 
 Nakonec ještě ověříme, že se skutečně jedná o homomorfismus okruhů.
-Mějme $ x, y \in \Zbb / \chi \Zbb $ libovolné. Pa
+Mějme $ x, y \in \Zbb / \mu \Zbb $ libovolné. Pa
 %
 \begin{align*}
     \varphi(x + y) &= ([x + y]_{p_1^{r_1}},\dots, [x + y]_{p_k^{r_k}})  \\
@@ -116,9 +115,9 @@ prostory jsou proto izomorfní.
 
 Předpokládejme, že chceme provádět sérii výpočtů (sčítání, odčítání,
 násobení) nad celými čísly a jsme dopředu schopni omezit všechny mezivýsledky nějakým číslem
-$ \chi $. Pak tyto výpočty můžeme ekvivalentně provádět v okruhu $ \Zbb / \chi \Zbb $.
+$ \mu $. Pak tyto výpočty můžeme ekvivalentně provádět v okruhu $ \Zbb / \mu \Zbb $.
 Avšak z důsledku \ref{Chin_Rem_Iso} plyne, že stejně tak můžeme výpočty provést
-paralelně modulo prvočíselné faktory $ \chi $. V praxi $ \chi $ obvykle získáme tak,
+paralelně modulo prvočíselné faktory $ \mu $. V praxi $ \mu $ obvykle získáme tak,
 že postupně přidáváme prvočísla dokud jejich součin není dostatečně velký.
 Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
 čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů.
@@ -137,7 +136,7 @@ bychom mohli postupně brát prvočísla $ 2, 3, 5, 7 \dots $, dokud by uvedená
 podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
 druhou stranu chceme, aby tato prvočísla byla dostatečně malá, abychom
 si pro rozumně velké matice vystačili se standardní 32-bitovou reprezentací
-prvku $ \Zbb / p_i \Zbb $. Co znamená rozumně velká matice, bude zřejmé z 
+prvků $ \Zbb / p_i \Zbb $. Co znamená rozumně velká matice, bude zřejmé z 
 následujících řádků.
 
 Přijatelný kompromis poskytuje \cite[Lemma 14]{triang}. Autor však tento výsledek
@@ -189,15 +188,14 @@ z čehož plyne následující výpočet.
 \end{align*}
 Tím je důkaz hotov až na případ, kdy $ \beta \in \{0, 1\} $. Tyto možnosti ale
 nejsou příliš zajímavé, neboť v prvním případě je Smithův normální tvar nulová
-matice a ve druhém pak skalár - jednička. V obou případech pak můžeme vzít
-libovolné prvočíslo, které jistě bude větší než determinant.
+matice a ve druhém pak skalár.
 \end{proof}
 
 \begin{pozn}
 Poznamenejme, že v praxi pro nějakou konkrétní úlohu můžeme mít k dispozici
 podstatně lepší odhad na determinant nebo na prvky v hledaném Smithově normálním
 tvaru. Toho můžeme s výhodou využít při převodu z RST do SNF. Hadamardův odhad
-$ \beta $ nahradíme lepším odhadem a dále postupujeme identicky.
+nahradíme lepším odhadem a dále postupujeme identicky.
 \end{pozn}
 
 Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozměrech
@@ -218,9 +216,9 @@ vhodným způsobem modifikujeme algoritmy ze druhé kapitoly, pak jsme schopni
 garantovat, že mezivýsledky budou omezeny výrazem
 $ \beta = 2[\Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} ] + 1 $
 \cite[Theorem 16]{triang}.
-Ačkoliv tento výraz vypadá poněkud komplikovaně, tak odhad
+Ačkoliv tento výraz vypadá poněkud komplikovaně, tak logaritmus odhadu
 asymptoticky odpovídá logaritmu Hadamardova odhadu na determinant a můžeme psát
-$ \log{\beta} = \mathcal{O}(r \log{(r \Vert A \Vert)}) $.
+$ \log{\beta} = \mathcal{O}(r \log{(r \Vert A \Vert)}) $ \cite[Theorem 16]{triang}.
 Poznamenejme, že zmíněné modifikace spočívají vesměs v tom, že pomocí nějakého
 význačného prvku redukujeme ostatní prvky v řádku nebo sloupci.
 
@@ -235,7 +233,8 @@ definice.
     \begin{Cond}
         \item Hlavní $ n \times n $ submatice je horní trojúhelníková, má plnou
             hodnost a prvky na diagonále jsou kladné.
-        \item Pro každé $ 1 \leq i \leq n $ a $ i < j \leq m $ platí $ A[i, i] > A[i, j] \geq 0 $.
+        \item Pro každé $ 1 \leq i \leq n $ a $ i < j \leq m $ platí 
+            $ A_{i, i} > A_{i, j} \geq 0 $.
     \end{Cond}
 \end{defi}
 
@@ -266,35 +265,64 @@ vlastnosti, které požaduje lemma \ref{bez_bound}.
 
 
 \begin{lem}
-Existuje algoritmus, který převede libovolnou matici v redukovaném schodovitém
-tvaru na ekvivalentní matici, která bude diagonálně dominantní.
+Mějme matici $ A $ v redukovaném schodovitém tvaru o rozměrech $ n \times m $,
+kde $ n > 0 $.
+Pak existuje algoritmus, který převede matici $ A $ na ekvivalentní matici, 
+která bude diagonálně dominantní a všechny mezivýsledky budou omezeny výrazem
+$ 2^{n - 1} \Vert A \Vert $.
 \end{lem}
 \begin{proof}
 Mějme matici $ A $ v redukovaném schodovitém tvaru o rozměrech $ n \times m $. 
 Pak můžeme přeskupit sloupce tak, aby hlavní $ n \times n $ submatice měla plnou
-hodnost a byla horní trojúhelníková. Pak můžeme uvážit následující funkci.\\
+hodnost, byla horní trojúhelníková a obsahovala všechny pivoty. Uvažme 
+následující algoritmus.\\
 %
-    \begin{algorithm}[htp]
-        \SetAlgoLined\DontPrintSemicolon
+    \begin{algorithm} \label{DDT_Algo}
+    {
+        \textbf{Algoritmus:} Compute\_DDT
+    }
+
+    \KwData{
+        Matice $ A $ o rozměrech $ k \times m $ jejíž hlavní $ k \times k $ 
+        submatice je regulární a horní trojúhelníková.
+    }
+
+    \KwResult{
+        Ekvivalentní diagonálně dominantní matice.
+    }
+
+    \Begin{
         \SetKwFunction{fun}{Compute\_DDT}
         \SetKwProg{myproc}{Function}{}{}
-        \myproc{\fun{
-                        Matice $ A $ o rozměrech $ k \times m $ jejíž hlavní 
-                        $ k \times k $ submatice je regulární a horní trojúhelníková}} 
-        {
-            Redukuj prvky v $ k $-tém řádku pomocí $ k $-tého sloupce.\;
-            \uIf{$ k > 1 $} {
-                $ \tilde{A} \leftarrow $ submatice matice $ A $ tvořená prvními 
-                $ k - 1 $ řádky.\;
-                \fun{$ \tilde{A} $}\;
-            }
-            \KwRet\
+        Redukuj prvky v $ k $-tém řádku pomocí $ k $-tého sloupce.\;
+        \If{$ k > 1 $} {
+            $ \tilde{A} \leftarrow $ submatice matice $ A $ tvořená prvními 
+            $ k - 1 $ řádky.\;
+            \fun{$ \tilde{A} $}\;
         }
+    }
     \end{algorithm} 
 
-Každý její běh bude jistě konečný a postupně převede všechny submatice tvořené 
-posledními $ i $ řádky do diagonálně dominantního tvaru.
+Každý běh uvedeného algoritmu bude jistě konečný a postupně převede všechny 
+submatice tvořené posledními $ i $ řádky do diagonálně dominantního tvaru.
+
+Důkaz uvedeného odhadu provedeme indukcí. Nechť $ n = 1 $. V tom případě pouze
+redukujeme prvky prvního řádku prvkem $ A_{1,1} $ a odhad bude platit.
+Buď $ n > 1 $ a nechť odhad na mezivýsledky algoritmu platí pro matice mající
+nejvýše $ n - 1 $ řádků. Z toho, že vstupní matice $ A $ je v redukovaném 
+schodovitém tvaru vyplývá, že $ A_{n,n} > A_{i, n} \geq 0 $ pro všechna 
+$ i = 1, \dots, n - 1 $. To implikuje, že prvky $ n $-tého řádku můžeme redukovat
+s odhadem $ \Vert A \Vert + A_{n,n} \frac{\Vert A \Vert} {A_{n,n}} = 2 \Vert A \Vert $.
+Nechť $ \tilde{A} $ je matice tvořena prvními $ n - 1 $ řádky výsledné matice.
+Pak platí $ \Vert \tilde{A} \Vert \leq 2 \Vert A \Vert $. To společně s
+indukčním předpokladem implikuje výsledný odhad 
+\begin{align*}
+    2^{n - 2} \Vert \tilde{A} \Vert 
+        \leq 2^{n - 2} 2 \Vert A \Vert 
+        = 2^{n - 1} \Vert A \Vert.
+\end{align*}
 \end{proof}
+
 
 
 
@@ -308,13 +336,14 @@ a výsledná matice bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
 Jediná operace inkriminovaného algoritmu, která zvětšuje prvky matice $ T $ je
-je v $ i $-té iteraci přičtení $ c $-násobku řádku: 
-$ \operatorname{row}(T, i) \pluseq c \operatorname{row}(T, i + 1) $.
+v $ i $-té iteraci přičtení $ c $-násobku řádku: 
+$ \operatorname{row}(T, i) \pluseq c \cdot \operatorname{row}(T, i + 1) $. Po
+provedení této operace můžeme $ i $-tý řádek redukovat diagonálním prvkem $ a_i $.
 
 Z Bachova lemmatu \ref{bach} plyne, že $ 0 \leq c < a_i $. 
 Nechť nejprve $ i \in \{1, \dots, k - 2 \} $. Pak uvedená nerovnost společně s
-tím, že $ T $ je diagonálně dominantní, implikuje $ a_i + a_i a_{i+1} > T[i, j] $ kde
-$ j = 1, \dots, m $. Pro $ i = k - 1 $ bude platit $ a_{k-1} + a_{k - 1} t_k > T[i, j] $.
+tím, že $ T $ je diagonálně dominantní, implikuje $ T_{i, j} < a_i + a_i a_{i+1} $ kde
+$ j = 1, \dots, m $. Pro $ i = k - 1 $ bude platit $ T_{i, j} < a_{k-1} + a_{k - 1} t_k $.
 
 Z toho plyne, že všechny mezivýsledky můžeme omezit maximem výrazů
 $ \max\limits_{1 \leq i < k - 1}\{ a_i + a_i a_{i+1} \} = a_{k - 2} ( 1 + a_{k - 1} )$ 
@@ -326,10 +355,9 @@ hledané omezení.
 \end{align*}
 Pro $ k = 2 $ dostáváme omezení $ a_{k - 1} + a_{k - 1} t_k $.
 
-Navíc pak pomocí prvku
-$ a_i $ můžeme zredukovat všechny prvky napravo, čímž získáme diagonálně dominantní
-matici. Korektnost algoritmu zůstane zachována, neboť platí
-$ \gcd(a_i, t_{i} + ct_{i+1}) = \gcd(a_i, t_{i} + ct_{i+1} + k a_i) $,
+Upravované řádky jsme průběžné redukovali diagonálními prvky, takže výsledná 
+matice bude diagonálně dominantní. Korektnost algoritmu zůstane zachována, 
+neboť platí $ \gcd(a_i, t_{i} + ct_{i+1}) = \gcd(a_i, t_{i} + ct_{i+1} + k a_i) $,
 kde $ k $ je libovolné celé číslo.
 \end{proof}
 
@@ -340,14 +368,14 @@ kde $ k $ je libovolné celé číslo.
 Buď $ T $ diagonálně dominantní matice splňující požadavky lemmatu \ref{Sloup_elim_SNF}.
 Pak můžeme algoritmus lemmatu \ref{Sloup_elim_SNF} modifikovat tak, že všechny
 mezivýsledky budou omezeny výrazem 
-$ \max\{ a_1^2 t_k, 3 a_1 a_{k - 1} \} $ pro $ k > 2 $, 
-$ a_1^2 t_k $ pro $ k = 2 $
+$ \max\{ 2 a_1^2 t_k, 3 a_1 a_{k - 1} \} $ pro $ k > 2 $, 
+$ 2 a_1^2 t_k $ pro $ k = 2 $
 a výsledná matice bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
-V algoritmu lemmatu \ref{Sloup_elim_SNF} zvětšujeme velikost prvků matice $ T $
-pouze při jejím vynásobením maticí $ V $. Vynásobení bude mít vliv pouze na
-prvky hlavní submatice $ k \times k $. Výslednou submatici můžeme zapsat ve tvaru
+V algoritmu lemmatu \ref{Sloup_elim_SNF} transformujeme matici $ T $ vynásobením 
+maticí $ V $. Vynásobení bude mít vliv pouze na prvky hlavní submatice 
+$ k \times k $. Výslednou submatici můžeme zapsat ve tvaru
 
 \begin{align*}
     \left(
@@ -375,16 +403,21 @@ A konečně pro prvky $ k $-tého sloupce dostáváme odhady
 \end{align*}
 a $ t_k a_1 / s_1 \leq a_1 t_k $.
 
-Nyní přistoupíme k eliminaci prvků v prvním sloupci. Nejprve se budeme věnovat
-úpravě řádků $ 2, \dots, k - 1 $. Snadno se nahlédne, že můžeme redukovat prvky
+Nyní přistoupíme k eliminaci prvků v prvním sloupci. Eliminace bude probíhat
+přičítáním vhodného násobku prvního řádku k ostatním. Nestačí proto uvažovat 
+pouze prvních $ k $ sloupců matice $ T $, neboť přičtení prvního řádku bude
+mít vliv na všechny sloupce matice $ T $.
+
+Nejprve se budeme věnovat úpravě řádků $ 2, \dots, k - 1 $. 
+Snadno se nahlédne, že můžeme redukovat prvky
 $ t t_i $ diagonálními prvky $ a_i $, aniž bychom tím ovlivnili jejich dělitelnost
 prvkem $ s_1 $. Přičtením vhodného násobku prvního řádku k řádkům 
 $ 2, \dots, k - 1 $ eliminujeme redukované prvky v prvním sloupci. 
 Prvky $ i $-tého řádku po provedení této operace můžeme odhadnout
 výrazem 
 \begin{align*}
-    a_i + a_1 \frac{a_i}{s_1} 
-    \leq a_i + a_1 a_i 
+    a_i + \frac{a_i}{s_1} a_1
+    \leq a_i + a_i a_1
     \leq 2 a_1 a_i
     \leq 2 a_1 a_{k - 1}.
 \end{align*}
@@ -393,7 +426,7 @@ Nakonec redukujeme řádky $ 2, \dots, k - 1 $ příslušnými diagonálními pr
 V případě $ k $-tého řádku bude postup mírně odlišný. Nejprve přičteme vhodný 
 násobek prvního řádku tak, abychom vynulovali prvek na pozici $ [k, 1] $. 
 Podobným způsobem jako v předchozím odstavci dostáváme na prvky $ k $-tého řádku
-odhad $ a_1^2 t_k / s_1 + t_k \leq 2 a_1^2 t_k $. Tyto pak redukujeme $ k $-tým 
+odhad $ t_k + a_1^2 t_k / s_1 \leq 2 a_1^2 t_k $. Tyto pak redukujeme $ k $-tým 
 sloupcem, z čehož vyplývá odhad na řádky $ i \in \{ 2, \dots, k - 1 \} $:
 \begin{align*}
     a_i + a_i \frac{\frac{a_1^2 t_k}{s_1} + t_k}{t_k a_1 / s_1} 
@@ -405,10 +438,10 @@ sloupcem, z čehož vyplývá odhad na řádky $ i \in \{ 2, \dots, k - 1 \} $:
 
 Nakonec vezmeme maximum ze všech průběžných odhadů a obdržíme
 \begin{align*}
-    \max\{ a_1^2 t_k, 3 a_1 a_{k - 1} \},
+    \max\{ 2 a_1^2 t_k, 3 a_1 a_{k - 1} \},
 \end{align*}
 pro $ k > 2 $ a pokud $ k = 2 $, tak většina odhadů vypadne a dostaneme výraz
-$ a_1^2 t_k $.
+$ 2 a_1^2 t_k $.
 
 Zbývá zajistit, že výsledná matice bude diagonálně dominantní. K tomu stačí 
 redukovat prvky v řádcích $ 1, \dots, k - 1 $ diagonálními prvky. Ověříme, zda 
@@ -439,7 +472,7 @@ algoritmu.
 Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{Sloup_elim}.
 Pak můžeme algoritmus věty \ref{Sloup_elim} modifikovat tak, že všechny
 mezivýsledky budou omezeny výrazem $ 3 a_1 \cdots a_{k - 2} a_{k - 1}^2 t_k $ 
-pro $ k > 2 $, $ a_1^2 t_k $ pro $ k = 2 $ a výsledná matice bude diagonálně 
+pro $ k > 2 $, $ 2 a_1^2 t_k $ pro $ k = 2 $ a výsledná matice bude diagonálně 
 dominantní.
 \end{lem}
 \begin{proof}
@@ -466,9 +499,9 @@ Pro $ i $-tou iteraci tak máme odhad
     & \leq 3 a_1 \cdots a_{k - 2} a_{k - 1}^2 t_k
 \end{align*}
 
-Největší z uvedených odhadů bude zřejmě odhad $ 3 a_1 \cdots a_{k - 1} t_k $.
+Největší z uvedených odhadů bude zřejmě odhad $ 3 a_1 \cdots a_{k - 2} a_{k - 1}^2 t_k $.
 Pro situaci $ k = 2 $ bude situace o něco jednodušší a analogicky můžeme dokázat
-odhad $ a_1^2 t_k $.
+odhad $ 2 a_1^2 t_k $.
 \end{proof}
 
 
@@ -507,7 +540,7 @@ modulo příslušný diagonální prvek.
 Tento eliminační proces můžeme provést pro všechny prvky $ b_{1, j} $ se stejnými
 odhady na pracovní prvky. Jen odhad na prvky v prvním sloupci musíme mírně upravit.
 Označme prvky prvního sloupce v průběhu výpočtu $ t_i $. Pak po každé iteraci
-eliminačního procesu bude zřejmě platit $ |t_i| \leq |a_i| $. V každém kroku
+eliminačního procesu bude zřejmě platit $ |t_i| \leq a_i $. V každém kroku
 algoritmu tak bude platit $ |t_i| \leq a_i + a_1 a_i $, neboť při eliminaci
 prvku $ b_{1,j} $ přiřazujeme $ t_i = t_i + tb_{i,j} $.
 
@@ -524,7 +557,8 @@ $ \max\limits_{1 \leq q < i \leq k}\{ a_i + a_q a_i \} = a_k + a_{k - 1} a_k $.
 Uvedená rovnost plyne z vlastností Smithova normálního tvaru. 
 
 Díky tomu, že jsme sloupce v hlavní $ k \times k $ matici průběžně redukovali
-modulo diagonální prvek, bude transpozice výsledné matice diagonálně dominantní.
+modulo diagonální prvek ve stejném sloupci, bude transpozice výsledné matice 
+diagonálně dominantní.
 \end{proof}
 
 \begin{vet}
@@ -532,7 +566,7 @@ Buď $ A $ diagonálně dominantní matice splňující požadavky věty \ref{SN
 Označme diagonální prvky matice $ A $ postupně $ a_1, a_2, \dots, a_n $.
 Pak můžeme algoritmus věty \ref{SNF_Triang} pro výpočet Smithova normálního 
 tvaru z trojúhelníkové matice modifikovat tak, že všechny mezivýsledky budou 
-omezeny výrazem $ 3 a_1 \cdots a_{n - 1}^2 a_n $ pro $ n > 1 $ a $ a_1 $ 
+omezeny výrazem $ 3 (a_1 \cdots a_{n - 1})^2 a_n $ pro $ n > 1 $ a $ a_1 $ 
 pro $ n = 1 $.
 \end{vet}
 \begin{proof}
@@ -540,10 +574,19 @@ Nechť $ n > 1 $.
 Nejprve modifikujeme první fázi algoritmu věty \ref{Sloup_elim} o sloupcové 
 eliminaci. Z lemmatu \ref{Sloup_elim_modified} plyne, že stávající proceduru 
 můžeme nahradit její vylepšenou verzí, která dává záruky na velikost prvků. 
-Snadno se nahlédne, že  algoritmus z \ref{Sloup_elim_modified} nemění absolutní 
-hodnotu součinu  diagonálních prvků vstupní matice. Z toho důvodu budou 
-mezivýsledky v  každém kroku $ r \in \{1, \dots, n \} $ omezeny součinem 
-$ 3 a_1 \cdots a_{n - 1}^2 a_n $.
+Nechť $ a_i^{(r)} $ značí $ i $-tý diagonální prvek na začátku $ r $-té 
+iterace. Pak platí $ a_i^{(1)} = a_i $. Díky lemmatu \ref{Sloup_elim_modified}
+budeme mít v každém kroku odhad na mezivýsledky 
+$ 3 a_1^{(r)} \cdots (a_{n - 1}^{(r)})^2 a_n^{(r)} $.
+Snadno se nahlédne, že algoritmus z \ref{Sloup_elim_modified} nemění absolutní 
+hodnotu součinu diagonálních prvků vstupní matice. Z toho důvodu bude platit
+\begin{align*}
+    3 a_1^{(r)} \cdots (a_{r - 1}^{(r)})^2 a_r^{(r)}
+        \leq 3 (a_1 \cdots a_{r - 1})^2 a_r
+\end{align*}
+Mezivýsledky v každém kroku $ r \in \{1, \dots, n \} $ proto budou omezeny 
+výrazem $ 3 (a_1 \cdots a_{n - 1})^2 a_n $.
+
 Výsledkem bude ekvivalentní matice
 \begin{align*}
 A' =
@@ -561,21 +604,19 @@ Ve druhé fázi použijeme algoritmus z lemmatu \ref{Zero_extra_modified}
 k eliminaci prvků v submatici $ B $. Nechť $ s_i $ značí diagonální prvky matice 
 $ S' $. Pak lemma \ref{Zero_extra_modified} garantuje, že všechny mezivýsledky 
 budou omezeny součtem $ s_n + s_{n - 1} s_n $. Avšak z toho, že 
-$ |a_1 \cdots a_n| = s_1 \cdots s_n $, plyne 
-$ s_n + s_{n - 1} s_n \leq 2 s_{n - 1} s_n \leq 2 3 a_1 \cdots a_{n - 1}^2 a_n $.
+$ a_1 \cdots a_n = s_1 \cdots s_n $, plyne 
+$ s_n + s_{n - 1} s_n \leq 2 s_{n - 1} s_n \leq 3 (a_1 \cdots a_{n - 1})^2 a_n $.
 
 Navíc transpozice výsledné $ n \times n $ hlavní submatice bude diagonálně 
 dominantní. Díky tomu na ni opět můžeme iterativně aplikovat modifikovaný 
-algoritmus sloupcové eliminace s odhadem $ 3 a_1 \cdots a_{n - 1}^2 a_n $.
-Maximum odhadů ze všech tří částí je rovno $ 3 a_1 \cdots a_{n - 1}^2 a_n $, 
+algoritmus sloupcové eliminace s odhadem $ 3 (a_1 \cdots a_{n - 1})^2 a_n $.
+Maximum odhadů ze všech tří částí je rovno $ 3 (a_1 \cdots a_{n - 1})^2 a_n $, 
 což jsme měli dokázat.
 
 Pokud by platilo $ n = 1 $, tak by bylo nutné aplikovat pouze lemma 
 \ref{Zero_extra_modified}, které v tomto případě dává odhad na mezivýsledky
 $ a_1 $.
 \end{proof}
-
-
 
 
 
@@ -591,7 +632,7 @@ korektní, musíme v algoritmu lemmatu \ref{RST_algo_lemma} postupovat poněkud
 opatrněji. S pracovní maticí $ B_k $, která označuje právě zpracovávaný sloupec,
 bychom měli vždy pracovat pouze ve standardní reprezentaci. To znamená, že při
 inicializaci matice $ B_k $ musíme pomocí věty \ref{Chin_Rem} zobrazit příslušné
-prvky matic v okruzích $ \Zbb / p_i \Zbb $ do okruhu $ \Zbb / \chi \Zbb $.
+prvky matic v okruzích $ \Zbb / p_i \Zbb $ do okruhu $ \Zbb / \mu \Zbb $.
 
 V praxi to pak znamená, že ve chvíli, kdy algoritmus potřebuje vypočítat nějaký
 koeficient (například pomocí rozšířeného Euklidova algoritmu), musíme prvky
@@ -608,8 +649,7 @@ tak, že pracujeme v okruzích $ \Zbb / p_i \Zbb $.
 Výpočet ekvivalentní trojúhelníkové matice z matice $ A $ tedy není problém.
 
 Naneštěstí v článku \cite{SNF_Arne} se autor již problematikou počítání v
-reziduálním systému nezabývá. To však můžeme na
-pravit. Výpočet povedeme podobným
+reziduálním systému nezabývá. To však můžeme napravit. Výpočet povedeme podobným
 způsobem jako v případě výše uvedené paralelizace algoritmu pro výpočet RST.
 Nejprve musíme identifikovat všechna místa algoritmu z věty \ref{SNF_Triang},
 která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_GCD}
@@ -623,7 +663,7 @@ systémech se získanými koeficienty.
 
 Celkem tedy dostáváme algoritmus pro výpočet Smithova normálního tvaru, který
 je schopen provádět většinu výpočtů ve standardní 32-bitové aritmetice. Navíc části
-algoritmu, které nevyžadují výpočet zmíněných koeficientů, můžeme provádet
+algoritmu, které nevyžadují výpočet zmíněných koeficientů, můžeme provádět
 paralelně a využít tak plný potenciál dnešních vícejádrových procesorů.
 V místě, kde je potřeba udělat nějaké rozhodnutí (vypočítat koeficient),
 je nutné pracovat s datovými typy pro reprezentaci libovolně velkého celého

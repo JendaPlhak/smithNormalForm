@@ -7,8 +7,8 @@ triangularizing integer matrices}'' \cite{triang}. Definujme nejdříve tvar mat
 jehož vytvoření bude naším cílem.
 
 \begin{defi}\label{RREF}
-    Řekneme, že matice $ A \in \Zmat $ je v redukovaném schodovitém tvaru (\rst{}), jestliže
-    splňuje následující podmínky:
+    Řekneme, že matice $ A \in \Zmat $ je v \emph{redukovaném schodovitém tvaru}
+    (\rst{}), jestliže splňuje následující podmínky:
     \begin{Cond}
         \item Buď $ r $ hodnost matice A. Pak prvních $ r $ řádků je nenulových
         a zbylých $ n - r $ řádků je nulových.
@@ -17,6 +17,11 @@ jehož vytvoření bude naším cílem.
         \item Pro každé $ 1 \leq i \leq r $ platí $ A[i, j_i] > 0 $.
         \item Pro každé $ 1 \leq k < i \leq r $ platí $ A[i, j_i] > A[k, j_i] \geq 0 $.
     \end{Cond}
+\end{defi}
+Pro lepší práci s uvedenou definicí definujeme ještě pivot matice.
+\begin{defi}
+\emph{Pivotem} matice $ A $ ve schodovitém tvaru rozumíme první nenulový prvek
+libovolného řádku matice $ A $.
 \end{defi}
 
 \begin{pozn}

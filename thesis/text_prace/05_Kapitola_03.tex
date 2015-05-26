@@ -97,7 +97,7 @@ podmínky, ale navíc bude platit
 Algoritmus bude pracovat iterativně vzhledem k proměnné $ r $, která bude značit
 aktuálně zpracovávaný řádek. Je zřejmé, že pro $ r = k $, bude platit
 \begin{align} \label{gcd_eq_induction}
-    \gcd(T_{r,r}, T_{r,k}) = \gcd(T_{r,r}, T_{r,k},T_{r+1,k},\dots, T_{k,k}).
+    \gcd(a_r, t_r) = \gcd(a_r, t_r, t_{r+1},\dots, t_k)
 \end{align}
 Můžeme tedy předpokládat, že pro nějaké $ i $, $ 1 \leq i < k $, splňuje
 matice $ T $ rovnost \ref{gcd_eq_induction} pro všechna $ r = k, k-1,\dots, i + 1 $.
@@ -108,7 +108,7 @@ rovnost \ref{gcd_eq_induction} pro $ r = k, k-1,\dots, i $.
 Buď $ 0 \leq c < a_i $ řešením rovnosti
 $ \gcd(t_i + ct_{i+1}, a_i) = \gcd(t_i, t_{i+1}, a_i) $.
 Takovéto $ c $ můžeme získat z důsledku \ref{Bach_Dus}. Přičtením $ c $-násobku
-řádku $ i + 1 $ k $ i $-tému řádku $ \operatorname{row}(T, i) \pluseq c \operatorname{row}(T, i + 1) $
+řádku $ i + 1 $ k $ i $-tému řádku $ \operatorname{row}(T, i) \pluseq c \cdot \operatorname{row}(T, i + 1) $
 získáme matici $ T' $ ve tvaru
 
 \begin{align*}
