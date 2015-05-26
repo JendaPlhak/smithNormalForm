@@ -168,9 +168,10 @@ Použití lemmatu \ref{num_primes_src} je skutečně korektní, neboť
 $ l \geq 6 $, z čehož plyne, že $ a \geq 32 $. Z definice funkce $ \pi(a) $ pak
 získáme naše tvrzení.
 \end{proof}
-\begin{dus}
-Buď $ \beta = (m^{1/2} \Vert A \Vert )^m $ Hadamardův odhad na determinant tak
-jako na začátku této sekce a nechť $ l = 6 + \log_2 \log_2 \beta $. Pak můžeme najít
+
+\begin{dus} \label{num_prim_dus}
+Buď $ \beta > 1 $ nějaký odhad a nechť $ l = 6 + \log_2 \log_2 \beta $. 
+Pak můžeme najít
 $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ \{p_1, \dots, p_s\} $,
 která je možno reprezentovat $ l $-bitovým celým číslem, a navíc bude platit
 $ \beta < p_1 \cdots p_s $.
@@ -186,10 +187,9 @@ z čehož plyne následující výpočet.
         = 2^{\frac{2^{6 + \log_2 \log_2 \beta}}{5}}
         = \beta^{\frac{2^6}{5}} > \beta
 \end{align*}
-Tím je důkaz hotov až na případ, kdy $ \beta \in \{0, 1\} $. Tyto možnosti ale
-nejsou příliš zajímavé, neboť v prvním případě je Smithův normální tvar nulová
-matice a ve druhém pak skalár.
 \end{proof}
+
+
 
 \begin{pozn}
 Poznamenejme, že v praxi pro nějakou konkrétní úlohu můžeme mít k dispozici
@@ -197,15 +197,6 @@ podstatně lepší odhad na determinant nebo na prvky v hledaném Smithově norm
 tvaru. Toho můžeme s výhodou využít při převodu z RST do SNF. Hadamardův odhad
 nahradíme lepším odhadem a dále postupujeme identicky.
 \end{pozn}
-
-Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozměrech
-$ 10^4 \times 10^4 $. Pak nám budou pro výpočet stačit prvočísla, jejichž bitová
-délka bude $ l = 6 + \log_2(10^4 \log_2(10^2 \Vert A \Vert)) $. Pokud dosadíme
-například $ \Vert A \Vert = 2^{31} $, zjistíme, že by nám stačila prvočísla
-mající nejvýše $ 26 $ bitů, což je pro naše potřeby naprosto
-postačující. Předpokládáme, že matice větších rozměrů již budou nad naše výpočetní
-možnosti.
-
 
 
 \section{Omezení velikosti mezivýsledků}
@@ -264,7 +255,7 @@ vlastnosti, které požaduje lemma \ref{bez_bound}.
 
 
 
-\begin{lem}
+\begin{lem} \label{DDT_Algo}
 Mějme matici $ A $ v redukovaném schodovitém tvaru o rozměrech $ n \times m $,
 kde $ n > 0 $.
 Pak existuje algoritmus, který převede matici $ A $ na ekvivalentní matici, 
@@ -277,7 +268,7 @@ Pak můžeme přeskupit sloupce tak, aby hlavní $ n \times n $ submatice měla 
 hodnost, byla horní trojúhelníková a obsahovala všechny pivoty. Uvažme 
 následující algoritmus.\\
 %
-    \begin{algorithm} \label{DDT_Algo}
+    \begin{algorithm} 
     {
         \textbf{Algoritmus:} Compute\_DDT
     }
@@ -322,7 +313,6 @@ indukčním předpokladem implikuje výsledný odhad
         = 2^{n - 1} \Vert A \Vert.
 \end{align*}
 \end{proof}
-
 
 
 
@@ -561,7 +551,7 @@ modulo diagonální prvek ve stejném sloupci, bude transpozice výsledné matic
 diagonálně dominantní.
 \end{proof}
 
-\begin{vet}
+\begin{vet} \label{SNF_Triang_modified}
 Buď $ A $ diagonálně dominantní matice splňující požadavky věty \ref{SNF_Triang}.
 Označme diagonální prvky matice $ A $ postupně $ a_1, a_2, \dots, a_n $.
 Pak můžeme algoritmus věty \ref{SNF_Triang} pro výpočet Smithova normálního 
@@ -624,8 +614,14 @@ $ a_1 $.
 
 
 \section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
-Mějme opět matici $ A $ tak jako na začátku a uvažme prvočísla
-$ \{ p_1, \dots, p_s \} $ z předchozí sekce. Článek \cite[Theorem 16]{triang}
+Mějme opět matici $ A $ tak jako na začátku. Jak jsme již uvedli výše, všechny
+mezivýsledky algoritmu z článku \cite{triang} můžeme omezit výrazem
+\begin{align*}
+    \beta = 2[\Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} ] + 1 ,
+\end{align*}
+kde $ r $ značí hodnost matice $ A $. Z důsledku \ref{num_prim_dus} vyplývá, že 
+můžeme vybrat $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ p_i $ takových,
+že $ p_1 \cdots p_s > \beta $. Článek \cite[Theorem 16]{triang} pak
 uvádí, že operace algoritmu z věty \ref{RST_algo} můžeme provádět paralelně
 v okruzích $ \Zbb / p_i \Zbb $. Avšak autor také podotýká, že aby byl algoritmus
 korektní, musíme v algoritmu lemmatu \ref{RST_algo_lemma} postupovat poněkud
@@ -646,23 +642,74 @@ také zabývá tím, jak vypočítat rank profile potřebný pro výpočet reduk
 schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se \cite[Theorem 15]{triang},
 že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $
 tak, že pracujeme v okruzích $ \Zbb / p_i \Zbb $.
-Výpočet ekvivalentní trojúhelníkové matice z matice $ A $ tedy není problém.
+Výpočet ekvivalentní trojúhelníkové matice $ \tilde{A} $ z matice $ A $ tedy 
+není problém.
 
 Naneštěstí v článku \cite{SNF_Arne} se autor již problematikou počítání v
-reziduálním systému nezabývá. To však můžeme napravit. Výpočet povedeme podobným
-způsobem jako v případě výše uvedené paralelizace algoritmu pro výpočet RST.
+reziduálním systému nezabývá. To však můžeme napravit použitím modifikovaných
+algoritmů z předchozí sekce. Nejprve převedeme výsledek algoritmu z věty 
+\ref{RST_algo} do diagonálně dominantního tvaru pomocí lemmatu \ref{DDT_Algo}.
+To v nejhorším případě implikuje odhad na všechny prvky $ 2^(r - 1) \beta $.
+V praxi ale nemusíme počítat s tímto nejhorším případem. Po výpočtení 
+redukovaného schodovitého tvaru jednoduše zjistíme velikost největšího prvku 
+a dostaneme odhad $ 2^(r - 1) \Vert \tilde{A} \Vert $. Toto je však odhad na 
+absolutní hodnotu největšího prvku. Proto odhad ještě vynásobíme dvojkou a 
+přičteme jedničku $ 2^r \Vert A \Vert + 1 $, čímž pokryjeme všechna čísla, 
+která se v průběhu výpočtu mohou objevit. Pro tento odhad můžeme opět díky 
+důsledku \ref{num_prim_dus} najít vhodná prvočísla, která jej budou omezovat.
+Výpočet pak můžeme provádět paralelně v okruzích $ \Zbb / p_i \Zbb $, ale stejně
+jako v případě výpočtu RST musíme při každém rozhodnutí (výpočtu koeficientu
+pomocí kterého provádíme redukci) zobrazit všechny potřebné prvky do okruhu
+$ \Zbb / \mu \Zbb $ a rozhodnutí provést tam. Takovýto postup pravděpodobně není
+nejefektivnější možný, avšak výpočetní složitost tohoto kroku bude zanedbatelná
+v porovnání s výpočtem redukovaného schodovitého tvaru a následného výpočtu 
+Smithova normálního tvaru.
+
+Nakonec použijeme modifikovaný algoritmus z věty \ref{SNF_Triang_modified}, 
+která dává odhad $ 3 (a_1 \cdots a_{n - 1})^2 a_n $. Tento odhad opět přenásobíme
+dvojkou a přičteme jedničku, abychom pokryli také záporná čísla. Neboť 
+Hadamardův odhad omezuje všechny minory matice, tak dostáváme nerovnost
+$ 6 (a_1 \cdots a_{n - 1})^2 a_n + 1 < 6 (n^{1/2} \Vert A \Vert)^{2 n} $. S 
+tímto nejhorším případem však opět v praxi počítat nemusíme. Stačí hledat 
+prvočísla omezující odhad, ve kterém vystupují diagonální koeficienty $ a_i $.
+Důsledek \ref{num_prim_dus} nám opět zaručuje, že takovýchto prvočísel jsme 
+schopni nalézt sdostatek.
+
+Výpočet povedeme podobným způsobem jako v případě výše uvedené paralelizace 
+algoritmu pro výpočet RST. 
 Nejprve musíme identifikovat všechna místa algoritmu z věty \ref{SNF_Triang},
 která vyžadují výpočet nějakých koeficientů. V lemmatu \ref{Sloup_elim_GCD}
 se jedná o koeficient $ c $, který počítáme pomocí Bachova lemmatu. Lemma
 \ref{Sloup_elim_SNF} pak používá rozšířený Euklidův algoritmus pro výpočet čísel
 $ s, t $ a $ s_1 $. Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu
-\ref{extra_cols}. Na těchto třech místech proto musí dojít k
+\ref{extra_cols}. Rozšíření těchto algoritmů pak na různých místech provádí 
+redukci modulo nějaký prvek. Na těchto místech proto musí dojít k
 převodu příslušných prvků do standardní reprezentace, výpočtu potřebných
 koeficientů a pak teprve může algoritmus pokračovat ve výpočtu v modulárních
 systémech se získanými koeficienty.
 
+\begin{pri}
+Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozměrech
+$ 10^4 \times 10^4 $ a největším prvku $ \Vert A \Vert = 2^{31} $. Pro výpočet 
+RST nám budou pro stačit prvočísla, jejichž bitová délka bude 
+$ l = 6 + \log_2(\log_2(\beta)) < 28 $. Numericky můžeme spočítat, že také
+$ 6 + \log_2(\log_2(2^{10^4 - 1} \beta)) < 28 $, takže při převodu na diagonálně
+dominantní matici si také vystačíme s čísly o délce 28 bitů.
+
+Konečně pro výpočet SNF z diagonálně dominantní matice máme odhad ma bitovou 
+délku 
+\begin{align*}
+    6 + \log_2(\log_2(6 (10^{2} 2^31)^{2 10^4})) 
+        = 6 + \log_2(2 10^4 \log_2(6 (10^{2} 2^31))) 
+        < 26.
+\end{align*}
+To jsou výsledky pro naše potřeby naprosto postačující. Předpokládáme, 
+že matice větších rozměrů již budou nad naše výpočetní možnosti.
+\end{pri}
+
 Celkem tedy dostáváme algoritmus pro výpočet Smithova normálního tvaru, který
-je schopen provádět většinu výpočtů ve standardní 32-bitové aritmetice. Navíc části
+je schopen provádět většinu výpočtů ve standardní 32-bitové aritmetice pro 
+matice, jejíž velikost je v rámci našich výpočetních možností. Navíc části
 algoritmu, které nevyžadují výpočet zmíněných koeficientů, můžeme provádět
 paralelně a využít tak plný potenciál dnešních vícejádrových procesorů.
 V místě, kde je potřeba udělat nějaké rozhodnutí (vypočítat koeficient),
