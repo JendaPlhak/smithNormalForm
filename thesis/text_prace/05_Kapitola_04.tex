@@ -649,10 +649,10 @@ Naneštěstí v článku \cite{SNF_Arne} se autor již problematikou počítán�
 reziduálním systému nezabývá. To však můžeme napravit použitím modifikovaných
 algoritmů z předchozí sekce. Nejprve převedeme výsledek algoritmu z věty 
 \ref{RST_algo} do diagonálně dominantního tvaru pomocí lemmatu \ref{DDT_Algo}.
-To v nejhorším případě implikuje odhad na všechny prvky $ 2^(r - 1) \beta $.
+To v nejhorším případě implikuje odhad na všechny prvky $ 2^{r - 1} \beta $.
 V praxi ale nemusíme počítat s tímto nejhorším případem. Po výpočtení 
 redukovaného schodovitého tvaru jednoduše zjistíme velikost největšího prvku 
-a dostaneme odhad $ 2^(r - 1) \Vert \tilde{A} \Vert $. Toto je však odhad na 
+a dostaneme odhad $ 2^{r - 1} \Vert \tilde{A} \Vert $. Toto je však odhad na 
 absolutní hodnotu největšího prvku. Proto odhad ještě vynásobíme dvojkou a 
 přičteme jedničku $ 2^r \Vert A \Vert + 1 $, čímž pokryjeme všechna čísla, 
 která se v průběhu výpočtu mohou objevit. Pro tento odhad můžeme opět díky 
@@ -669,7 +669,7 @@ Nakonec použijeme modifikovaný algoritmus z věty \ref{SNF_Triang_modified},
 která dává odhad $ 3 (a_1 \cdots a_{n - 1})^2 a_n $. Tento odhad opět přenásobíme
 dvojkou a přičteme jedničku, abychom pokryli také záporná čísla. Neboť 
 Hadamardův odhad omezuje všechny minory matice, tak dostáváme nerovnost
-$ 6 (a_1 \cdots a_{n - 1})^2 a_n + 1 < 6 (n^{1/2} \Vert A \Vert)^{2 n} $. S 
+$ 6 (a_1 \cdots a_{n - 1})^2 a_n + 1 < 6 (n^{1/2} \Vert A \Vert)^{2 n} + 1 $. S 
 tímto nejhorším případem však opět v praxi počítat nemusíme. Stačí hledat 
 prvočísla omezující odhad, ve kterém vystupují diagonální koeficienty $ a_i $.
 Důsledek \ref{num_prim_dus} nám opět zaručuje, že takovýchto prvočísel jsme 
@@ -693,15 +693,16 @@ Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozm�
 $ 10^4 \times 10^4 $ a největším prvku $ \Vert A \Vert = 2^{31} $. Pro výpočet 
 RST nám budou pro stačit prvočísla, jejichž bitová délka bude 
 $ l = 6 + \log_2(\log_2(\beta)) < 28 $. Numericky můžeme spočítat, že také
-$ 6 + \log_2(\log_2(2^{10^4 - 1} \beta)) < 28 $, takže při převodu na diagonálně
+$ 6 + \log_2(\log_2(2^{10^4} \beta + 1)) < 28 $, takže při převodu na diagonálně
 dominantní matici si také vystačíme s čísly o délce 28 bitů.
 
 Konečně pro výpočet SNF z diagonálně dominantní matice máme odhad ma bitovou 
 délku 
 \begin{align*}
-    6 + \log_2(\log_2(6 (10^{2} 2^31)^{2 10^4})) 
-        = 6 + \log_2(2 10^4 \log_2(6 (10^{2} 2^31))) 
-        < 26.
+    6 + \log_2(\log_2(6 (10^{2} 2^{31})^{2 \cdot 10^4} + 1)) 
+        & < 6 + \log_2(\log_2(7 (10^{2} 2^{31})^{2 \cdot 10^4})) \\
+        & = 6 + \log_2(2 \cdot 10^4 \log_2(7 (10^{2} 2^{31})))   \\
+        & < 26.
 \end{align*}
 To jsou výsledky pro naše potřeby naprosto postačující. Předpokládáme, 
 že matice větších rozměrů již budou nad naše výpočetní možnosti.
