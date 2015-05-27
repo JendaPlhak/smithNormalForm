@@ -58,6 +58,7 @@
 \usepackage[]{algorithm2e}
 \usepackage[makeroom]{cancel}
 \usepackage{mathtools}
+\usepackage{wallpaper}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 %  \usepackage[mtbold,mtplusscr,mtpluscal]{mathtime} % komercni matematicky font, dostupne pouze na UMS
 
@@ -123,7 +124,9 @@
 
 \Abstrakty%
 {V této bakalářské práci se věnujeme algoritmům pro výpočet Smithova normálního tvaru celočíselných matic, který nalézá uplatnění například při řešení soustav celočíselných rovnic nebo při počítání simpliciálních homologií. Protože v průběhu výpočtu Smithova normálního tvaru můžeme už pro malé matice narazit na problémy s bitovou délkou mezivýsledků, uvádíme zde algoritmus, pro nějž odvozujeme odhad na mezivýsledky. Tento algoritmus modifikujeme tak, abychom mohli s využitím Čínské zbytkové věty garantovat dostatečně malou bitovou délku mezivýsledků. Modifikace algoritmu navíc umožní jistou míru paralelizace výpočtu.}%
-{In this thesis we study algorithms for computing Smith normal form of integer matrices which can be used to solve system of linear Diophantine equations or in the process of computing simplicial homologies. While computing Smith normal form of even small matrices, one can easily run into problems with bit length of intermediate results. For that reason we introduce algorithm for which we present bounds on intermediate results. This algorithm is than modified using Chinese reminder theorem to provide reasonably small bounds on bit length of intermediate results. This modifications also allows certain level of parallelization.}
+{In this thesis we study algorithms for computing the Smith normal form of integer matrices which can be used to solve systems of linear Diophantine equations or in the process of computing simplicial homology groups. In the computation of the Smith normal form, even for small matrices, one can easily run into problems with the bit length of intermediate results. For that reason we introduce a refined algorithm and present bounds on its intermediate results. This algorithm is then modified using the Chinese reminder theorem to provide reasonably small bounds on the bit length of intermediate results. This modifications also allows a certain level of parallelization.}
+
+
 
 \TextPodekovani%
 {Na tomto místě bych chtěl poděkovat Bc. Lukáši Vokřínkovi, PhD. za odborné vedení bakalářské práce a za cenné připomínky, které ovlivnily směřování celé práce.}
@@ -261,9 +264,9 @@ zdrojů, které jsou v práci citovány.}
 %%%%%% PAK ''ZAPROCENTUJTE'' RADEK S \SemVlozitZadani A ODPROCENTUJTE RADEK S \VlozZadani %%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\SemVlozitZadani
 
-% \VlozZadani{NazevSouboruSeZadanim}
+
+\VlozZadani{zadani.pdf}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% PODEKOVANI + PROHLASENI %%%%%%%%%%%%%%%
