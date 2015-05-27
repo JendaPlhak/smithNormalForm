@@ -1,7 +1,9 @@
 \chapter{Paralelizace}
 
-Buď $ A $ celočíselná matice $ n \times m $ a předpokládejme, že $ n < m $. Pak
-z Hadamardovy nerovnosti (pro bližší informace čtenáře odkazujeme na publikaci
+Buď $ A $ celočíselná matice $ n \times m $ a předpokládejme, že $ n \leq m $.
+Rovněž můžeme předpokládat, že $ n > 1 $. V opačném případě je výpočet Smithova
+normálního tvaru triviální.
+Z Hadamardovy nerovnosti (pro bližší informace čtenáře odkazujeme na publikaci
 \cite{Hadamard}) plyne, že pro libovolný minor $ h $ matice $ A $
 platí $ h \leq (n^{1/2} \Vert A \Vert )^n $, kde
 $ \Vert A \Vert = max \{ |a^i_j| \} $. Z článku \cite{Had_tight} plyne, že
@@ -12,9 +14,9 @@ tvaru můžeme poměrně rychle dostat do problémů s kapacitou celočíselnýc
 
 Tento problém můžeme řešit knihovnami pro reprezentaci celých čísel libovolné
 bitové délky. Nicméně efektivita takového řešení už není ideální. 
-Hodilo by se nám proto, kdybychom mohli celý výpočet
+Bylo by tedy vhodné, kdybychom mohli celý výpočet
 rozložit na více částí, pro které už by nebylo problém spočítat výsledek pomocí
-standardní 32-bitové aritmetiky a následně všechny částečné výsledky spojit
+standardní 32bitové aritmetiky, a následně všechny částečné výsledky spojit
 do hledaného Smithova normálního tvaru. Toho můžeme dosáhnout pomocí Čínské
 zbytkové věty.
 
@@ -65,7 +67,7 @@ Pak ale $ x_1 \equiv x_2 \pmod{m_i} $, což implikuje $ m_i \mid x_1 - x_2 $.
 Protože $ m_i $ jsou po dvou nesoudělná, tak z předchozí implikace dále plyne, že
 $ x_1 - x_2 $ bude dělitelné také součinem všech $ m_i $, tedy
 $ \mu \mid x_1 - x_2 $. To je ale ekvivalentní tomu, že
-$ x_1 \equiv x_2 \pmod{\mu} $ a důkaz je hotov.
+$ x_1 \equiv x_2 \pmod{\mu} $, a důkaz je hotov.
 \end{proof}
 
 \begin{dus} \label{Chin_Rem_Iso}
@@ -93,13 +95,13 @@ Pak podle věty \ref{Chin_Rem} můžeme nalézt takové $ x \in \Zbb $, že
 %
 Pak ale $ \varphi([x]_m) = a $, z čehož plyne, že $ \varphi $ je surjektivní.
 
-Mějme $ x, y \in \Zbb / \mu \Zbb $ libolná a předpokládejme
+Mějme $ x, y \in \Zbb / \mu \Zbb $ libovolná a předpokládejme
 $ \varphi(x) = \varphi(y) $. Pak ale z věty \ref{Chin_Rem} plyne, že
 $ x \equiv y \pmod{\mu} $. $ \varphi $ je proto injekce a díky předchozímu
 odstavci také bijekce.
 
 Nakonec ještě ověříme, že se skutečně jedná o homomorfismus okruhů.
-Mějme $ x, y \in \Zbb / \mu \Zbb $ libovolné. Pa
+Mějme $ x, y \in \Zbb / \mu \Zbb $ libovolné. Pak
 %
 \begin{align*}
     \varphi(x + y) &= ([x + y]_{p_1^{r_1}},\dots, [x + y]_{p_k^{r_k}})  \\
@@ -118,7 +120,7 @@ násobení) nad celými čísly a jsme dopředu schopni omezit všechny mezivýs
 $ \mu $. Pak tyto výpočty můžeme ekvivalentně provádět v okruhu $ \Zbb / \mu \Zbb $.
 Avšak z důsledku \ref{Chin_Rem_Iso} plyne, že stejně tak můžeme výpočty provést
 paralelně modulo prvočíselné faktory $ \mu $. V praxi $ \mu $ obvykle získáme tak,
-že postupně přidáváme prvočísla dokud jejich součin není dostatečně velký.
+že postupně přidáváme prvočísla, dokud jejich součin není dostatečně velký.
 Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
 čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů.
 Nyní můžeme paralelně aplikovat operace, které potřebujeme provést, a konečně
@@ -135,7 +137,7 @@ najít prvočísla $ p_1,\dots, p_k $ tak, aby $ \beta < p_1 \cdots p_k $. Zřej
 bychom mohli postupně brát prvočísla $ 2, 3, 5, 7 \dots $, dokud by uvedená
 podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
 druhou stranu chceme, aby tato prvočísla byla dostatečně malá, abychom
-si pro rozumně velké matice vystačili se standardní 32-bitovou reprezentací
+si pro rozumně velké matice vystačili se standardní 32bitovou reprezentací
 prvků $ \Zbb / p_i \Zbb $. Co znamená rozumně velká matice, bude zřejmé z 
 následujících řádků.
 
@@ -205,7 +207,7 @@ normálního tvaru, musíme být schopni omezit prvky všech matic, se kterými
 budeme v průběhu výpočtu pracovat. Z článku \cite{triang} vyplývá, že pokud
 vhodným způsobem modifikujeme algoritmy ze druhé kapitoly, pak jsme schopni
 garantovat, že mezivýsledky budou omezeny výrazem
-$ \beta = 2[\Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} ] + 1 $
+$ \beta = \Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} $
 \cite[Theorem 16]{triang}.
 Ačkoliv tento výraz vypadá poněkud komplikovaně, tak logaritmus odhadu
 asymptoticky odpovídá logaritmu Hadamardova odhadu na determinant a můžeme psát
@@ -229,7 +231,7 @@ definice.
     \end{Cond}
 \end{defi}
 
-Pro další práci s ohady budeme ještě potřebovat následující lemma.
+Pro další práci s odhady budeme ještě potřebovat následující lemma.
 \begin{lem} \label{bez_bound}
 Nechť $ a, b \in \Zbb $. Pak existují koeficienty
 $ s, t $, $ \gcd(a, b) = s a + t b $ takové, že platí $ |s| \leq |b| $ a
@@ -249,7 +251,7 @@ nerovnosti.
 Z toho pak plyne, že $ |s| < 1 + b $ a $ |s| \leq b $.
 \end{proof}
 \begin{pozn}
-Dá se ukázat, že koeficienty z rozšířeného Euklidova algoritmu budou mít přesně
+Lze ukázat, že koeficienty z rozšířeného Euklidova algoritmu budou mít přesně
 vlastnosti, které požaduje lemma \ref{bez_bound}.
 \end{pozn}
 
@@ -259,7 +261,7 @@ vlastnosti, které požaduje lemma \ref{bez_bound}.
 Mějme matici $ A $ v redukovaném schodovitém tvaru o rozměrech $ n \times m $,
 kde $ n > 0 $.
 Pak existuje algoritmus, který převede matici $ A $ na ekvivalentní matici, 
-která bude diagonálně dominantní a všechny mezivýsledky budou omezeny výrazem
+která bude diagonálně dominantní, a všechny mezivýsledky budou omezeny výrazem
 $ 2^{n - 1} \Vert A \Vert $.
 \end{lem}
 \begin{proof}
@@ -274,7 +276,7 @@ následující algoritmus.\\
     }
 
     \KwData{
-        Matice $ A $ o rozměrech $ k \times m $ jejíž hlavní $ k \times k $ 
+        Matice $ A $ o rozměrech $ k \times m $, jejíž hlavní $ k \times k $ 
         submatice je regulární a horní trojúhelníková.
     }
 
@@ -304,7 +306,7 @@ nejvýše $ n - 1 $ řádků. Z toho, že vstupní matice $ A $ je v redukované
 schodovitém tvaru vyplývá, že $ A_{n,n} > A_{i, n} \geq 0 $ pro všechna 
 $ i = 1, \dots, n - 1 $. To implikuje, že prvky $ n $-tého řádku můžeme redukovat
 s odhadem $ \Vert A \Vert + A_{n,n} \frac{\Vert A \Vert} {A_{n,n}} = 2 \Vert A \Vert $.
-Nechť $ \tilde{A} $ je matice tvořena prvními $ n - 1 $ řádky výsledné matice.
+Nechť $ \tilde{A} $ je matice tvořená prvními $ n - 1 $ řádky výsledné matice.
 Pak platí $ \Vert \tilde{A} \Vert \leq 2 \Vert A \Vert $. To společně s
 indukčním předpokladem implikuje výsledný odhad 
 \begin{align*}
@@ -325,14 +327,14 @@ $ a_{k - 1} + a_{k - 1} t_k $ pro $ k = 2 $
 a výsledná matice bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
-Jediná operace inkriminovaného algoritmu, která zvětšuje prvky matice $ T $ je
+Jediná operace inkriminovaného algoritmu, která zvětšuje prvky matice $ T $, je
 v $ i $-té iteraci přičtení $ c $-násobku řádku: 
 $ \operatorname{row}(T, i) \pluseq c \cdot \operatorname{row}(T, i + 1) $. Po
 provedení této operace můžeme $ i $-tý řádek redukovat diagonálním prvkem $ a_i $.
 
 Z Bachova lemmatu \ref{bach} plyne, že $ 0 \leq c < a_i $. 
 Nechť nejprve $ i \in \{1, \dots, k - 2 \} $. Pak uvedená nerovnost společně s
-tím, že $ T $ je diagonálně dominantní, implikuje $ T_{i, j} < a_i + a_i a_{i+1} $ kde
+tím, že $ T $ je diagonálně dominantní, implikuje $ T_{i, j} < a_i + a_i a_{i+1} $, kde
 $ j = 1, \dots, m $. Pro $ i = k - 1 $ bude platit $ T_{i, j} < a_{k-1} + a_{k - 1} t_k $.
 
 Z toho plyne, že všechny mezivýsledky můžeme omezit maximem výrazů
@@ -430,7 +432,7 @@ Nakonec vezmeme maximum ze všech průběžných odhadů a obdržíme
 \begin{align*}
     \max\{ 2 a_1^2 t_k, 3 a_1 a_{k - 1} \},
 \end{align*}
-pro $ k > 2 $ a pokud $ k = 2 $, tak většina odhadů vypadne a dostaneme výraz
+pro $ k > 2 $, a pokud $ k = 2 $, tak většina odhadů vypadne a dostaneme výraz
 $ 2 a_1^2 t_k $.
 
 Zbývá zajistit, že výsledná matice bude diagonálně dominantní. K tomu stačí 
@@ -519,7 +521,7 @@ TV =
     \end{array}
     \right).
 \end{align*}
-Jediné prvky, které se můžou transformací zvětšit jsou ty pod diagonálou v 
+Jediné prvky, které se mohou transformací zvětšit, jsou ty pod diagonálou v 
 prvním sloupci a prvky $ b_{i,j} $ pro $ i = 2,\dots,k $.
 
 Díky tomu, že matice $ T $ je diagonálně dominantní, platí nerovnost
@@ -534,7 +536,7 @@ eliminačního procesu bude zřejmě platit $ |t_i| \leq a_i $. V každém kroku
 algoritmu tak bude platit $ |t_i| \leq a_i + a_1 a_i $, neboť při eliminaci
 prvku $ b_{1,j} $ přiřazujeme $ t_i = t_i + tb_{i,j} $.
 
-Celkem jsme tedy schopni eliminovat všechny prvky $ b_{1,j} $ tak, že  
+Celkem jsme tedy schopni eliminovat všechny prvky $ b_{1,j} $ tak, že 
 mezivýsledky budou omezeny výrazem $ \max\{ a_i + a_1 a_i \} $, kde 
 $ i = 2,\dots,k $. Nakonec ještě redukujeme prvky pod diagonálou modulo 
 diagonální prvek ve stejném sloupci.
@@ -614,94 +616,131 @@ $ a_1 $.
 
 
 \section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
-Mějme opět matici $ A $ tak jako na začátku. Jak jsme již uvedli výše, všechny
-mezivýsledky algoritmu z článku \cite{triang} můžeme omezit výrazem
+
+
+\subsubsection{Výpočet Smithova normálního tvaru}
+
+Mějme matici $ A $ tak jako na začátku. S využitím modifikovaných algoritmů 
+druhé kapitoly, o jejichž modifikaci jsme mluvili v předchozí sekci, vypočítáme
+redukovaný schodovitý tvar matice $ A $. Z výsledné matice odstraníme nulové 
+řádky a pomocí algoritmu lemmatu \ref{DDT_Algo} ji převedeme do diagonálně
+dominantního tvaru. Nakonec použijeme modifikovaný algoritmus pro výpočet 
+Smithova normálního tvaru z věty \ref{SNF_Triang_modified}, čímž získáme hledaný
+Smithův normální tvar matice $ A $.
+
+
+\subsubsection{Omezení mezivýsledků}
+
+V předchozí sekci jsme uvedli, že všechny mezivýsledky při výpočtu redukovaného
+schodovitého tvaru můžeme omezit výrazem
 \begin{align*}
-    \beta = 2[\Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} ] + 1 ,
+    \beta = \Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} ,
 \end{align*}
-kde $ r $ značí hodnost matice $ A $. Z důsledku \ref{num_prim_dus} vyplývá, že 
-můžeme vybrat $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ p_i $ takových,
-že $ p_1 \cdots p_s > \beta $. Článek \cite[Theorem 16]{triang} pak
-uvádí, že operace algoritmu z věty \ref{RST_algo} můžeme provádět paralelně
-v okruzích $ \Zbb / p_i \Zbb $. Avšak autor také podotýká, že aby byl algoritmus
-korektní, musíme v algoritmu lemmatu \ref{RST_algo_lemma} postupovat poněkud
-opatrněji. S pracovní maticí $ B_k $, která označuje právě zpracovávaný sloupec,
-bychom měli vždy pracovat pouze ve standardní reprezentaci. To znamená, že při
-inicializaci matice $ B_k $ musíme pomocí věty \ref{Chin_Rem} zobrazit příslušné
-prvky matic v okruzích $ \Zbb / p_i \Zbb $ do okruhu $ \Zbb / \mu \Zbb $.
+kde $ r $ značí hodnost matice $ A $. Označme výslednou matici $ \tilde{A} $.
 
-V praxi to pak znamená, že ve chvíli, kdy algoritmus potřebuje vypočítat nějaký
-koeficient (například pomocí rozšířeného Euklidova algoritmu), musíme prvky
-potřebné pro výpočet daného koeficientu převést z modulárního systému do standardní
-reprezentace pomocí Čínské zbytkové věty, vypočítat koeficient nad okruhem celých
-čísel a pak pomocí tohoto koeficientu provést kýženou operaci nad maticemi v
-okruzích $ \Zbb / p_i \Zbb $.
+Z lemmatu \ref{DDT_Algo} vyplývá, že mezivýsledky při převodu matice $ \tilde{A} $ 
+do diagonálně dominantního tvaru jsou vázány výrazem 
+$ 2^{r - 1} \Vert \tilde{A} \Vert $, což v nejhorším případě znamená odhad 
+$ 2^{r - 1} \beta $.
 
-Autor článku \cite{triang} se
-také zabývá tím, jak vypočítat rank profile potřebný pro výpočet redukovaného
-schodovitého tvaru pomocí Čínské zbytkové věty. Ukazuje se \cite[Theorem 15]{triang},
-že je skutečně možné efektivně rank profile vypočítat pomocí prvočísel $ p_i $
-tak, že pracujeme v okruzích $ \Zbb / p_i \Zbb $.
-Výpočet ekvivalentní trojúhelníkové matice $ \tilde{A} $ z matice $ A $ tedy 
-není problém.
+A konečně mezivýsledky při výpočtu Smithova normálního tvaru budou díky větě
+\ref{SNF_Triang_modified} omezeny součinem $ 3 (a_1 \cdots a_{n - 1})^2 a_n $,
+kde $ a_i $ jsou diagonální prvky zpracovávané matice. Protože 
+Hadamardův odhad omezuje všechny minory matice, dostáváme nerovnost
+$ 3 (a_1 \cdots a_{n - 1})^2 a_n < 3 (n^{1/2} \Vert A \Vert)^{2 n} $.
+
+
+\subsubsection{Výpočet s využitím Čínské zbytkové věty}
+
+V každém ze tří uvedených kroků výpočtu jsme schopni dopředu omezit mezivýsledky
+nějakým odhadem $ \omega $. Avšak všechna tato omezení byla dána na velikost,
+tedy absolutní hodnotu mezivýsledků. Proto abychom mohli všechny mezivýsledky 
+v daném kroku jednoznačně reprezentovat v okruhu $ \Zbb / \mu \Zbb $, musíme 
+zvolit $ \mu $ tak, aby platilo $ \mu > 2 \omega + 1 $.
+
+Nechť $ \omega $ značí libovolný z našich odhadů a nechť 
+$ l = 6 + \log_2(\log_2(2 \omega + 1)) $. Pak z důsledku \ref{num_prim_dus} 
+vyplývá, že můžeme vybrat $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel 
+$ p_i $ takových, že $ p_1 \cdots p_s > 2 \omega + 1 $. Zvolme 
+$ \mu = p_1 \cdots p_s $. 
+
+Z důsledku \ref{Chin_Rem_Iso} Čínské zbytkové věty vyplývá, že existuje 
+isomorfismus 
+$ \varphi : \Zbb / \mu \Zbb \rightarrow \Zbb / p_1 \Zbb \times \cdots \Zbb / p_s \Zbb $.
+Matici $ A $ proto můžeme v průběhu výpočtu ekvivalentně reprezentovat pomocí
+$ s $ matic v okruzích $ \Zbb / p_i \Zbb $ a veškeré algebraické operace 
+(sčítání, odečítání, násobení) můžeme provádět paralelně přímo v těchto okruzích.
+
+Reprezentaci matice $ A $ v průběhu výpočtu v okruhu $ \Zbb / \mu \Zbb $ budeme
+nazývat standardní reprezentace. Reprezentací v modulárním systému pak budeme 
+rozumět reprezentaci v okruhu $ \Zbb / p_1 \Zbb \times \cdots \Zbb / p_s \Zbb $.
+Pro přechod mezi standardní reprezentací a modulárním systémem budeme používat
+zobrazení $ \varphi $ z důsledku \ref{Chin_Rem_Iso}.
+Abychom mohli výše uvedenou reprezentaci v průběhu výpočtu korektně používat, 
+musíme identifikovat všechna místa algoritmů, která si nevystačí s algebraickými 
+operacemi. 
+
+V \cite[Theorem 16]{triang} autor uvádí, že k tomu, aby byl algoritmus
+korektní stačí, abychom s maticí $ B_k $, která označuje právě zpracovávaný 
+sloupec v lemmatu \ref{RST_algo_lemma}, pracovali vždy jen ve standardní 
+reprezentaci. To znamená, že při inicializaci matice $ B_k $ musíme pomocí věty 
+\ref{Chin_Rem} zobrazit příslušné prvky matic v okruzích $ \Zbb / p_i \Zbb $ do 
+okruhu $ \Zbb / \mu \Zbb $. Další modifikace nejsou nutné, neboť definovaný 
+algoritmus při výpočtu používá dopředu vypočítaný rank profile. Bez něj bychom 
+ještě potřebovali rozhodovat o tom, zda v daném sloupci je nebo není pivot, tj. 
+jestli jsou příslušné prvky nulové -- samozřejmě se může jednoduše stát, že 
+nenulové číslo dá nulový zbytek v $\Zbb / p_i \Zbb$.
 
 Naneštěstí v článku \cite{SNF_Arne} se autor již problematikou počítání v
-reziduálním systému nezabývá. To však můžeme napravit použitím modifikovaných
-algoritmů z předchozí sekce. Nejprve převedeme výsledek algoritmu z věty 
-\ref{RST_algo} do diagonálně dominantního tvaru pomocí lemmatu \ref{DDT_Algo}.
-To v nejhorším případě implikuje odhad na všechny prvky $ 2^{r - 1} \beta $.
-V praxi ale nemusíme počítat s tímto nejhorším případem. Po výpočtení 
-redukovaného schodovitého tvaru jednoduše zjistíme velikost největšího prvku 
-a dostaneme odhad $ 2^{r - 1} \Vert \tilde{A} \Vert $. Toto je však odhad na 
-absolutní hodnotu největšího prvku. Proto odhad ještě vynásobíme dvojkou a 
-přičteme jedničku $ 2^r \Vert A \Vert + 1 $, čímž pokryjeme všechna čísla, 
-která se v průběhu výpočtu mohou objevit. Pro tento odhad můžeme opět díky 
-důsledku \ref{num_prim_dus} najít vhodná prvočísla, která jej budou omezovat.
-Výpočet pak můžeme provádět paralelně v okruzích $ \Zbb / p_i \Zbb $, ale stejně
-jako v případě výpočtu RST musíme při každém rozhodnutí (výpočtu koeficientu
-pomocí kterého provádíme redukci) zobrazit všechny potřebné prvky do okruhu
-$ \Zbb / \mu \Zbb $ a rozhodnutí provést tam. Takovýto postup pravděpodobně není
-nejefektivnější možný, avšak výpočetní složitost tohoto kroku bude zanedbatelná
-v porovnání s výpočtem redukovaného schodovitého tvaru a následného výpočtu 
-Smithova normálního tvaru.
+modulárním systému nezabývá. To ovšem není problém, neboť jsme dokázali vlastní
+odhady na mezivýsledky a nyní stačí identifikovat problematická místa algoritmu
+pro převod do diagonálně dominantního tvaru \ref{DDT_Algo} a algoritmu pro 
+výpočet Smithova normálního tvaru věty \ref{SNF_Triang_modified}.
 
-Nakonec použijeme modifikovaný algoritmus z věty \ref{SNF_Triang_modified}, 
-která dává odhad $ 3 (a_1 \cdots a_{n - 1})^2 a_n $. Tento odhad opět přenásobíme
-dvojkou a přičteme jedničku, abychom pokryli také záporná čísla. Neboť 
-Hadamardův odhad omezuje všechny minory matice, tak dostáváme nerovnost
-$ 6 (a_1 \cdots a_{n - 1})^2 a_n + 1 < 6 (n^{1/2} \Vert A \Vert)^{2 n} + 1 $. S 
-tímto nejhorším případem však opět v praxi počítat nemusíme. Stačí hledat 
-prvočísla omezující odhad, ve kterém vystupují diagonální koeficienty $ a_i $.
-Důsledek \ref{num_prim_dus} nám opět zaručuje, že takovýchto prvočísel jsme 
-schopni nalézt sdostatek.
+V prvním případě se jedná pouze o provádění redukcí, kdy potřebujeme vědět, jaký
+násobek sloupce je potřeba přičíst, abychom redukovali prvek v jiném sloupci. 
+Ke korektnímu výpočtu tohoto násobku je postačující převést redukovaný a 
+redukující prvek do standardní reprezenatce, provést dělení a pak provést 
+redukci v modulárním systému s výsledným koeficientem.
 
-Výpočet povedeme podobným způsobem jako v případě výše uvedené paralelizace 
-algoritmu pro výpočet RST. 
-Nejprve musíme identifikovat všechna místa algoritmu z věty \ref{SNF_Triang},
-která si nevystačí s algebraickými operacemi (sčítání, odečítání, násobení). 
-Jedná se o výpočty koeficientů pro řádkové/sloupcové operace
+V případě algoritmu pro výpočet Smithova normálního tvaru \ref{SNF_Triang_modified}
+se téměř výhradně jedná o výpočty koeficientů pro řádkové/sloupcové operace
 pomocí Bezoutova lemmatu nebo Bachova lemmatu (ty totiž používají
 uspořádání $\Zbb$, které nelze promítnout do $\Zbb / p_1 \Zbb \times
-\cdots \times \Zbb / p_s \Zbb$), případně výpočtu koeficientu pro redukci.
+\cdots \times \Zbb / p_s \Zbb$). V obou případech je postačující vypočítat
+hledané koeficienty ve standardní reprezentaci a dále pokračovat v modulárním
+systému. Konkrétně se jedná o lemma \ref{Sloup_elim_GCD} - koeficient $ c $, 
+který počítáme pomocí Bachova lemmatu. Lemma \ref{Sloup_elim_SNF} pak používá 
+rozšířený  Euklidův algoritmus pro výpočet čísel $ s, t $ a $ s_1 $. 
+Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu \ref{extra_cols}. 
+Algoritmus věty \ref{SNF_Triang_modified} používá navíc ještě modulární
+redukce, se kterými se můžeme vypořádat stejným způsobem, jako v případě 
+algoritmu pro výpočet diagonálně dominantního tvaru. 
 
-V lemmatu \ref{Sloup_elim_GCD} se jedná o koeficient $ c $, který počítáme 
-pomocí Bachova lemmatu. Lemma \ref{Sloup_elim_SNF} pak používá rozšířený 
-Euklidův algoritmus pro výpočet čísel $ s, t $ a $ s_1 $. Analogický výpočet 
-koeficientů $ s, t $ najdeme v lemmatu \ref{extra_cols}. Rozšíření těchto 
-algoritmů pak na různých místech provádí redukci modulo nějaký prvek. Na těchto 
-místech proto musí dojít k převodu příslušných prvků do standardní reprezentace, 
-výpočtu potřebných koeficientů a pak teprve může algoritmus pokračovat ve 
-výpočtu v modulárních systémech se získanými koeficienty.
+\begin{pozn}
+Po výpočtu redukovaného schodovitého tvaru v praxi není nutné používat pro 
+výpočet diagonálně dominantního tvaru odhad $ 2^{r - 1} \beta $, který může být 
+zbytečně velký. Namísto toho použijeme odhad $ 2^{r - 1} \Vert \tilde{A} \Vert $.
+Navíc pokud pro tento odhad bude potřeba prvočísel stejné bitové délky, nemusíme 
+modulární reprezentaci přepočítávat a stačí pouze pokračovat dále s vybranými
+prvočísly, jejichž součin bude větší než nový odhad 
+$ 2^{r - 1} \Vert \tilde{A} \Vert $. Analogicky můžeme postupovat na začátku
+výpočtu Smithova normálního tvaru z diagonálně dominantního tvaru.
+\end{pozn}
+
+Pro ilustraci uvádíme následující příklad, ve kterém se zabýváme tím, kolik bitů 
+budeme potřebovat pro reprezentaci našich prvočísel při výpočtu Smithova
+normálního tvaru matice s konkrétními parametry.
 
 \begin{pri}
 Předpokládejme, že chceme vypočítat Smithův normální tvar matice o rozměrech
 $ 10^4 \times 10^4 $ a největším prvku $ \Vert A \Vert = 2^{31} $. Pro výpočet 
-RST nám budou pro stačit prvočísla, jejichž bitová délka bude 
-$ l = 6 + \log_2(\log_2(\beta)) < 28 $. Numericky můžeme spočítat, že také
-$ 6 + \log_2(\log_2(2^{10^4} \beta + 1)) < 28 $, takže při převodu na diagonálně
+RST nám budou stačit prvočísla, jejichž bitová délka bude 
+$ l = 6 + \log_2(\log_2(2 \beta + 1)) < 28 $. Numericky můžeme spočítat, že také
+$ 6 + \log_2(\log_2(2^{10^4} (2 \beta + 1) + 1)) < 28 $, takže při převodu na diagonálně
 dominantní matici si také vystačíme s čísly o délce 28 bitů.
 
-Konečně pro výpočet SNF z diagonálně dominantní matice máme odhad ma bitovou 
+Konečně pro výpočet SNF z diagonálně dominantní matice máme odhad na bitovou 
 délku 
 \begin{align*}
     6 + \log_2(\log_2(6 (10^{2} 2^{31})^{2 \cdot 10^4} + 1)) 
@@ -714,12 +753,12 @@ To jsou výsledky pro naše potřeby naprosto postačující. Předpokládáme,
 \end{pri}
 
 Celkem tedy dostáváme algoritmus pro výpočet Smithova normálního tvaru, který
-je schopen provádět většinu výpočtů ve standardní 32-bitové aritmetice pro 
-matice, jejíž velikost je v rámci našich výpočetních možností. Navíc části
-algoritmu, které nevyžadují výpočet zmíněných koeficientů, můžeme provádět
+je schopen provádět většinu výpočtů ve standardní 32bitové aritmetice pro 
+matice, jejichž velikost je v rámci našich výpočetních možností. Navíc části
+algoritmu, které vyžadují pouze algebraické operace, můžeme provádět
 paralelně a využít tak plný potenciál dnešních vícejádrových procesorů.
-V místě, kde je potřeba udělat nějaké rozhodnutí (vypočítat koeficient),
+V místě, kde je potřeba provést nějaké nealgebraické operace (vypočítat koeficient),
 je nutné pracovat s datovými typy pro reprezentaci libovolně velkého celého
-čísla. V jednom okamžiku však takových čísel budeme potřebovat jen velmi málo
-(obvykle se jedná pouze o vstupy do rozšířeného Euklidova algoritmu), a proto
-tyto výpočty nebudou nijak významně zvyšovat paměťovou náročnost.
+čísla. V jednom okamžiku však takových čísel budeme potřebovat jen velmi málo, 
+a proto tyto výpočty nebudou nijak významně zvyšovat paměťovou náročnost.
+

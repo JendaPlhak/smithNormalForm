@@ -2,7 +2,7 @@
 \addcontentsline{toc}{chapter}{Úvod}
 
 Smithův normální tvar celočíselných matic nalézá uplatnění například při řešení
-soustav celočíselných rovnic nebo při počítání simpliciálních homologií \cite{Simplic_Homo}.
+soustav celočíselných rovnic nebo při počítání simpliciálních homologií \cite{Simplic_Homo},
 cílem této práce proto bude seznámit čtenáře s efektivním
 algoritmem pro výpočet Smithova normálního tvaru celočíselných matic.
 
@@ -11,24 +11,25 @@ celočíselnou matici takovýto tvar existuje a je jednoznačný. Vedlejším pr
 tohoto důkazu bude také naivní algoritmus.
 Tento naivní přístup však nebude poskytovat žádná omezení na velikosti prvků
 matic vznikajících během výpočtu. Z toho důvodu uvedeme také druhý algoritmus, který
-bude možné pomocí Čínské zbytkové věty paralelizovat a poskytneme záruky na
+bude možné pomocí Čínské zbytkové věty paralelizovat, a poskytneme záruky na
 bitovou délku prvků všech matic vyskytujících se v algoritmu.
 Popis tohoto algoritmu bude náplní kapitol 2, 3 a 4.
 
-Ve druhé kapitole popíšeme, jakým způsobeme můžeme pro celočíselnou matici
+Ve druhé kapitole popíšeme, jakým způsobem můžeme pro celočíselnou matici
 vypočítat ekvivalentní matici v redukovaném schodovitém tvaru. Třetí kapitola
 na tento výsledek naváže a poskytne popis algoritmu pro výpočet Smithova
 normálního tvaru z matice v redukovaném schodovitém tvaru. Ve čtvrté kapitole
 nastíníme možnosti paralelního výpočtu pomocí Čínské zbytkové věty, poskytneme
-odhady na prvky všech matic objevujících se v průběhu výpočtu a rozebereme
+odhady na prvky všech matic objevujících se v průběhu výpočtu a rozebereme,
 jakým způsobem můžeme omezit jejich bitovou délku.
 
 V první kapitole budeme vycházet zejména z učebního textu \cite{vokr}. V 
-kapitolách 2 respektive 3 pak čerpáme z článků \cite{triang} respektive 
+kapitolách 2, respektive 3 pak čerpáme z článků \cite{triang} respektive 
 \cite{SNF_Arne}.
 
 Předpokládá se, že čtenář má základní znalosti z lineární algebry a
 elementární teorie čísel.
 
 \cleardoublepage
+
 
