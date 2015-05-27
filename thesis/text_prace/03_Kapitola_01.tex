@@ -54,15 +54,15 @@ vypadají invertibilní celočíselné matice. To popisuje následující lemma.
         $ \det(A) \cdot \det(A^{-1}) = \det(AA^{-1}) = \det(E) = 1 $,
     \end{center}
     a protože determinant celočíselné matice je z definice determinantu
-    také celočíselný, musí platit $det(A) = det(A^{-1}) = \pm1$, neboť v okruhu
+    také celočíselný, musí platit $ \det(A) = \det(A^{-1}) = \pm1$, neboť v okruhu
     $\mathbb{Z}$ máme pouze dvě jednotky, a to právě $\pm1$.
 
     Buď naopak $A \in \Zmat$ čtvercová s determinantem $\pm1$. Pak inverzní
     matici $A^{-1}$ můžeme spočítat z algebraických doplňků jako
     \begin{center}
-        $A^{-1} = \frac{1}{\operatorname{det}(A)} \cdot A_{\mathrm{adj}} = \pm A_{adj}$,
+        $A^{-1} = \frac{1}{\operatorname{det}(A)} \cdot A_{\mathrm{adj}} = \pm A_{\mathrm{adj}}$,
     \end{center}
-    nicméně prvky matice $A_{adj}$ - algebraické doplňky - se vypočítají
+    nicméně prvky matice $A_{\mathrm{adj}}$ - algebraické doplňky - se vypočítají
     ze subdeterminantů (minorů) matice A a musí být proto celočíselné. Matice
     $A^{-1}$ je tedy celočíselná.
 \end{proof}
@@ -78,14 +78,14 @@ algoritmus. Ten funguje následujícím způsobem.
 
 Pro libovolná $ a, b \in \mathbb{Z}$ taková, že $ |a| > |b| $ vydělíme číslo
 $ a $ číslem $ b $ se zbytkem. Tedy $ a = qb + c $. Pak ovšem platí, že
-$ gcd(a, b) = gcd(b, c) $, neboť
+$ \gcd(a, b) = \gcd(b, c) $, neboť
 
 \begin{center}
-$ gcd(a, b) = d \Rightarrow d \vert (a - qb) \Rightarrow d \vert c \Rightarrow d \vert gcd(b, c)$
+$ \gcd(a, b) = d \Rightarrow d \vert (a - qb) \Rightarrow d \vert c \Rightarrow d \vert \gcd(b, c)$
 \end{center}
 a naopak
 \begin{center}
-$ gcd(b, c) = e \Rightarrow e \vert (qb + c) \Rightarrow e \vert a \Rightarrow e \vert gcd(a, b)$.
+$ \gcd(b, c) = e \Rightarrow e \vert (qb + c) \Rightarrow e \vert a \Rightarrow e \vert \gcd(a, b)$.
 \end{center}
 Takto můžeme postupovat rekurzivně a po konečném počtu kroků bude $ c = 0 $ a
 $ b $ příslušné danému kroku bude právě hledaný největší společný dělitel.
@@ -167,12 +167,12 @@ Dostáváme, že $ q_k \vert q_{k+1}$, což jsme měli dokázat.
 
 Zbývá dokázat jednoznačnost. Označme
 \begin{center}
-$ gcd_{i \times i }(A) = gcd\{det(X) \vert X \textrm{ je submatice } A \textrm{ tvaru }i \times i\} $.
+$ \gcd_{i \times i }(A) = \gcd\{\det(X) \vert X \textrm{ je submatice } A \textrm{ tvaru }i \times i\} $.
 \end{center}
 
 Prvně ukážeme, že platí rovnost
 \begin{center}
-$ q_1 \hdots q_i = gcd_{i \times i }(A)$,
+$ q_1 \hdots q_i = \gcd_{i \times i }(A)$,
 \end{center}
 
 kde $ A $ je matice ve \snf{}. Pokud submatice $ X $ obsahuje $k$-tý řádek, ale
@@ -181,11 +181,11 @@ neboť $ A $ je diagonální a $ X $ tak bude obsahovat nulový řádek. Stačí
 uvažovat submatice, jejichž diagonála leží na hlavní diagonále matice $ A $. To
 znamená, že platí
 \begin{center}
-$ gcd_{i \times i }(A) = gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} $.
+$ \gcd_{i \times i }(A) = \gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} $.
 \end{center}
 Navíc A je ve \snf{}, proto $ q_i | q_{i+1} $, z čehož plyne
 \begin{center}
-$ gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} = q_1 \hdots q_i $,
+$ \gcd\{q_{k_1} \hdots q_{k_i} \vert 1 \leq k_1 < \hdots < k_i \leq r \} = q_1 \hdots q_i $,
 \end{center}
 což jsme chtěli dokázat.
 
@@ -199,13 +199,13 @@ To ovšem nemá žádný vliv na výsledného největšího společného dělite
 násobku řádku je situace ovšem poněkud složitější. Každý nový subdeterminant je
 pak celočíselnou kombinací subdeterminantů předchozí matice. Z toho plyne, že
 \begin{center}
-$ gcd_{i \times i }(A) \vert gcd_{i \times i }(A') $.
+$ \gcd_{i \times i }(A) \vert \gcd_{i \times i }(A') $.
 \end{center}
 
 Jak jsme ale ukázali dříve, operace přičtení řádku je invertibilní. Můžeme tedy
 celý proces zopakovat opačným směrem a stejnou argumentací dostáváme
 \begin{center}
-$ gcd_{i \times i }(A') \vert gcd_{i \times i }(A) $.
+$ \gcd_{i \times i }(A') \vert \gcd_{i \times i }(A) $.
 \end{center}
 Největší společný dělitel subdeterminantů se tedy nezmění.
 

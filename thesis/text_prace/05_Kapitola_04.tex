@@ -116,24 +116,32 @@ prostory jsou proto izomorfní.
 \end{proof}
 
 Předpokládejme, že chceme provádět sérii výpočtů (sčítání, odčítání,
-násobení) nad celými čísly a jsme dopředu schopni omezit všechny mezivýsledky nějakým číslem
-$ \mu $. Pak tyto výpočty můžeme ekvivalentně provádět v okruhu $ \Zbb / \mu \Zbb $.
-Avšak z důsledku \ref{Chin_Rem_Iso} plyne, že stejně tak můžeme výpočty provést
+násobení) nad celými čísly a jsme dopředu schopni omezit všechny mezivýsledky 
+nějakým číslem $ \gamma $. Toto omezení je dáno na velikost, tedy absolutní 
+hodnotu mezivýsledků. Proto abychom mohli všechny mezivýsledky jednoznačně 
+reprezentovat v okruhu $ \Zbb / \mu \Zbb $, musíme zvolit $ \mu $ tak, aby 
+platilo $ \mu > 2 \gamma + 1 $. Pak všechny výpočty můžeme ekvivalentně provádět 
+v okruhu $ \Zbb / \mu \Zbb $ s třídami, které v každém okamžiku výpočtu díky 
+volbě $ \mu $ jednoznačně odpovídají mezivýsledkům v okruhu celých čísel.
+Z důsledku \ref{Chin_Rem_Iso} navíc plyne, že stejně tak můžeme výpočty provést
 paralelně modulo prvočíselné faktory $ \mu $. V praxi $ \mu $ obvykle získáme tak,
 že postupně přidáváme prvočísla, dokud jejich součin není dostatečně velký.
 Pak použijeme zobrazení $ \varphi $ z důkazu důsledku \ref{Chin_Rem_Iso},
-čímž získáme výchozí reprezentanty v příslušných okruzích součinu okruhů.
-Nyní můžeme paralelně aplikovat operace, které potřebujeme provést, a konečně
-pomocí konstrukce uvedené v důkazu věty \ref{Chin_Rem} spojíme částečné výsledky
-a obdržíme výsledek původní úlohy.
+čímž získáme výchozí reprezentanty v jednotlivých činitelích $ \Zbb / p_i \Zbb $.
+Nyní můžeme veškeré operace aplikovat paralelně, a konečně pomocí konstrukce 
+uvedené v důkazu věty \ref{Chin_Rem} spojíme částečné výsledky a obdržíme 
+výsledek původní úlohy.
 
 
 
 
 \section{Výběr prvočísel}
-Předpokládejme, že máme k dispozici odhad $ \beta $, který omezuje všechny
-prvky matic vznikajících v průběhu výpočtu Smithova normálního tvaru. Naším cílem bude
-najít prvočísla $ p_1,\dots, p_k $ tak, aby $ \beta < p_1 \cdots p_k $. Zřejmě
+Předpokládejme, že máme k dispozici odhad $ \gamma $, který omezuje všechny
+prvky matic vznikajících v průběhu výpočtu Smithova normálního tvaru. 
+Abychom mohli jednoznačně reprezentovat všechny mezivýsledky zvolíme 
+$ \eta = 2 \gamma + 1 $ (tuto volbu ještě řádně zdůvodníme v sekci 4.3).  
+Naším cílem bude najít prvočísla $ p_1,\dots, p_k $ tak, aby 
+$ \eta < p_1 \cdots p_k $. Zřejmě
 bychom mohli postupně brát prvočísla $ 2, 3, 5, 7 \dots $, dokud by uvedená
 podmínka nebyla splněna. Takto bychom však dostali prvočísel zbytečně mnoho. Na
 druhou stranu chceme, aby tato prvočísla byla dostatečně malá, abychom
@@ -172,11 +180,11 @@ získáme naše tvrzení.
 \end{proof}
 
 \begin{dus} \label{num_prim_dus}
-Buď $ \beta > 1 $ nějaký odhad a nechť $ l = 6 + \log_2 \log_2 \beta $. 
+Buď $ \eta > 1 $ nějaký odhad a nechť $ l = 6 + \log_2 \log_2 \eta $. 
 Pak můžeme najít
 $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel $ \{p_1, \dots, p_s\} $,
 která je možno reprezentovat $ l $-bitovým celým číslem, a navíc bude platit
-$ \beta < p_1 \cdots p_s $.
+$ \eta < p_1 \cdots p_s $.
 \end{dus}
 \begin{proof}
 Uvažme prvočísla z lemmatu \ref{num_prim} a označme je $ \{p_1, \dots, p_s\} $.
@@ -186,8 +194,8 @@ z čehož plyne následující výpočet.
     p_1 \cdots p_s
         > (2^{l - 1}) ^ s
         \geq 2^{(l - 1) \frac{2^l}{5 (l - 1)}}
-        = 2^{\frac{2^{6 + \log_2 \log_2 \beta}}{5}}
-        = \beta^{\frac{2^6}{5}} > \beta
+        = 2^{\frac{2^{6 + \log_2 \log_2 \eta}}{5}}
+        = \eta^{\frac{2^6}{5}} > \eta
 \end{align*}
 \end{proof}
 
@@ -196,8 +204,8 @@ z čehož plyne následující výpočet.
 \begin{pozn}
 Poznamenejme, že v praxi pro nějakou konkrétní úlohu můžeme mít k dispozici
 podstatně lepší odhad na determinant nebo na prvky v hledaném Smithově normálním
-tvaru. Toho můžeme s výhodou využít při převodu z RST do SNF. Hadamardův odhad
-nahradíme lepším odhadem a dále postupujeme identicky.
+tvaru. Toho můžeme s výhodou využít při převodu z RST do SNF. Původní odhad
+jednoduše nahradíme lepším odhadem a dále postupujeme identicky.
 \end{pozn}
 
 
@@ -208,14 +216,15 @@ budeme v průběhu výpočtu pracovat. Z článku \cite{triang} vyplývá, že p
 vhodným způsobem modifikujeme algoritmy ze druhé kapitoly, pak jsme schopni
 garantovat, že mezivýsledky budou omezeny výrazem
 $ \beta = \Vert A \Vert (20 r \log_2{ (r^{1/2} \Vert A \Vert) })^{5/2} (r^{1/2} \Vert A \Vert)^{9 r} $
-\cite[Theorem 16]{triang}.
+, viz \cite[Theorem 16]{triang}.
 Ačkoliv tento výraz vypadá poněkud komplikovaně, tak logaritmus odhadu
 asymptoticky odpovídá logaritmu Hadamardova odhadu na determinant a můžeme psát
 $ \log{\beta} = \mathcal{O}(r \log{(r \Vert A \Vert)}) $ \cite[Theorem 16]{triang}.
 Poznamenejme, že zmíněné modifikace spočívají vesměs v tom, že pomocí nějakého
 význačného prvku redukujeme ostatní prvky v řádku nebo sloupci.
 
-V článku \cite{SNF_Arne} se autor touto problematikou bohužel nezabývá. Pokusíme
+V článku \cite{SNF_Arne} o výpočtu Smithova normálního tvaru z horní trojúhelníkové
+matice se autor touto problematikou bohužel nezabývá. Pokusíme
 se proto pro procedury ze třetí kapitoly podat odhad vlastní. Budeme však muset
 mírně upravit požadavky na vstupní matice. Tyto požadavky jsou obsahem následující
 definice.
@@ -234,7 +243,7 @@ definice.
 Pro další práci s odhady budeme ještě potřebovat následující lemma.
 \begin{lem} \label{bez_bound}
 Nechť $ a, b \in \Zbb $. Pak existují koeficienty
-$ s, t $, $ \gcd(a, b) = s a + t b $ takové, že platí $ |s| \leq |b| $ a
+$ s, t $ takové, že platí $ \gcd(a, b) = s a + t b $, $ |s| \leq |b| $ a
 $ |t| \leq |a| $.
 \end{lem}
 \begin{proof}
@@ -258,8 +267,8 @@ vlastnosti, které požaduje lemma \ref{bez_bound}.
 
 
 \begin{lem} \label{DDT_Algo}
-Mějme matici $ A $ v redukovaném schodovitém tvaru o rozměrech $ n \times m $,
-kde $ n > 0 $.
+Mějme matici $ A $ v redukovaném schodovitém tvaru mající plnou hodnost o 
+rozměrech $ n \times m $,kde $ n > 0 $.
 Pak existuje algoritmus, který převede matici $ A $ na ekvivalentní matici, 
 která bude diagonálně dominantní, a všechny mezivýsledky budou omezeny výrazem
 $ 2^{n - 1} \Vert A \Vert $.
@@ -305,7 +314,8 @@ Buď $ n > 1 $ a nechť odhad na mezivýsledky algoritmu platí pro matice mají
 nejvýše $ n - 1 $ řádků. Z toho, že vstupní matice $ A $ je v redukovaném 
 schodovitém tvaru vyplývá, že $ A_{n,n} > A_{i, n} \geq 0 $ pro všechna 
 $ i = 1, \dots, n - 1 $. To implikuje, že prvky $ n $-tého řádku můžeme redukovat
-s odhadem $ \Vert A \Vert + A_{n,n} \frac{\Vert A \Vert} {A_{n,n}} = 2 \Vert A \Vert $.
+tak, že veškeré prvky výsledné matice budou mít velikost nejvýše 
+$ \Vert A \Vert + A_{n,n} \frac{\Vert A \Vert} {A_{n,n}} = 2 \Vert A \Vert $.
 Nechť $ \tilde{A} $ je matice tvořená prvními $ n - 1 $ řádky výsledné matice.
 Pak platí $ \Vert \tilde{A} \Vert \leq 2 \Vert A \Vert $. To společně s
 indukčním předpokladem implikuje výsledný odhad 
@@ -314,6 +324,7 @@ indukčním předpokladem implikuje výsledný odhad
         \leq 2^{n - 2} 2 \Vert A \Vert 
         = 2^{n - 1} \Vert A \Vert.
 \end{align*}
+\qedhere
 \end{proof}
 
 
@@ -464,8 +475,8 @@ algoritmu.
 Buď $ T $ diagonálně dominantní matice splňující požadavky věty \ref{Sloup_elim}.
 Pak můžeme algoritmus věty \ref{Sloup_elim} modifikovat tak, že všechny
 mezivýsledky budou omezeny výrazem $ 3 a_1 \cdots a_{k - 2} a_{k - 1}^2 t_k $ 
-pro $ k > 2 $, $ 2 a_1^2 t_k $ pro $ k = 2 $ a výsledná matice bude diagonálně 
-dominantní.
+pro $ k > 2 $, respektivevýrazem $ 2 a_1^2 t_k $ pro $ k = 2 $ a výsledná matice 
+bude diagonálně dominantní.
 \end{lem}
 \begin{proof}
 Pro modifikaci algoritmu věty \ref{Sloup_elim} můžeme použít algoritmy z lemmat
@@ -476,7 +487,7 @@ Dále budeme předpokládat, že $ k > 2 $.
 Lemma \ref{Sloup_elim_GCD_modified} dává odhad $ a_{k - 2} a_{k - 1} $. 
 Následně budeme iterativně aplikovat lemma \ref{Sloup_elim_SNF_modified}.
 Nechť $ T_{k,k}^{(i)} $ značí prvek na pozici $ [k, k] $ v $ i $-té iteraci, 
-přičemž iniciálně bude platit $ T_{k,k}^{(0)} = t_k $. V $ i $-té 
+přičemž na začátku bude platit $ T_{k,k}^{(0)} = t_k $. V $ i $-té 
 iteraci přiřazujeme $ T_{k,k}^{(i)} = T_{k,k}^{(i - 1)} a_i / s_i $, 
 kde $ s_i $ odpovídá prvku v příslušné iteraci, který jsme v lemmatu 
 \ref{Sloup_elim_SNF} značili $ s_1 $.
@@ -527,14 +538,14 @@ prvním sloupci a prvky $ b_{i,j} $ pro $ i = 2,\dots,k $.
 Díky tomu, že matice $ T $ je diagonálně dominantní, platí nerovnost
 $ |tb_{i,j}| \leq a_1 a_i $ pro $ i = 2,\dots,k $. Také zřejmě platí
 $ | b_{i,j} a_1 / s_1 | \leq a_1 a_i $. Následně můžeme všechny prvky redukovat
-modulo příslušný diagonální prvek.
+modulo diagonální prvek ve stejném řádku.
 
 Tento eliminační proces můžeme provést pro všechny prvky $ b_{1, j} $ se stejnými
 odhady na pracovní prvky. Jen odhad na prvky v prvním sloupci musíme mírně upravit.
 Označme prvky prvního sloupce v průběhu výpočtu $ t_i $. Pak po každé iteraci
 eliminačního procesu bude zřejmě platit $ |t_i| \leq a_i $. V každém kroku
 algoritmu tak bude platit $ |t_i| \leq a_i + a_1 a_i $, neboť při eliminaci
-prvku $ b_{1,j} $ přiřazujeme $ t_i = t_i + tb_{i,j} $.
+prvku $ b_{1,j} $ přiřazujeme $ t_i \leftarrow t_i + tb_{i,j} $.
 
 Celkem jsme tedy schopni eliminovat všechny prvky $ b_{1,j} $ tak, že 
 mezivýsledky budou omezeny výrazem $ \max\{ a_i + a_1 a_i \} $, kde 
@@ -576,8 +587,8 @@ hodnotu součinu diagonálních prvků vstupní matice. Z toho důvodu bude plat
     3 a_1^{(r)} \cdots (a_{r - 1}^{(r)})^2 a_r^{(r)}
         \leq 3 (a_1 \cdots a_{r - 1})^2 a_r
 \end{align*}
-Mezivýsledky v každém kroku $ r \in \{1, \dots, n \} $ proto budou omezeny 
-výrazem $ 3 (a_1 \cdots a_{n - 1})^2 a_n $.
+Pro každý krok $ r = 1, \dots, n $ tak budou mezivýsledky omezeny výrazem
+$ 3 (a_1 \cdots a_{n - 1})^2 a_n $.
 
 Výsledkem bude ekvivalentní matice
 \begin{align*}
@@ -617,10 +628,14 @@ $ a_1 $.
 
 \section{Paralelizace algoritmů pro výpočet Smithova normálního tvaru}
 
+Na následujících řádcích nejprve obecně shrneme algoritmus, který používáme pro 
+výpočet Smithova normálního tvaru. Pak pro jednotlivé kroky algoritmu uvedeme 
+omezení na mezivýsledky a nakonec se budeme zabývat omezením bitové délky většiny
+mezivýsledků s využitím Čínské zbytkové věty a paralelizací.
 
 \subsubsection{Výpočet Smithova normálního tvaru}
 
-Mějme matici $ A $ tak jako na začátku. S využitím modifikovaných algoritmů 
+Mějme matici $ A $ tak jako na začátku. S využitím algoritmů 
 druhé kapitoly, o jejichž modifikaci jsme mluvili v předchozí sekci, vypočítáme
 redukovaný schodovitý tvar matice $ A $. Z výsledné matice odstraníme nulové 
 řádky a pomocí algoritmu lemmatu \ref{DDT_Algo} ji převedeme do diagonálně
@@ -653,29 +668,33 @@ $ 3 (a_1 \cdots a_{n - 1})^2 a_n < 3 (n^{1/2} \Vert A \Vert)^{2 n} $.
 \subsubsection{Výpočet s využitím Čínské zbytkové věty}
 
 V každém ze tří uvedených kroků výpočtu jsme schopni dopředu omezit mezivýsledky
-nějakým odhadem $ \omega $. Avšak všechna tato omezení byla dána na velikost,
+nějakým odhadem $ \gamma $. Avšak všechna tato omezení byla dána na velikost,
 tedy absolutní hodnotu mezivýsledků. Proto abychom mohli všechny mezivýsledky 
 v daném kroku jednoznačně reprezentovat v okruhu $ \Zbb / \mu \Zbb $, musíme 
-zvolit $ \mu $ tak, aby platilo $ \mu > 2 \omega + 1 $.
+zvolit $ \mu $ tak, aby platilo $ \mu > 2 \gamma + 1 $.
 
-Nechť $ \omega $ značí libovolný z našich odhadů a nechť 
-$ l = 6 + \log_2(\log_2(2 \omega + 1)) $. Pak z důsledku \ref{num_prim_dus} 
+Nechť $ \gamma $ značí libovolný z našich odhadů a nechť 
+$ l = 6 + \log_2(\log_2(2 \gamma + 1)) $. Pak z důsledku \ref{num_prim_dus} 
 vyplývá, že můžeme vybrat $ s = \ceil{\frac{2^{l}}{5 (l - 1)}} $ prvočísel 
-$ p_i $ takových, že $ p_1 \cdots p_s > 2 \omega + 1 $. Zvolme 
+$ 2^{l - 1} < p_i < 2^l $ takových, že $ p_1 \cdots p_s > 2 \gamma + 1 $. Zvolme 
 $ \mu = p_1 \cdots p_s $. 
 
 Z důsledku \ref{Chin_Rem_Iso} Čínské zbytkové věty vyplývá, že existuje 
 isomorfismus 
 $ \varphi : \Zbb / \mu \Zbb \rightarrow \Zbb / p_1 \Zbb \times \cdots \Zbb / p_s \Zbb $.
-Matici $ A $ proto můžeme v průběhu výpočtu ekvivalentně reprezentovat pomocí
+Matici $ A $ proto budeme v průběhu výpočtu ekvivalentně reprezentovat pomocí
 $ s $ matic v okruzích $ \Zbb / p_i \Zbb $ a veškeré algebraické operace 
-(sčítání, odečítání, násobení) můžeme provádět paralelně přímo v těchto okruzích.
+(sčítání, odečítání, násobení) budeme provádět paralelně přímo v těchto okruzích.
 
-Reprezentaci matice $ A $ v průběhu výpočtu v okruhu $ \Zbb / \mu \Zbb $ budeme
+Reprezentaci matice $ A $ v průběhu výpočtu v okruhu celých čísel $ \Zbb $ budeme
 nazývat standardní reprezentace. Reprezentací v modulárním systému pak budeme 
 rozumět reprezentaci v okruhu $ \Zbb / p_1 \Zbb \times \cdots \Zbb / p_s \Zbb $.
+Poznamenejme, že díky uvedeným odhadům můžeme matici $ A $ ve standardní 
+reprezentaci chápat ekvivalentně jako matici v okruhu $ \Zbb / \mu \Zbb $. 
+
 Pro přechod mezi standardní reprezentací a modulárním systémem budeme používat
-zobrazení $ \varphi $ z důsledku \ref{Chin_Rem_Iso}.
+zobrazení $ \varphi $ z důsledku \ref{Chin_Rem_Iso}. Pro přechod opačným směrem
+můžeme použít algoritmus z Čínské zbytkové věty \ref{Chin_Rem}.
 Abychom mohli výše uvedenou reprezentaci v průběhu výpočtu korektně používat, 
 musíme identifikovat všechna místa algoritmů, která si nevystačí s algebraickými 
 operacemi. 
@@ -700,16 +719,19 @@ výpočet Smithova normálního tvaru věty \ref{SNF_Triang_modified}.
 V prvním případě se jedná pouze o provádění redukcí, kdy potřebujeme vědět, jaký
 násobek sloupce je potřeba přičíst, abychom redukovali prvek v jiném sloupci. 
 Ke korektnímu výpočtu tohoto násobku je postačující převést redukovaný a 
-redukující prvek do standardní reprezenatce, provést dělení a pak provést 
-redukci v modulárním systému s výsledným koeficientem.
+redukující prvek do standardní reprezenatce, provést dělení se zbytkem a pak 
+provést redukci v modulárním systému s výsledným koeficientem.
 
 V případě algoritmu pro výpočet Smithova normálního tvaru \ref{SNF_Triang_modified}
 se téměř výhradně jedná o výpočty koeficientů pro řádkové/sloupcové operace
 pomocí Bezoutova lemmatu nebo Bachova lemmatu (ty totiž používají
 uspořádání $\Zbb$, které nelze promítnout do $\Zbb / p_1 \Zbb \times
-\cdots \times \Zbb / p_s \Zbb$). V obou případech je postačující vypočítat
-hledané koeficienty ve standardní reprezentaci a dále pokračovat v modulárním
-systému. Konkrétně se jedná o lemma \ref{Sloup_elim_GCD} - koeficient $ c $, 
+\cdots \times \Zbb / p_s \Zbb$). V obou případech je postačující převést
+prvky pracovní matice, které vstupují do výpočtu, do standardní reprezentace,
+vypočítat hledané koeficienty ve standardní reprezentaci, koeficienty promítnout
+zpět do modulárního systému a nakonec v modulárním systému provést příslušnou 
+řádkovou/sloupcovou operaci. 
+Konkrétně se jedná o lemma \ref{Sloup_elim_GCD} - koeficient $ c $, 
 který počítáme pomocí Bachova lemmatu. Lemma \ref{Sloup_elim_SNF} pak používá 
 rozšířený  Euklidův algoritmus pro výpočet čísel $ s, t $ a $ s_1 $. 
 Analogický výpočet koeficientů $ s, t $ najdeme v lemmatu \ref{extra_cols}. 
@@ -722,14 +744,14 @@ Po výpočtu redukovaného schodovitého tvaru v praxi není nutné používat p
 výpočet diagonálně dominantního tvaru odhad $ 2^{r - 1} \beta $, který může být 
 zbytečně velký. Namísto toho použijeme odhad $ 2^{r - 1} \Vert \tilde{A} \Vert $.
 Navíc pokud pro tento odhad bude potřeba prvočísel stejné bitové délky, nemusíme 
-modulární reprezentaci přepočítávat a stačí pouze pokračovat dále s vybranými
+modulární reprezentaci přepočítávat a stačí dále pokračovat pouze s vybranými
 prvočísly, jejichž součin bude větší než nový odhad 
-$ 2^{r - 1} \Vert \tilde{A} \Vert $. Analogicky můžeme postupovat na začátku
+$ 2^{r} \Vert \tilde{A} \Vert + 1 $. Analogicky můžeme postupovat na začátku
 výpočtu Smithova normálního tvaru z diagonálně dominantního tvaru.
 \end{pozn}
 
 Pro ilustraci uvádíme následující příklad, ve kterém se zabýváme tím, kolik bitů 
-budeme potřebovat pro reprezentaci našich prvočísel při výpočtu Smithova
+budeme potřebovat pro reprezentaci prvočísel při výpočtu Smithova
 normálního tvaru matice s konkrétními parametry.
 
 \begin{pri}
@@ -757,7 +779,7 @@ je schopen provádět většinu výpočtů ve standardní 32bitové aritmetice p
 matice, jejichž velikost je v rámci našich výpočetních možností. Navíc části
 algoritmu, které vyžadují pouze algebraické operace, můžeme provádět
 paralelně a využít tak plný potenciál dnešních vícejádrových procesorů.
-V místě, kde je potřeba provést nějaké nealgebraické operace (vypočítat koeficient),
+V místě, kde je potřeba provést nějaké nealgebraické operace (použít dělení se zbytkem),
 je nutné pracovat s datovými typy pro reprezentaci libovolně velkého celého
 čísla. V jednom okamžiku však takových čísel budeme potřebovat jen velmi málo, 
 a proto tyto výpočty nebudou nijak významně zvyšovat paměťovou náročnost.

@@ -267,7 +267,7 @@ a navíc $ CB $ bude splňovat následující podmínky:
             a_k & \bar{a}_k  \\
         \end{pmatrix}
     $ je regulární a
-    \item $ gcd(N, a_k) = gcd(N, a_0, b_1, b_2, \dots, b_k) $.
+    \item $ \gcd(N, a_k) = \gcd(N, a_0, b_1, b_2, \dots, b_k) $.
 \end{Cond}
 \end{vet}
 
@@ -296,7 +296,7 @@ Po provedení kroku $ l-1 $ a na začátku kroku $ l $ jsou vypočítány koefic
 $ c_1, \dots, c_{l-1} $ a jsou splněny podmínky
 \begin{center}
     \begin{CondNum}
-        \item $ gcd(N, a_i) = gcd(N, a_0, b_1, b_2, \dots, b_i) $
+        \item $ \gcd(N, a_i) = \gcd(N, a_0, b_1, b_2, \dots, b_i) $
         \item $ N \bar{a}_i - \bar{N} a_i \neq 0 $
     \end{CondNum}
 \end{center}
@@ -305,7 +305,7 @@ a (2) splněny triviálně. Teď musíme provést
 indukční krok - najít vhodné $ c_l $ takové, že budou splněny podmínky
 (1) a (2) pro $ i = l $.
 
-Nechť $ g = gcd(a_{l-1}, b_l) $. Pak můžeme dělením se zbytkem najít celá
+Nechť $ g = \gcd(a_{l-1}, b_l) $. Pak můžeme dělením se zbytkem najít celá
 čísla $ q_1, q_2 $ a
 $ 0 \leq \tilde{a}_{l-1}, \tilde{b}_{l} < N $ taková, že platí
 
@@ -317,7 +317,7 @@ $ 0 \leq \tilde{a}_{l-1}, \tilde{b}_{l} < N $ taková, že platí
 \end{equation}
 Čísla $ \tilde{a}_{l-1} $ a $ \tilde{b}_{l} $ budou nesoudělná. Důkaz tohoto
 tvrzení se ve skutečnosti redukuje na důkaz implikace
-$ gcd(a,b) = 1 \Rightarrow gcd(a \mathbin{\%} N, b \mathbin{\%} N) = 1 $, kde
+$ \gcd(a,b) = 1 \Rightarrow \gcd(a \mathbin{\%} N, b \mathbin{\%} N) = 1 $, kde
 $ a \mathbin{\%} N $ značí zbytek po dělení $ a $ číslem $ N $. Tato implikace
 skutečně platí, protože Bezoutovu rovnost pro $ a $ a $ b $ můžeme vzít modulo
 $ N $, čímž dostaneme $ (a \mathbin{\%} N) t + (b \mathbin{\%} N) u = 1 $. Zbytky
@@ -326,19 +326,19 @@ po dělení číslem $ N $ proto budou nesoudělné.
 Pomocí algoritmu, který jsme použili v důkazu lemmatu \ref{bach}, můžeme najít
 kladné číslo $ t $ takové, že bude platit
 \begin{equation}\label{t_search}
-    gcd(\tilde{a}_{l-1} + t \tilde{b}_{l}, N) = 1,
+    \gcd(\tilde{a}_{l-1} + t \tilde{b}_{l}, N) = 1,
 \end{equation}
 a volbou $ c_l \leftarrow t $ zajistíme splnění podmínky (1). Skutečně:
 \begin{align*}
-    gcd(a_l, N) &= gcd(a_{l-1} + t b_l, N)  \\
-                &= gcd(g (q_1 N +  \tilde{a}_{l-1})
+    \gcd(a_l, N) &= \gcd(a_{l-1} + t b_l, N)  \\
+                &= \gcd(g (q_1 N +  \tilde{a}_{l-1})
                         + tg(q_2 N + \tilde{b}_{l}), N) \\
-                &= gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l})
+                &= \gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l})
                         + g (q_1 + t q_2) N, N) \\
-                &= gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l}), N) \\
-                &= gcd(g, N) \\
-                &= gcd(a_{l-1}, b_l, N) \\
-                &= gcd(N, a_0, b_1, b_2, \dots, b_l), \\
+                &= \gcd(g (\tilde{a}_{l-1} + t \tilde{b}_{l}), N) \\
+                &= \gcd(g, N) \\
+                &= \gcd(a_{l-1}, b_l, N) \\
+                &= \gcd(N, a_0, b_1, b_2, \dots, b_l), \\
 \end{align*}
 přičemž poslední rovnost plyne z indukčního předpokladu.
 
@@ -372,7 +372,7 @@ Pokud nám tedy v kroku \ref{t_search} vyjde $ c_l $ různé od $ x $, je vše v
 Pokud ovšem $ c_l = t = x $, nebyla by podmínka (2) splněna.
 To ale můžeme snadno napravit. Předpokládejme tedy, že $ 0 < x = t $.
 Nechť $ \bar{t} $ je nejmenší nezáporné číslo, pro které platí
-$ gcd(\tilde{a}_{l-1} + \bar{t} (-\tilde{b}_{l}), N) = 1 $. Volbou $ c_l \leftarrow -\bar{t}$
+$ \gcd(\tilde{a}_{l-1} + \bar{t} (-\tilde{b}_{l}), N) = 1 $. Volbou $ c_l \leftarrow -\bar{t}$
 zajistíme splnění podmínky (2), protože $ c_l = -\bar{t} \leq 0 < x $. Platnost
 podmínky (1) pro takovouto volbu $ c_l $ se pak dokáže zcela analogicky, jako
 jsme to již provedli výše pro $ c_l = t $.
@@ -493,7 +493,7 @@ CB =
         b_k    & \bar{b}_k  \\
     \end{pmatrix}
 \end{align*}
-s tím, že $ gcd(N, a_k) = gcd(N, a_k, b_1, b_2, \dots, b_k) $ a navíc submatice
+s tím, že $ \gcd(N, a_k) = \gcd(N, a_k, b_1, b_2, \dots, b_k) $ a navíc submatice
 \begin{align*}
     \begin{pmatrix}
         N      & \bar{N} \\
@@ -504,7 +504,7 @@ bude regulární.
 
 Aplikací rozšířeného Euklidova algoritmu na dvojici $ (N, a_k) $ obdržíme
 koeficienty $ t_1 $, $ m_1 $, $ m_2 $ takové, že
-$ m_1 N + m_2 a_k = t_1 = gcd(N, a_k) $. Nyní můžeme vytvořit matici
+$ m_1 N + m_2 a_k = t_1 = \gcd(N, a_k) $. Nyní můžeme vytvořit matici
 
 \begin{align*}
 U =
